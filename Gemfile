@@ -70,6 +70,7 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'poltergeist'
   
   gem 'guard-rspec'
   gem 'libnotify'
