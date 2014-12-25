@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe WelcomeController, :type => :controller do
+RSpec.describe EstimationsController, :type => :controller do
 
   describe 'GET index' do
     it 'redirects to /sign_in if not authenticated' do
@@ -16,6 +16,15 @@ RSpec.describe WelcomeController, :type => :controller do
       get :index
 
       expect(response).to have_http_status(:success)
+    end
+
+    it 'loads estimations for the current user' do
+      user = FactoryGirl.create(:user_with_estimations)
+      sign_in user
+
+      get :index
+
+      expect(assigns(:estimations)).to match_array(user.estimations)
     end
   end
 

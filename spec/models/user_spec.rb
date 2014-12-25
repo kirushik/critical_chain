@@ -12,10 +12,14 @@
 #  last_sign_in_ip     :string
 #  created_at          :datetime
 #  updated_at          :datetime
+#  provider            :string
+#  uid                 :string
 #
 # Indexes
 #
-#  index_users_on_email  (email) UNIQUE
+#  index_users_on_email     (email) UNIQUE
+#  index_users_on_provider  (provider)
+#  index_users_on_uid       (uid)
 #
 
 require 'rails_helper'
@@ -60,6 +64,21 @@ RSpec.describe User, :type => :model do
       new_user = User.from_omniauth oauth_payload
 
       expect(new_user).to eq(user)
+    end
+  end
+
+  describe "estimations" do
+    it "should be an array" do
+      expect(user.estimations).to match_array([])
+    end
+
+    it "should not include other user's estimations" do
+      user = FactoryGirl.create(:user_with_estimations, estimations: 3)
+      FactoryGirl.create(:user_with_estimations)
+
+      user = User.find(user.id)
+
+      expect(user.estimations.size).to eq(3)
     end
   end
 end

@@ -11,6 +11,8 @@ gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
 gem 'font-awesome-sass'
 
+gem 'page_title_helper'
+
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
@@ -55,6 +57,7 @@ group :development, :test do
 
   gem 'rspec-rails'
 
+  gem 'factory_girl_rails'
   gem 'faker'
 
   gem 'guard-migrate'
@@ -66,7 +69,6 @@ group :development do
 end
 
 group :test do
-  gem 'factory_girl_rails'
   gem 'capybara'
   
   gem 'guard-rspec'
