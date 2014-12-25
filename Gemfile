@@ -34,6 +34,7 @@ group :production do
   gem 'pg'
   gem 'rails_12factor'
   gem 'rack-ssl', require: 'rack/ssl'
+  gem 'thin'
 end
 
 group :development, :test do
