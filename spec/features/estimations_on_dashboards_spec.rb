@@ -14,5 +14,9 @@ feature "EstimationsOnDashboards", :type => :feature do
     click_link(estimation.title)
 
     expect(page.title).to start_with(estimation.title)
+    estimation.estimation_items.each do |item|
+      expect(page).to have_text(item.value)
+      expect(page).to have_text(item.title)
+    end
   end
 end
