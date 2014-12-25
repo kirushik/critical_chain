@@ -1,4 +1,6 @@
 class WelcomeController < ApplicationController
-  def index
+  # before_action :authenticate_user!, except: :login
+
+  def login
   end
 end

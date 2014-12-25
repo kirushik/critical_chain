@@ -56,3 +56,12 @@ group :test do
   gem 'libnotify'
 end
 
+# To provide authentication
+gem 'devise'
+# To auth with Google
+gem 'omniauth-google-oauth2'
+# To enable privilege separation
+gem 'pundit'
+
+# Heroku-friendly configuration management
+gem 'figaro'
