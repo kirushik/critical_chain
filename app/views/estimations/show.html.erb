@@ -3,3 +3,9 @@
 <ol>
   <%= render @estimation.estimation_items %>
 </ol>
+
+<%= simple_form_for [@estimation, EstimationItem.new], remote: true do |f| %>
+  <%= f.input :value %>
+  <%= f.input :title %>
+  <%= f.submit 'Add estimation' %>
+<% end %>
