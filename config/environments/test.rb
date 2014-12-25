@@ -42,3 +42,4 @@ Rails.application.configure do
 end
 
 OmniAuth.config.test_mode = true
+Warden.test_mode!

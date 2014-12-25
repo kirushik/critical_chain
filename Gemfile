@@ -11,6 +11,8 @@ gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
 gem 'font-awesome-sass'
 
+gem 'page_title_helper'
+
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views

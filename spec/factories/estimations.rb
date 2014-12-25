@@ -15,6 +15,16 @@
 
 FactoryGirl.define do
   factory :estimation do
-    title Faker::Lorem.sentence
+    sequence(:title) { Faker::Lorem.sentence }
+
+    factory :estimation_with_items do
+      transient do
+        estimation_items 2
+      end
+
+      after(:create) do |estimation, evaluator|
+        FactoryGirl.create_list(:estimation_item, evaluator.estimation_items, :estimation => estimation)
+      end
+    end
   end
 end

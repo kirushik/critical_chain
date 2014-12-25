@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "welcome/index.html.erb", :type => :view do
+RSpec.describe "estimations/index.html.erb", :type => :view do
   it 'should contain user\'s private estimations' do
     estimations = (1..3).map { FactoryGirl.create(:estimation) }
     assign(:estimations, estimations)

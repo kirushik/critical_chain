@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe WelcomeController, :type => :controller do
+RSpec.describe EstimationsController, :type => :controller do
 
   describe 'GET index' do
     it 'redirects to /sign_in if not authenticated' do

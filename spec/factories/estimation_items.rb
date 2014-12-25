@@ -16,7 +16,7 @@
 
 FactoryGirl.define do
   factory :estimation_item do
-    sequence(:value) { Faker::Number.number }
+    sequence(:value) { Faker::Number.number(2) }
     sequence(:title) { Faker::Lorem.sentence }
   end
 end
