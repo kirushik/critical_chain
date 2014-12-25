@@ -25,40 +25,45 @@
 require 'rails_helper'
 
 def oauth_payload_for uid, email = Faker::Internet.email
-  payload = double
-  allow(payload).to receive_messages(provider: 'google_oauth2', uid: uid)
-
-  info = double
-  allow(info).to receive(:email).and_return(email)
-  allow(payload).to receive(:info).and_return(info)
-
-  payload
 end
 
 RSpec.describe User, :type => :model do
-  before :each do
-    @user = FactoryGirl.create(:google_user)
+  let(:user) { FactoryGirl.create(:google_user) }
+  def oauth_payload email = nil
+    payload = double
+    allow(payload).to receive_messages(provider: 'google_oauth2', uid: user.uid)
+
+    if email
+      info = double
+      allow(info).to receive(:email).and_return email
+      allow(payload).to receive(:info).and_return(info)
+    end
+
+    payload
   end
 
   describe 'from_omniauth method' do
     it 'should return existing object when second parameter is present' do
-      user = User.from_omniauth(nil, @user)
-      expect(user.object_id).to eq(@user.object_id)
+      new_user = User.from_omniauth(nil, user)
+      
+      expect(new_user.object_id).to eq(user.object_id)
     end
 
     it 'should create user if it is not in the database' do
-      @user.delete
+      user.delete
       expect(User.count).to eq(0)
 
-      user = User.from_omniauth oauth_payload_for(@user.uid, 'aaa@example.com')
-      expect(user.uid).to eq(@user.uid)
-      expect(user.email).to eq('aaa@example.com')
+      new_user = User.from_omniauth oauth_payload('aaa@example.com')
+
+      expect(new_user.uid).to eq(user.uid)
+      expect(new_user.email).to eq('aaa@example.com')
       expect(User.count).to eq(1)
     end
 
     it 'should locate user if it is in the database' do
-      user = User.from_omniauth oauth_payload_for(@user.uid)
-      expect(user).to eq(@user)
+      new_user = User.from_omniauth oauth_payload
+
+      expect(new_user).to eq(user)
     end
   end
 end
