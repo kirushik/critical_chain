@@ -17,6 +17,15 @@ RSpec.describe WelcomeController, :type => :controller do
 
       expect(response).to have_http_status(:success)
     end
+
+    it 'loads estimations for the current user' do
+      user = FactoryGirl.create(:user_with_estimations)
+      sign_in user
+
+      get :index
+
+      expect(assigns(:estimations)).to match_array(user.estimations)
+    end
   end
 
 end
