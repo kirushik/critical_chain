@@ -46,6 +46,9 @@ group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
 
+  gem 'pry-rescue'
+  gem 'pry-stack_explorer'
+
   gem 'sqlite3'
 
   gem 'rspec-rails'
