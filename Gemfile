@@ -55,6 +55,7 @@ group :development, :test do
 
   gem 'rspec-rails'
 
+  gem 'factory_girl_rails'
   gem 'faker'
 
   gem 'guard-migrate'
@@ -66,7 +67,6 @@ group :development do
 end
 
 group :test do
-  gem 'factory_girl_rails'
   gem 'capybara'
   
   gem 'guard-rspec'
