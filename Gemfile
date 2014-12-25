@@ -51,11 +51,19 @@ group :development, :test do
   gem 'rspec-rails'
 
   gem 'faker'
+
+  gem 'guard-migrate'
+end
+
+group :development do
+  gem 'guard-livereload', require: false
+  gem 'rack-livereload'
 end
 
 group :test do
   gem 'factory_girl_rails'
   gem 'capybara'
+  
   gem 'guard-rspec'
   gem 'libnotify'
 end

@@ -74,6 +74,9 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
+    em-websocket (0.5.1)
+      eventmachine (>= 0.12.9)
+      http_parser.rb (~> 0.6.0)
     erubis (2.7.0)
     eventmachine (1.0.4)
     execjs (2.2.2)
@@ -100,6 +103,14 @@ GEM
       pry (>= 0.9.12)
       thor (>= 0.18.1)
     guard-compat (1.2.0)
+    guard-livereload (2.4.0)
+      em-websocket (~> 0.5)
+      guard (~> 2.8)
+      multi_json (~> 1.8)
+    guard-migrate (1.2.1)
+      activerecord (>= 4.1.0)
+      guard (~> 2.3)
+      guard-compat (~> 1.1)
     guard-rspec (4.5.0)
       guard (~> 2.1)
       guard-compat (~> 1.1)
@@ -107,6 +118,7 @@ GEM
     hashie (3.3.2)
     hike (1.2.3)
     hitimes (1.2.2)
+    http_parser.rb (0.6.0)
     i18n (0.7.0)
     jbuilder (2.2.6)
       activesupport (>= 3.0.0, < 5)
@@ -166,6 +178,8 @@ GEM
     pundit (0.3.0)
       activesupport (>= 3.0.0)
     rack (1.6.0)
+    rack-livereload (0.3.15)
+      rack
     rack-ssl (1.4.1)
       rack
     rack-test (0.6.2)
@@ -283,6 +297,8 @@ DEPENDENCIES
   factory_girl_rails
   faker
   figaro
+  guard-livereload
+  guard-migrate
   guard-rspec
   jbuilder (~> 2.0)
   jquery-rails
@@ -291,6 +307,7 @@ DEPENDENCIES
   pg
   pry-rails
   pundit
+  rack-livereload
   rack-ssl
   rails (= 4.2.0)
   rails_12factor
