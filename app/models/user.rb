@@ -12,14 +12,10 @@
 #  last_sign_in_ip     :string
 #  created_at          :datetime
 #  updated_at          :datetime
-#  provider            :string
-#  uid                 :string
 #
 # Indexes
 #
-#  index_users_on_email     (email) UNIQUE
-#  index_users_on_provider  (provider)
-#  index_users_on_uid       (uid)
+#  index_users_on_email  (email) UNIQUE
 #
 
 class User < ActiveRecord::Base

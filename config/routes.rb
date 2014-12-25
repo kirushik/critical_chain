@@ -5,7 +5,7 @@
 #  user_omniauth_callback GET|POST /users/auth/:action/callback(.:format) users/omniauth_callbacks#:action
 #        new_user_session GET      /sign_in(.:format)                     devise/sessions#new
 #    destroy_user_session GET      /sign_out(.:format)                    devise/sessions#destroy
-#                    root GET      /                                      welcome#login
+#                    root GET      /                                      welcome#index
 #
 
 Rails.application.routes.draw do

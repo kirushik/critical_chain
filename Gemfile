@@ -6,6 +6,11 @@ ruby '2.1.5'
 gem 'rails', '4.2.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
+
+gem 'bootstrap-sass'
+gem 'autoprefixer-rails'
+gem 'font-awesome-sass'
+
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
@@ -51,11 +56,19 @@ group :development, :test do
   gem 'rspec-rails'
 
   gem 'faker'
+
+  gem 'guard-migrate'
+end
+
+group :development do
+  gem 'guard-livereload', require: false
+  gem 'rack-livereload'
 end
 
 group :test do
   gem 'factory_girl_rails'
   gem 'capybara'
+  
   gem 'guard-rspec'
   gem 'libnotify'
 end
