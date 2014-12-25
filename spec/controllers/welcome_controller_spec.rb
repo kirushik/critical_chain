@@ -6,8 +6,7 @@ RSpec.describe WelcomeController, :type => :controller do
     it 'redirects to /sign_in if not authenticated' do
       get :index
 
-      expect(response).to have_http_status(302)
-      expect(response.header['Location']).to eq('http://test.host/sign_in')
+      expect(response).to redirect_to(new_user_session_path)
     end
 
     it 'returns http success when logged in' do
