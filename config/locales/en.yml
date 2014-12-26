@@ -23,3 +23,7 @@ en:
   estimations:
     index:
       title: Your estimations
+  devise:
+    sessions:
+      new:
+        title: Please sign in

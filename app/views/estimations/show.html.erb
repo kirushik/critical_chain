@@ -1,16 +1,42 @@
 <% page_title! @estimation.title %>
 
-<ol id="<%= dom_id @estimation %>">
-  <%= render @estimation.estimation_items %>
-</ol>
+<div class="col-md-6">
+  <table id="<%= dom_id @estimation %>" class="table table-hover">
+    <%= render @estimation.estimation_items %>
+  </table>
+</div>
 
-<%= form_for [@estimation, EstimationItem.new], remote: true do |f| %>
-  <%= f.number_field :value %>
-  <%= f.text_field :title %>
-  <%= f.submit 'Add estimation' %>
-<% end %>
+<div class="col-md-5 col-md-offset-1">
+  <%= form_for [@estimation, EstimationItem.new], html: { class: 'form-inline' }, remote: true do |f| %>
+    <div class="form-group">
+      <%= f.label :value, class: 'sr-only' %>
+      <%= f.number_field :value, class: 'form-control value', placeholder: 'Value', autofocus: true %>
+    </div>
+    <div class="form-group">
+      <%= f.label :title, class: 'sr-only' %>
+      <%= f.text_field :title, class: 'form-control title', placeholder: 'Item title (optional)' %>
+    </div>
+    <%= f.button class: 'btn btn-success', value: 'Add estimation item', type: :submit do %>
+      <%= icon('plus-circle fa-lg') %>
+    <% end %>
+  <% end %>
 
-<h2 id="total"><%= @estimation.total.round(2) %></h2>
 
-<h3 id="sum"><%= @estimation.sum %></h3>
-<h3 id="buffer"><%= @estimation.buffer.round(2) %></h3>
+  <table id="results-table">
+    <tr class="lead">
+      <td class="text-success" id="sum"><%= @estimation.sum %></td>
+      <td class="text-muted"><small>+</small></td>
+      <td class="text-info" id="buffer"><%= @estimation.buffer.round(2) %></td>
+      <td class="text-muted"><small>=</small></td>
+      <td class="text-warning" id="total"><%= @estimation.total.round(2) %></td>
+    </tr>
+    <tr class="text-muted text-center">
+      <td><small>Sum</small></td>
+      <td></td>
+      <td><small>Buffer</small></td>
+      <td></td>
+      <td><small>Total</small></td>
+    </tr>
+  </table>
+
+</div>
