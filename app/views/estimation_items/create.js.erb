@@ -1,1 +1,4 @@
 $('#<%= dom_id @estimation %>').append('<%=j render @estimation_item %>');
+$('#total').text('<%= @estimation.total.round(2) %>');
+$('#sum').text('<%= @estimation.sum %>');
+$('#buffer').text('<%= @estimation.buffer.round(2) %>');
