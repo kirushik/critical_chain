@@ -28,6 +28,11 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     fill_in 'estimation_item_title', with: new_title
     click_button 'Add estimation'
 
+    wait_for_ajax
+    
+    expect(find_field('estimation_item_value').value).not_to eq('7')
+    expect(find_field('estimation_item_title').value).not_to eq(new_title)
+
     expect(page).to have_text(new_title)
   end
 end
