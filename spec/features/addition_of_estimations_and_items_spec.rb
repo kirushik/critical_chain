@@ -10,7 +10,16 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     login_as user
   end
 
-  it 'should allow me to add estimations on the root page', :js do
+  scenario 'I can add an estimation' do
+    visit root_path
+
+    fill_in 'estimation_title', with: 'Azaza zuzu'
+    click_button 'Create estimation'
+
+    expect(page.title).to start_with('Azaza zuzu')
+  end
+
+  scenario 'I can add estimation itemss on the corresponding page', :js do
     visit estimation_path(estimation)
 
     expect(page).not_to have_text(new_title)

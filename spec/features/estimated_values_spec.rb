@@ -18,5 +18,19 @@ feature "Estimated values", :type => :feature do
     expect(page).to have_text(2.83)
   end
 
-  scenario 'should be recalculated with AJAX'
+  scenario 'should be recalculated with AJAX', :js do
+    visit estimation_path(estimation)
+
+    expect(page).to have_text(0)
+
+    fill_in 'estimation_item_value', with: 1
+    click_button 'Add estimation'
+
+    fill_in 'estimation_item_value', with: 7
+    click_button 'Add estimation'
+
+    expect(page).to have_text(8)
+    expect(page).to have_text(5.66)
+    expect(page).to have_text(13.66)
+  end
 end
