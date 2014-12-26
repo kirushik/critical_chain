@@ -8,9 +8,9 @@ class ApplicationController < ActionController::Base
 
   include Pundit
   # Exception to ensure every action contains authorization call
-  after_action :verify_authorized, :except => :index
+  after_action :verify_authorized, :except => :index, :unless => :devise_controller?
   # Exception to ensure out indices are authorized with scope
-  after_action :verify_policy_scoped, :only => :index
+  after_action :verify_policy_scoped, :only => :index, :unless => :devise_controller?
 
   rescue_from Pundit::NotAuthorizedError, with: :permission_denied unless Rails.env.development?
 
