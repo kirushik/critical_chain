@@ -21,5 +21,13 @@ RSpec.describe EstimationItemsController, :type => :controller do
       expect(estimation.reload.estimation_items.size).to eq(1)
     end
 
+    it "doesn\'t allow to add items to estimations of others" do
+      sign_in FactoryGirl.create(:user)
+
+      post :create, estimation_id: estimation.id, estimation_item: { value: 117 }
+
+      expect(response).to have_http_status(403)
+      expect(estimation.reload.estimation_items.size).to eq(0)
+    end
   end
 end

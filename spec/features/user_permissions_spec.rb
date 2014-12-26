@@ -9,6 +9,6 @@ feature "UserPermissions", :type => :feature do
     login_as user_a
 
     visit estimation_path(others_estimation)
-    expect(page.status_code).to be(401)
+    expect(page.status_code).to be(403)
   end
 end

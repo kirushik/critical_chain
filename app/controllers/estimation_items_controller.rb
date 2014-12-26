@@ -4,6 +4,9 @@ class EstimationItemsController < ApplicationController
 
     @estimation_item = EstimationItem.new(estimation_item_params)
     @estimation_item.estimation = @estimation
+
+    authorize @estimation, :update?
+
     @estimation_item.save!
 
     redirect_to estimation_path(@estimation) unless request.xhr?
