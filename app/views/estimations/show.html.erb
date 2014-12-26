@@ -9,3 +9,8 @@
   <%= f.text_field :title %>
   <%= f.submit 'Add estimation' %>
 <% end %>
+
+<h2 id="total"><%= @estimation.total.round(2) %></h2>
+
+<h3 id="sum"><%= @estimation.sum %></h3>
+<h3 id="buffer"><%= @estimation.buffer.round(2) %></h3>

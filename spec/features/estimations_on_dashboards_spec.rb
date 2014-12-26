@@ -20,15 +20,6 @@ feature "EstimationsOnDashboards", :type => :feature do
     end
   end
 
-  scenario 'I can add an estimation' do
-    visit root_path
-
-    fill_in 'estimation_title', with: 'Azaza zuzu'
-    click_button 'Create estimation'
-
-    expect(page.title).to start_with('Azaza zuzu')
-  end
-
   scenario 'won\'t show me other people\'s estimations' do
     other_user = FactoryGirl.create(:user_with_estimations)
 

@@ -16,4 +16,16 @@
 class Estimation < ActiveRecord::Base
   belongs_to :user
   has_many :estimation_items
+
+  def sum
+    estimation_items.pluck(:value).sum
+  end
+
+  def buffer
+    sum/Math.sqrt(estimation_items.count)
+  end
+
+  def total
+    sum + buffer
+  end
 end
