@@ -12,14 +12,20 @@
 #  last_sign_in_ip     :string
 #  created_at          :datetime
 #  updated_at          :datetime
+#  provider            :string
+#  uid                 :string
 #
 # Indexes
 #
-#  index_users_on_email  (email) UNIQUE
+#  index_users_on_email     (email) UNIQUE
+#  index_users_on_provider  (provider)
+#  index_users_on_uid       (uid)
 #
 
 class User < ActiveRecord::Base
   devise :omniauthable, :rememberable, :trackable, :omniauth_providers => [:google_oauth2]
+
+  has_many :estimations
 
   def self.from_omniauth auth, current_user = nil
     return current_user if current_user
