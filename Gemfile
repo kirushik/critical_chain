@@ -87,5 +87,3 @@ gem 'pundit'
 
 # Heroku-friendly configuration management
 gem 'figaro'
-
-gem 'simple_form'

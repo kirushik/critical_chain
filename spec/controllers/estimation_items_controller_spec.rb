@@ -15,7 +15,7 @@ RSpec.describe EstimationItemsController, :type => :controller do
     it "adds an item to the estimation when authorized" do
       expect(estimation.estimation_items.size).to eq(0)
 
-      post :create, estimation_id: estimation.id, value: 117
+      post :create, estimation_id: estimation.id, estimation_item: { value: 117 }
       expect(response).to redirect_to(estimation_path(estimation))
 
       expect(estimation.reload.estimation_items.size).to eq(1)

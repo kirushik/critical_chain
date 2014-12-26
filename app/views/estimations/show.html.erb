@@ -1,11 +1,11 @@
 <% page_title! @estimation.title %>
 
-<ol>
+<ol id="<%= dom_id @estimation %>">
   <%= render @estimation.estimation_items %>
 </ol>
 
-<%= simple_form_for [@estimation, EstimationItem.new], remote: true do |f| %>
-  <%= f.input :value %>
-  <%= f.input :title %>
+<%= form_for [@estimation, EstimationItem.new], remote: true do |f| %>
+  <%= f.number_field :value %>
+  <%= f.text_field :title %>
   <%= f.submit 'Add estimation' %>
 <% end %>

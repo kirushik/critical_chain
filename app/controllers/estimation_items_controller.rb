@@ -1,11 +1,16 @@
 class EstimationItemsController < ApplicationController
   def create
-    EstimationItem.create!(estimation_item_params)
-    redirect_to estimation_path(params[:estimation_id]) unless request.xhr?
+    @estimation = Estimation.find(params[:estimation_id])
+
+    @estimation_item = EstimationItem.new(estimation_item_params)
+    @estimation_item.estimation = @estimation
+    @estimation_item.save!
+
+    redirect_to estimation_path(@estimation) unless request.xhr?
   end
 
   private
   def estimation_item_params
-    params.permit(:title, :value, :estimation_id)
+    params.require(:estimation_item).permit(:title, :value)
   end
 end
