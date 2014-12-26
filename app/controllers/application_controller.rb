@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   # Exception to ensure out indices are authorized with scope
   after_action :verify_policy_scoped, :only => :index
 
-  rescue_from Pundit::NotAuthorizedError, with: :permission_denied
+  rescue_from Pundit::NotAuthorizedError, with: :permission_denied unless Rails.env.development?
 
   def new_session_path scope
     new_user_session_path
