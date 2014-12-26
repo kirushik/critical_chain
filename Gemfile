@@ -70,6 +70,9 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'poltergeist'
+
+  gem 'database_cleaner'
   
   gem 'guard-rspec'
   gem 'libnotify'
