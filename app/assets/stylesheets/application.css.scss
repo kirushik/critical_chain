@@ -2,3 +2,15 @@
 @import "bootstrap";
 @import "font-awesome-sprockets";
 @import "font-awesome";
+
+.form-inline .form-control.value {
+  width: 6em;
+}
+
+#results-table {
+  margin-top: 15px;
+}
+
+#results-table td {
+  padding-right: 6px;
+}
