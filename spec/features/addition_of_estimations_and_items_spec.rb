@@ -19,14 +19,14 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     expect(page.title).to start_with('Azaza zuzu')
   end
 
-  scenario 'I can add estimation itemss on the corresponding page', :js do
+  scenario 'I can add estimation items on the corresponding page', :js do
     visit estimation_path(estimation)
 
     expect(page).not_to have_text(new_title)
 
     fill_in 'estimation_item_value', with: 7
     fill_in 'estimation_item_title', with: new_title
-    click_button 'Add estimation'
+    click_button 'Add estimation item'
 
     wait_for_ajax
     
