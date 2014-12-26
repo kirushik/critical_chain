@@ -28,4 +28,18 @@ feature "EstimationsOnDashboards", :type => :feature do
 
     expect(page.title).to start_with('Azaza zuzu')
   end
+
+  scenario 'won\'t show me other people\'s estimations' do
+    other_user = FactoryGirl.create(:user_with_estimations)
+
+    visit root_path
+
+    user.estimations.each do |e|
+      expect(page).to have_text(e.title)
+    end
+
+    other_user.estimations.each do |e|
+      expect(page).not_to have_text(e.title)
+    end
+  end 
 end
