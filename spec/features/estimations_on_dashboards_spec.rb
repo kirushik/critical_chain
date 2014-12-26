@@ -19,4 +19,13 @@ feature "EstimationsOnDashboards", :type => :feature do
       expect(page).to have_text(item.title)
     end
   end
+
+  scenario 'I can add an estimation' do
+    visit root_path
+
+    fill_in 'estimation_title', with: 'Azaza zuzu'
+    click_button 'Create estimation'
+
+    expect(page.title).to start_with('Azaza zuzu')
+  end
 end
