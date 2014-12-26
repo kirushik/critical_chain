@@ -10,11 +10,11 @@
   <%= form_for [@estimation, EstimationItem.new], html: { class: 'form-inline' }, remote: true do |f| %>
     <div class="form-group">
       <%= f.label :value, class: 'sr-only' %>
-      <%= f.number_field :value, class: 'form-control', placeholder: 'Value' %>
+      <%= f.number_field :value, class: 'form-control value', placeholder: 'Value', autofocus: true %>
     </div>
     <div class="form-group">
       <%= f.label :title, class: 'sr-only' %>
-      <%= f.text_field :title, class: 'form-control', placeholder: 'Item title (optional)' %>
+      <%= f.text_field :title, class: 'form-control title', placeholder: 'Item title (optional)' %>
     </div>
     <%= f.button class: 'btn btn-success', value: 'Add estimation item', type: :submit do %>
       <%= icon('plus-circle fa-lg') %>
