@@ -2,17 +2,19 @@ class EstimationsController < ApplicationController
   def create
     estimation = Estimation.new(estimation_params)
     estimation.user = current_user
+    authorize estimation
     estimation.save!
 
     redirect_to estimation_path(estimation)
   end
 
   def index
-    @estimations = current_user.estimations
+    @estimations = policy_scope(Estimation).all
   end
 
   def show
     @estimation = Estimation.find(params[:id])
+    authorize @estimation
   end
 
   private
