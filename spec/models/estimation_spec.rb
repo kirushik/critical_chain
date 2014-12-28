@@ -47,4 +47,18 @@ RSpec.describe Estimation, :type => :model do
       expect(subject.total).to be(2.0)
     end
   end
+
+  describe 'deletions' do
+    it 'should happen with dependent items' do
+      2.times do
+        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 3)
+      end
+      
+      expect(EstimationItem.count).to eq(2)
+
+      subject.destroy!
+
+      expect(EstimationItem.count).to eq(0)
+    end
+  end
 end

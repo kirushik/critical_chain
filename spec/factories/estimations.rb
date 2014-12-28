@@ -15,11 +15,11 @@
 
 FactoryGirl.define do
   factory :estimation do
-    sequence(:title) { Faker::Lorem.sentence }
+    title { Faker::Lorem.sentence }
 
     factory :estimation_with_items do
       transient do
-        items {{count: 2, size: 10}}
+        items {{count: 1, size: 10}}
       end
 
       after(:create) do |estimation, evaluator|

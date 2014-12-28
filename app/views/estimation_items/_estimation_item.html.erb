@@ -1,8 +1,13 @@
-<tr>
+<tr id="<%= dom_id estimation_item %>">
   <td class="text-right">
     <span class="lead">
       <%= estimation_item.value %>
     </span>
   </td>
   <td><%= estimation_item.title %></td>
+  <td>
+    <%= button_to [estimation_item.estimation, estimation_item], method: :delete, remote: true, class: 'close pull-right' do %>
+      <span>&times;</span>
+    <% end %>
+  </td>
 </tr>

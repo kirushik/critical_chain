@@ -24,11 +24,21 @@
 
 FactoryGirl.define do
   factory :user do
-    sequence(:email) { Faker::Internet.email }
+    email { Faker::Internet.email }
 
     factory :google_user do
       provider 'google_oauth2'
-      sequence(:uid) { Faker::Number.number(25) }
+      uid { Faker::Number.number(25) }
+    end
+
+    factory :user_with_nonempty_estimations do
+      transient do
+        n 1
+      end
+
+      after(:create) do |user, evaluator|
+        FactoryGirl.create_list(:estimation_with_items, evaluator.n, :user => user)
+      end
     end
     
     factory :user_with_estimations do
