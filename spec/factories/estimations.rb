@@ -19,12 +19,11 @@ FactoryGirl.define do
 
     factory :estimation_with_items do
       transient do
-        estimation_items 2
-        item_size 117
+        items {{count: 2, size: 10}}
       end
 
       after(:create) do |estimation, evaluator|
-        FactoryGirl.create_list(:estimation_item, evaluator.estimation_items, estimation: estimation, value: evaluator.item_size)
+        FactoryGirl.create_list(:estimation_item, evaluator.items[:count], estimation: estimation, value: evaluator.items[:size])
       end
     end
   end

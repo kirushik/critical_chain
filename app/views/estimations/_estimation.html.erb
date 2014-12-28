@@ -1,1 +1,10 @@
-<%= link_to estimation.title, estimation, class: 'list-group-item' %>
+<%= link_to estimation, class: 'list-group-item' do %>
+  <%= estimation.title %>
+  <span class="pull-right text-muted">
+    <span class="text-success"><strong><%= estimation.sum %></strong></span>
+    +
+    <span class="text-info"><strong><%= estimation.buffer.round(2) %></strong></span>
+    =
+    <span class="text-warning"><strong><%= estimation.total.round(2) %></strong></span>
+  </span>
+<% end %>
