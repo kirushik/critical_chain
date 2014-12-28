@@ -5,4 +5,9 @@
     </span>
   </td>
   <td><%= estimation_item.title %></td>
+  <td>
+    <%= button_to [estimation_item.estimation, estimation_item], method: :delete, class: 'close pull-right' do %>
+      <span>&times;</span>
+    <% end %>
+  </td>
 </tr>

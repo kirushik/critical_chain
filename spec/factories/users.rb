@@ -32,6 +32,13 @@ FactoryGirl.define do
     end
 
     factory :user_with_nonempty_estimation do
+      transient do
+        items 1
+      end
+
+      after(:create) do |user, evaluator|
+        FactoryGirl.create_list(:estimation_with_items, evaluator.items, :user => user)
+      end
     end
     
     factory :user_with_estimations do
