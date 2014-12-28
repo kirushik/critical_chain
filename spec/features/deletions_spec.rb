@@ -25,10 +25,23 @@ feature "Deletions", :type => :feature do
       new_buttons = page.all('button', :text => '×')
       expect(new_buttons.size).to eq(items_count-1)
       expect(page).not_to have_text(first_item.title)
-
     end
 
-    it 'should be possible with AJAX', :js
+    it 'should be possible with AJAX', :js do
+      visit estimation_path(estimation)
+
+      buttons = page.all('button', :text => '×')
+      expect(buttons.size).to eq(items_count)
+      expect(page).to have_text(first_item.title)
+
+      buttons.first.click
+
+      wait_for_ajax
+
+      new_buttons = page.all('button', :text => '×')
+      expect(new_buttons.size).to eq(items_count-1)
+      expect(page).not_to have_text(first_item.title)
+    end
   end
 
   context "Estimation sets deletion" do

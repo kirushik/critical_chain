@@ -13,13 +13,13 @@ class EstimationItemsController < ApplicationController
   end
 
   def destroy
-    estimation = Estimation.find(params[:estimation_id])
-    estimation_item = EstimationItem.find(params[:id])
+    @estimation = Estimation.find(params[:estimation_id]).decorate
+    @estimation_item = EstimationItem.find(params[:id])
 
-    authorize estimation, :update?
-    estimation_item.destroy!
+    authorize @estimation, :update?
+    @estimation_item.destroy!
 
-    redirect_to estimation_path(estimation) unless request.xhr?
+    redirect_to estimation_path(@estimation) unless request.xhr?
   end
 
   private
