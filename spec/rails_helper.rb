@@ -55,6 +55,7 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include Warden::Test::Helpers, type: :feature
   config.include WaitForAjax, type: :feature
+  config.include ActionView::RecordIdentifier, type: :feature
 end
 
 Capybara.javascript_driver = :poltergeist

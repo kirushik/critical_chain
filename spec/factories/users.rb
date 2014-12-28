@@ -31,13 +31,13 @@ FactoryGirl.define do
       uid { Faker::Number.number(25) }
     end
 
-    factory :user_with_nonempty_estimation do
+    factory :user_with_nonempty_estimations do
       transient do
-        items 1
+        n 1
       end
 
       after(:create) do |user, evaluator|
-        FactoryGirl.create_list(:estimation_with_items, evaluator.items, :user => user)
+        FactoryGirl.create_list(:estimation_with_items, evaluator.n, :user => user)
       end
     end
     

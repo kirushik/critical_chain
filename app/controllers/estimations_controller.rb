@@ -17,6 +17,14 @@ class EstimationsController < ApplicationController
     authorize @estimation
   end
 
+  def destroy
+    @estimation = Estimation.find(params[:id])
+    authorize @estimation
+    @estimation.destroy
+
+    redirect_to estimations_path unless request.xhr?
+  end
+
   private
   def estimation_params
     params.require(:estimation).permit(:title)
