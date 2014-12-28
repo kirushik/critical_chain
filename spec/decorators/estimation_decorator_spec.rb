@@ -26,7 +26,7 @@ describe EstimationDecorator do
     estimation = FactoryGirl.create(:estimation_with_items, items: {count: 1, size: 1}).decorate
 
     expect(estimation.buffer).to eq("1")
-    expect(estimation.total).to eq("2")
+    expect(estimation.total).to eq("2") 
     
   end
 end
