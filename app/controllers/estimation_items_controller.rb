@@ -1,6 +1,6 @@
 class EstimationItemsController < ApplicationController
   def create
-    @estimation = Estimation.find(params[:estimation_id])
+    @estimation = Estimation.find(params[:estimation_id]).decorate
 
     @estimation_item = EstimationItem.new(estimation_item_params)
     @estimation_item.estimation = @estimation

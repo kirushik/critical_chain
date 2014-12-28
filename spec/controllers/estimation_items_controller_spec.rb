@@ -29,5 +29,11 @@ RSpec.describe EstimationItemsController, :type => :controller do
       expect(response).to have_http_status(403)
       expect(estimation.reload.estimation_items.size).to eq(0)
     end
+
+    it "decorates loaded Estimation" do
+      post :create, estimation_id: estimation.id, estimation_item: { value: 117 }
+      
+      expect(assigns(:estimation)).to be_decorated
+    end
   end
 end

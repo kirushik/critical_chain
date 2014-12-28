@@ -34,6 +34,7 @@ RSpec.describe EstimationsController, :type => :controller do
       get :index
 
       expect(assigns(:estimations)).to be_decorated
+      expect(assigns(:estimations).first).to be_decorated
     end
   end
 

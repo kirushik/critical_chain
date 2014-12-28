@@ -2,16 +2,12 @@ class EstimationDecorator < Draper::Decorator
   decorates :estimation
   delegate_all
 
-  def qqq
-    'Q'*40
+  def buffer
+    object.buffer.to_s(:rounded, significant: true).gsub(/\.0+$/, '') rescue "0"
   end
-  # Define presentation-specific methods here. Helpers are accessed through
-  # `helpers` (aka `h`). You can override attributes, for example:
-  #
-  #   def created_at
-  #     helpers.content_tag :span, class: 'time' do
-  #       object.created_at.strftime("%a %m/%d/%y")
-  #     end
-  #   end
+
+  def total
+    object.total.to_s(:rounded, significant: true).gsub(/\.0+$/, '') rescue "0"
+  end
 
 end

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "estimations/show.html.erb", :type => :view do
-  let(:estimation) { FactoryGirl.create(:estimation_with_items, items: {count: 2, size: 2}) }
+  let(:estimation) { FactoryGirl.create(:estimation_with_items, items: {count: 2, size: 2}).decorate }
 
   before(:each) do 
     assign(:estimation, estimation)

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "estimations/_estimation.html.erb", :type => :view do
   it 'should render estimation\'s calculated values' do
-    estimation = FactoryGirl.create(:estimation_with_items, items: {size: 1, count: 4})
+    estimation = FactoryGirl.create(:estimation_with_items, items: {size: 1, count: 4}).decorate
     
     render partial: "estimations/estimation", locals: { estimation: estimation }
 
