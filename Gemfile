@@ -77,6 +77,8 @@ group :test do
   
   gem 'guard-rspec'
   gem 'libnotify'
+
+  gem 'rspec_junit_formatter', :git => 'git@github.com:circleci/rspec_junit_formatter.git'
 end
 
 # To provide authentication

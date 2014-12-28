@@ -1,3 +1,12 @@
+GIT
+  remote: git@github.com:circleci/rspec_junit_formatter.git
+  revision: 7b098c8ab2ac5e5f78190b51629ed6d67a9de4d1
+  specs:
+    rspec_junit_formatter (0.2.0)
+      builder (< 4)
+      rspec (>= 2, < 4)
+      rspec-core (!= 2.12.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -346,6 +355,7 @@ DEPENDENCIES
   rails (= 4.2.0)
   rails_12factor
   rspec-rails
+  rspec_junit_formatter!
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring
