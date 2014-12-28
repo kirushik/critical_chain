@@ -29,6 +29,8 @@ feature "Estimated values", :type => :feature do
     fill_in 'estimation_item_value', with: 7
     click_button 'Add estimation item'
 
+    wait_for_ajax
+
     expect(page).to have_text(8)
     expect(page).to have_text(5.66)
     expect(page).to have_text(13.7)
