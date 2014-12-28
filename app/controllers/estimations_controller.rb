@@ -9,11 +9,11 @@ class EstimationsController < ApplicationController
   end
 
   def index
-    @estimations = policy_scope(Estimation).all
+    @estimations = policy_scope(Estimation).all.decorate
   end
 
   def show
-    @estimation = Estimation.find(params[:id])
+    @estimation = Estimation.find(params[:id]).decorate
     authorize @estimation
   end
 

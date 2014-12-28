@@ -87,3 +87,5 @@ gem 'pundit'
 
 # Heroku-friendly configuration management
 gem 'figaro'
+
+gem 'draper'
