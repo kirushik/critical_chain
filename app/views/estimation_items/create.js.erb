@@ -1,5 +1,5 @@
 $('#<%= dom_id @estimation %>').append('<%=j render @estimation_item %>');
-$('#<%= dom_id @estimation_item %>').effect('highlight', 1000);
+$('#<%= dom_id @estimation_item %>').effect('highlight', {color:"#f7f7e5"}, 1000);
 
 $('#estimation_item_value').val('')
 $('#estimation_item_title').val('')
