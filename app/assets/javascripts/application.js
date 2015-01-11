@@ -20,7 +20,14 @@
 //= require_tree .
 
 var ready = function () {
-  $('.editable').editable();
+  $('.editable').editable({success: function(response, newValue) {
+    var vals = response.additionalValues;
+    if(vals) {
+      $('#total').text(vals.total);
+      $('#sum').text(vals.sum);
+      $('#buffer').text(vals.buffer);
+    }
+  }});
 }
 
 $(document).ready(ready);

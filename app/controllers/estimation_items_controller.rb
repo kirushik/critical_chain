@@ -29,8 +29,14 @@ class EstimationItemsController < ApplicationController
     authorize estimation, :update?
     estimation_item.update_attributes(estimation_item_params)
 
+    estimation.reload
+    
     if request.xhr?
-      render json: {success: true}
+      render json: {success: true, additionalValues: {
+          sum: estimation.sum,
+          buffer: estimation.buffer,
+          total: estimation.total
+        }}
     else
       redirect_to estimation_path(estimation)
     end
