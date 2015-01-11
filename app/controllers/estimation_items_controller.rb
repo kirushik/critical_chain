@@ -22,6 +22,19 @@ class EstimationItemsController < ApplicationController
     redirect_to estimation_path(@estimation) unless request.xhr?
   end
 
+  def update
+    @estimation = Estimation.find(params[:estimation_id]).decorate
+    @estimation_item = EstimationItem.find(params[:id])
+
+    authorize @estimation, :update?
+
+    if request.xhr?
+      render json: {success: true}
+    else
+      redirect_to estimation_path(@estimation)
+    end
+  end
+
   private
   def estimation_item_params
     params.require(:estimation_item).permit(:title, :value)
