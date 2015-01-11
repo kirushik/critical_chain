@@ -15,4 +15,20 @@
 //= require jquery-ui/effect-highlight
 //= require turbolinks
 //= require bootstrap-sprockets
+//= require editable/bootstrap-editable
+//= require editable/rails
 //= require_tree .
+
+var ready = function () {
+  $('.editable').editable({success: function(response, newValue) {
+    var vals = response.additionalValues;
+    if(vals) {
+      $('#total').text(vals.total);
+      $('#sum').text(vals.sum);
+      $('#buffer').text(vals.buffer);
+    }
+  }});
+}
+
+$(document).ready(ready);
+$(document).on('page:load', ready);
