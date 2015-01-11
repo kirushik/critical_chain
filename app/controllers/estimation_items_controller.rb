@@ -23,15 +23,16 @@ class EstimationItemsController < ApplicationController
   end
 
   def update
-    @estimation = Estimation.find(params[:estimation_id]).decorate
-    @estimation_item = EstimationItem.find(params[:id])
+    estimation = Estimation.find(params[:estimation_id]).decorate
+    estimation_item = EstimationItem.find(params[:id])
 
-    authorize @estimation, :update?
+    authorize estimation, :update?
+    estimation_item.update_attributes(estimation_item_params)
 
     if request.xhr?
       render json: {success: true}
     else
-      redirect_to estimation_path(@estimation)
+      redirect_to estimation_path(estimation)
     end
   end
 
