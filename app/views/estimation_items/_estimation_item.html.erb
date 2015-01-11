@@ -4,7 +4,7 @@
       <%= estimation_item.value %>
     </span>
   </td>
-  <td><%= editable estimation_item, :title, url: estimation_estimation_item_path(estimation_item.estimation, estimation_item), mode: :inline %></td>
+  <td><%= estimation_item.decorate.editable :title %></td>
   <td>
     <%= button_to [estimation_item.estimation, estimation_item], method: :delete, remote: true, class: 'close pull-right' do %>
       <span>&times;</span>
