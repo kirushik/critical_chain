@@ -15,4 +15,13 @@
 //= require jquery-ui/effect-highlight
 //= require turbolinks
 //= require bootstrap-sprockets
+//= require editable/bootstrap-editable
+//= require editable/rails
 //= require_tree .
+
+var ready = function () {
+  $('.editable').editable();
+}
+
+$(document).ready(ready);
+$(document).on('page:load', ready);
