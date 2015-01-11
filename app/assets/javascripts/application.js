@@ -19,7 +19,7 @@
 //= require editable/rails
 //= require_tree .
 
-var ready = function () {
+var activate_editables = function () {
   $('.editable').editable({success: function(response, newValue) {
     var vals = response.additionalValues;
     if(vals) {
@@ -30,5 +30,5 @@ var ready = function () {
   }});
 }
 
-$(document).ready(ready);
-$(document).on('page:load', ready);
+$(document).ready(activate_editables);
+$(document).on('page:load', activate_editables);

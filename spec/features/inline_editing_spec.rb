@@ -41,4 +41,19 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     expect(page).to have_text new_estimation_value
     expect(page).to have_text '7 + 7 = 14'
   end
+
+  scenario 'AJAX-added items are editable', :js do
+
+    fill_in 'estimation_item_value', with: new_estimation_value
+    fill_in 'estimation_item_title', with: new_estimation_title
+    click_button 'Add estimation item'
+
+    wait_for_ajax
+
+    expect(page).to have_css('span.editable', count: 2*estimation.estimation_items.count) # Two per row — value and title
+
+    page.find('span.editable', text: estimation.estimation_items.last.value).click
+    
+    expect(page).to have_css('.editable-inline')
+  end
 end
