@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.1.5'
+ruby '2.1.4'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.0'
@@ -78,7 +78,7 @@ group :test do
   gem 'poltergeist'
 
   gem 'database_cleaner'
-  
+
   gem 'guard-rspec'
   gem 'libnotify'
 
