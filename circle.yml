@@ -2,6 +2,6 @@ deployment:
   production:
     branch: master
     commands:
-      - heroku pgbackups:capture --app criticalchain --expire
+      - heroku pg:backups  --app criticalchain
       - git push git@heroku.com:criticalchain.git $CIRCLE_SHA1:refs/heads/master
       - heroku run rake db:migrate --app criticalchain
