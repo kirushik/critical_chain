@@ -1,3 +1,4 @@
+{<img alt='Stories in Ready' src='https://badge.waffle.io/kirushik/critical_chain.png?label=ready&title=Ready' />}[https://waffle.io/kirushik/critical_chain]
 == README
 
 This README would normally document whatever steps are necessary to get the
