@@ -27,14 +27,18 @@ class EstimationItemsController < ApplicationController
     @estimation_item = EstimationItem.find(params[:id])
 
     authorize @estimation, :update?
-    @estimation_item.update_attributes(estimation_item_params)
+    result = @estimation_item.update_attributes(estimation_item_params)
 
     @estimation.reload
     
     if request.xhr?
+      # return render plain: @estimation_item.errors.first, status: :bad_request unless result
+
       respond_to do |format|
         format.json do
-          render json: {success: true, additionalValues: {
+          render json: {success: result,
+            msg: @estimation_item.errors.full_messages.first,
+            additionalValues: {
               sum: @estimation.sum,
               buffer: @estimation.buffer,
               total: @estimation.total
@@ -43,7 +47,7 @@ class EstimationItemsController < ApplicationController
         format.js
       end
     else
-      redirect_to estimation_path(estimation)
+      redirect_to estimation_path(@estimation)
     end
   end
 
