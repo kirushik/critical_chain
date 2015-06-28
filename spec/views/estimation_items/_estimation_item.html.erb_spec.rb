@@ -13,4 +13,13 @@ RSpec.describe "estimation_items/_estimation_item.html.erb", :type => :view do
     expect(rendered).to have_css('.fa-toggle-on')
   end
 
+  it 'should render number editor for batch items' do
+    estimation_item = FactoryGirl.create(:estimation_item, quantity: 17)
+    render partial: "estimation_items/estimation_item", locals: { estimation_item: estimation_item }
+
+    html = Nokogiri::HTML.parse(rendered)
+
+    expect(html.css('.fa-copy')).not_to be_empty
+    expect(html.css('.quantity').first.attributes['data-value'].value).to eq '17'
+  end
 end

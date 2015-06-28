@@ -17,7 +17,7 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
   scenario 'I can modify the estimation item title', :js do
     expect(page).not_to have_text new_estimation_title
 
-    page.find('span.editable', text: estimation.estimation_items.first.title).click
+    page.find('span.editable.title', text: estimation.estimation_items.first.title).click
     expect(page).to have_css('.editable-inline')
 
     page.find('.editable-inline .editable-input input').set new_estimation_title
@@ -34,7 +34,7 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
   scenario 'I can modify estimation item value', :js do
     expect(page).not_to have_text new_estimation_value
 
-    page.find('span.editable', text: estimation.estimation_items.first.value).click
+    page.find('span.editable.value', text: estimation.estimation_items.first.value).click
     page.find('.editable-inline .editable-input input').set new_estimation_value
     page.find('.editable-inline .editable-submit').click
 
@@ -52,7 +52,9 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
 
     wait_for_ajax
 
-    expect(page).to have_css('span.editable', count: 2*estimation.estimation_items.count) # Two per row — value and title
+    expect(page).to have_css('span.editable.value', count: estimation.estimation_items.count)
+    expect(page).to have_css('span.editable.title', count: estimation.estimation_items.count)
+    expect(page).to have_css('span.editable.quantity', count: estimation.estimation_items.count)
 
     page.find('span.editable', text: estimation.estimation_items.last.value).click
     
@@ -63,5 +65,13 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     find(:css, '.toggle-fixed').click
 
     expect(page).to have_text "#{old_estimation_value} + 0 = #{old_estimation_value}"
+  end
+
+  scenario 'I can set the number for a batch', :js do
+    page.find('span.editable.quantity').click
+    page.find('.editable-inline .editable-input input').set '4'
+    page.find('.editable-inline .editable-submit').click
+
+    expect(page).to have_text "#{4*old_estimation_value} + #{2*old_estimation_value} = #{6*old_estimation_value}"
   end
 end

@@ -5,7 +5,7 @@ RSpec.describe EstimationItemsController, :type => :controller do
   describe "POST create" do
 
     let(:user) { FactoryGirl.create(:user_with_estimations) }
-    let(:estimation) { user.estimations.first}
+    let(:estimation) { user.estimations.first }
 
     before(:each) do
       sign_in user
