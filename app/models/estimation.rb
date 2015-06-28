@@ -18,7 +18,7 @@ class Estimation < ActiveRecord::Base
   has_many :estimation_items, dependent: :destroy
 
   def sum
-    estimation_items.sum(:value)
+    estimation_items.sum('value * quantity')
   end
 
   def buffer
@@ -32,12 +32,12 @@ class Estimation < ActiveRecord::Base
   private
   def bufferable_sum
     #TODO Make this a scope
-    estimation_items.where(fixed: false).sum(:value)
+    estimation_items.where(fixed: false).sum('value * quantity')
   end
 
   def bufferable_count
     #TODO Make this a scope
-    count = estimation_items.where(fixed: false).count
+    count = estimation_items.where(fixed: false).sum(:quantity)
     count == 0 ? 1 : count
   end
 end

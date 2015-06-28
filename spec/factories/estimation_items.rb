@@ -9,6 +9,7 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  fixed         :boolean          default(FALSE), not null
+#  quantity      :integer          default(1), not null
 #
 # Indexes
 #
@@ -17,9 +18,10 @@
 
 FactoryGirl.define do
   factory :estimation_item do
-    value { Faker::Number.number(2) }
-    title { Faker::Lorem.sentence }
+    sequence(:value) { Faker::Number.number(2) }
+    sequence(:title) { Faker::Lorem.sentence }
     fixed false
+    quantity 1
 
     estimation
   end
