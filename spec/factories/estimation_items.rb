@@ -9,6 +9,7 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  fixed         :boolean          default(FALSE), not null
+#  quantity      :integer          default(1), not null
 #
 # Indexes
 #
