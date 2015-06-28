@@ -1,7 +1,7 @@
 <tr id="<%= dom_id estimation_item %>">
   <td class="text-right">
     <span class="lead">
-      <%= estimation_item.decorate.editable :value %>
+      <%= estimation_item.decorate.editable :value, type: :number %>
     </span>
   </td>
   <td>
@@ -16,7 +16,7 @@
   <td><%= estimation_item.decorate.editable :title %></td>
   <td>
     <%= icon(:copy) %>
-    <%= estimation_item.decorate.editable :quantity %>
+    <%= estimation_item.decorate.editable :quantity, type: :number %>
   </td>
   <td>
     <%= button_to [estimation_item.estimation, estimation_item], method: :delete, remote: true, class: 'close pull-right' do %>
