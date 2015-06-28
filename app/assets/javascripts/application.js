@@ -21,6 +21,7 @@
 
 var activate_editables = function () {
   $('.editable').editable({success: function(response, newValue) {
+    if(!response.success) return response.msg; //msg will be shown in editable form
     var vals = response.additionalValues;
     if(vals) {
       $('#total').text(vals.total);

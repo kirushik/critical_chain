@@ -2,16 +2,14 @@ require 'rails_helper'
 
 RSpec.describe EstimationItemsController, :type => :controller do
 
+  let(:user) { FactoryGirl.create(:user_with_estimations) }
+  let(:estimation) { user.estimations.first }
+
+  before(:each) do
+    sign_in user
+  end
+  
   describe "POST create" do
-
-    let(:user) { FactoryGirl.create(:user_with_estimations) }
-    let(:estimation) { user.estimations.first }
-
-    before(:each) do
-      sign_in user
-    end
-
-
     it "adds an item to the estimation when authorized" do
       expect(estimation.estimation_items.size).to eq(0)
 
@@ -34,6 +32,16 @@ RSpec.describe EstimationItemsController, :type => :controller do
       post :create, estimation_id: estimation.id, estimation_item: { value: 117 }
       
       expect(assigns(:estimation)).to be_decorated
+    end
+  end
+
+  describe "PATCH update" do
+    let(:estimation_item) { FactoryGirl.create :estimation_item, estimation: estimation }
+
+    it 'denies to update quantity to negative numbers' do
+      xhr :patch, :update, id: estimation_item.id, estimation_id: estimation.id, estimation_item: { quantity: -1 }, format: :json
+
+      expect(JSON.parse(response.body)['success']).to be_falsey
     end
   end
 end
