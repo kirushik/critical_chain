@@ -66,6 +66,34 @@ RSpec.describe Estimation, :type => :model do
         expect(subject.total).to eq 10
       end
     end
+
+    context 'with batch items' do
+      it 'takes quantity in account' do
+        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1, quantity: 4)
+
+        expect(subject.sum).to eq 4
+        expect(subject.buffer).to eq 2
+        expect(subject.total).to eq 6
+      end
+
+      it 'can mix batches and ordinary items' do
+        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1, quantity: 3)
+        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1)
+
+        expect(subject.sum).to eq 4
+        expect(subject.buffer).to eq 2
+        expect(subject.total).to eq 6
+      end
+
+      it 'avoids fixed items in calculations' do
+        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1, quantity: 4)
+        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 10, fixed: true)
+
+        expect(subject.sum).to eq 14
+        expect(subject.buffer).to eq 2
+        expect(subject.total).to eq 16
+      end
+    end
   end
 
   describe 'deletions' do
