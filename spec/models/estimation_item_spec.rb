@@ -38,4 +38,8 @@ RSpec.describe EstimationItem, :type => :model do
     should_not_accept_value -1
     should_accept_value 0
   end
+
+  it 'should be not-fixed by default' do
+    expect(EstimationItem.new.fixed?).to eq false
+  end
 end

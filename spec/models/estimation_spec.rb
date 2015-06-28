@@ -30,7 +30,7 @@ RSpec.describe Estimation, :type => :model do
         subject.estimation_items << FactoryGirl.create(:estimation_item, value: 3)
       end
 
-      expect(subject.sum).to be(6)
+      expect(subject.sum).to eq 6
     end
 
     it "should calculate buffer" do
@@ -38,13 +38,33 @@ RSpec.describe Estimation, :type => :model do
         subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1)
       end
       
-      expect(subject.buffer).to be(2.0)
+      expect(subject.buffer).to eq 2
     end
 
     it 'should calculate total' do
       subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1)
 
-      expect(subject.total).to be(2.0)
+      expect(subject.total).to eq 2
+    end
+
+    context 'with fixed items' do
+      it 'should yield zero buffer if only fixed items present' do
+        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1, fixed: true)
+        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1, fixed: true)
+
+        expect(subject.buffer).to eq 0
+      end
+
+      it 'should count buffers ignoring fixed items' do
+        4.times do
+          subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1)
+          subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1, fixed: true)
+        end
+
+        expect(subject.sum).to eq 8
+        expect(subject.buffer).to eq 2
+        expect(subject.total).to eq 10
+      end
     end
   end
 
