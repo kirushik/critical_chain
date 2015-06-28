@@ -1,0 +1,8 @@
+$('#<%= dom_id @estimation_item %>').replaceWith('<%=j render @estimation_item %>');
+$('#<%= dom_id @estimation_item %>').effect('highlight', {color:"#f7f7e5"}, 1000);
+
+$('#total').text('<%= @estimation.total %>');
+$('#sum').text('<%= @estimation.sum %>');
+$('#buffer').text('<%= @estimation.buffer %>');
+
+activate_editables();

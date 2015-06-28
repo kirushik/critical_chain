@@ -18,5 +18,8 @@ FactoryGirl.define do
   factory :estimation_item do
     value { Faker::Number.number(2) }
     title { Faker::Lorem.sentence }
+    fixed false
+
+    estimation
   end
 end

@@ -23,20 +23,25 @@ class EstimationItemsController < ApplicationController
   end
 
   def update
-    estimation = Estimation.find(params[:estimation_id]).decorate
-    estimation_item = EstimationItem.find(params[:id])
+    @estimation = Estimation.find(params[:estimation_id]).decorate
+    @estimation_item = EstimationItem.find(params[:id])
 
-    authorize estimation, :update?
-    estimation_item.update_attributes(estimation_item_params)
+    authorize @estimation, :update?
+    @estimation_item.update_attributes(estimation_item_params)
 
-    estimation.reload
+    @estimation.reload
     
     if request.xhr?
-      render json: {success: true, additionalValues: {
-          sum: estimation.sum,
-          buffer: estimation.buffer,
-          total: estimation.total
-        }}
+      respond_to do |format|
+        format.json do
+          render json: {success: true, additionalValues: {
+              sum: @estimation.sum,
+              buffer: @estimation.buffer,
+              total: @estimation.total
+            }}
+        end
+        format.js
+      end
     else
       redirect_to estimation_path(estimation)
     end
@@ -44,6 +49,6 @@ class EstimationItemsController < ApplicationController
 
   private
   def estimation_item_params
-    params.require(:estimation_item).permit(:title, :value)
+    params.require(:estimation_item).permit(:title, :value, :fixed)
   end
 end
