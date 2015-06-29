@@ -25,8 +25,16 @@ class EstimationsController < ApplicationController
     redirect_to estimations_path unless request.xhr?
   end
 
+  def update
+    @estimation = Estimation.find(params[:id])
+    authorize @estimation, :update?
+    @estimation.update!(estimation_params)
+
+    redirect_to estimation_path(@estimation)
+  end
+
   private
   def estimation_params
-    params.require(:estimation).permit(:title)
+    params.require(:estimation).permit(:title, :tracking_mode)
   end
 end

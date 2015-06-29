@@ -50,4 +50,23 @@ RSpec.describe EstimationsController, :type => :controller do
     end
   end
 
+  describe 'PATCH update' do
+    let(:user) { FactoryGirl.create(:user_with_estimations) }
+    let(:estimation) { user.estimations.first }
+
+    before(:each) do
+      sign_in user
+    end
+
+    it 'allows changing of Estimation#tracking_mode' do
+      xhr :patch, :update, id: estimation.id, estimation: { tracking_mode: true }
+
+      expect(estimation.reload.tracking_mode?).to be_truthy
+    end
+
+    it 'redirects to the estimation if no XHR happened' do
+      patch :update, id: estimation.id, estimation: { tracking_mode: true }
+      expect(response).to redirect_to(estimation_path(estimation))
+    end
+  end
 end

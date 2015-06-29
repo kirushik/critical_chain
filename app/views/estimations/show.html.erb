@@ -7,6 +7,15 @@
 </div>
 
 <div class="col-md-5 col-md-offset-1">
+  <p>
+    <%= form_for @estimation, method: :patch do |f| %>
+      <span class="h4"><span class="small">Tracking mode</span></span>
+      <%= f.hidden_field :tracking_mode, :value => !@estimation.tracking_mode? %>
+      <%= f.button type: :submit, class: 'btn btn-link toggle-tracking' do %>
+        <span class="fa fa-lg <%= @estimation.tracking_mode? ? 'fa-toggle-on' : 'fa-toggle-off' %>"></span>
+      <% end %>
+    <% end %>
+  </p>
   <%= form_for [@estimation, EstimationItem.new], html: { class: 'form-inline' }, remote: true do |f| %>
     <div class="form-group">
       <%= f.label :value, class: 'sr-only' %>

@@ -25,4 +25,8 @@ RSpec.describe "estimations/show.html.erb", :type => :view do
   it 'shows the rounded total value' do
     expect(rendered).to have_text(6.83) 
   end
+
+  it 'shows tracking mode toggle' do
+    expect(rendered).to have_css('.toggle-tracking')
+  end
 end
