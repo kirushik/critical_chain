@@ -73,7 +73,7 @@ RSpec.describe User, :type => :model do
     end
 
     it "should not include other user's estimations" do
-      user = FactoryGirl.create(:user_with_estimations, estimations: 3)
+      user = FactoryGirl.create(:user_with_estimations, n: 3)
       FactoryGirl.create(:user_with_estimations)
 
       user = User.find(user.id)
