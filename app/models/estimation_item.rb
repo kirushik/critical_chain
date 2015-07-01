@@ -21,5 +21,6 @@ class EstimationItem < ActiveRecord::Base
   belongs_to :estimation
 
   validates :value, presence: true, :numericality => { :greater_than_or_equal_to => 0 }
+  validates :actual_value, :numericality => { :greater_than_or_equal_to => 0, allow_blank: true }
   validates :quantity, presence: true, :numericality => { :greater_than => 0 }
 end
