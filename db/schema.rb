@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150629193208) do
+ActiveRecord::Schema.define(version: 20150701170544) do
 
   create_table "estimation_items", force: :cascade do |t|
     t.integer  "value"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20150629193208) do
     t.datetime "updated_at",                    null: false
     t.boolean  "fixed",         default: false, null: false
     t.integer  "quantity",      default: 1,     null: false
+    t.float    "actual_value"
   end
 
   add_index "estimation_items", ["estimation_id"], name: "index_estimation_items_on_estimation_id"
