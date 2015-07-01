@@ -53,6 +53,6 @@ class EstimationItemsController < ApplicationController
 
   private
   def estimation_item_params
-    params.require(:estimation_item).permit(:title, :value, :quantity, :fixed)
+    params.require(:estimation_item).permit(:title, :value, :quantity, :fixed, :actual_value)
   end
 end
