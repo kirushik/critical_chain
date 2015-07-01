@@ -47,7 +47,7 @@ describe EstimationDecorator do
       FactoryGirl.create :estimation_item, estimation: estimation, actual_value: 1
       FactoryGirl.create :estimation_item, estimation: estimation
       
-      expect(estimation.decorate.actual_sum).to eq("1") 
+      expect(estimation.decorate.actual_sum).to eq(1.0) 
     end
   end
 

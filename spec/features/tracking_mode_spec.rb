@@ -28,6 +28,6 @@ feature "Tracking mode", :type => :feature do
     page.find('.editable-inline .editable-input input').set 11179
     page.find('.editable-inline .editable-submit').click
 
-    expect(page).to have_text "11200 out of #{estimation.decorate.total}"
+    expect(page).to have_text "11179 out of #{estimation.decorate.total}"
   end
 end

@@ -23,6 +23,6 @@ class EstimationDecorator < Draper::Decorator
   end
 
   def actual_sum
-    object.estimation_items.sum(:actual_value).to_s(:rounded, significant: true).gsub(/\.0+$/, '') rescue "0"
+    object.estimation_items.sum(:actual_value)
   end
 end
