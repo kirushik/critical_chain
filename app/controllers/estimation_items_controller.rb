@@ -41,7 +41,8 @@ class EstimationItemsController < ApplicationController
             additionalValues: {
               sum: @estimation.sum,
               buffer: @estimation.buffer,
-              total: @estimation.total
+              total: @estimation.total,
+              actual_sum: @estimation.actual_sum
             }}
         end
         format.js

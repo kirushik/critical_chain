@@ -25,7 +25,9 @@ feature "Tracking mode", :type => :feature do
     visit estimation_path(tracking_mode_estimation)
 
     page.first('span.editable.actual_value').click
-    page.find('.editable-inline .editable-input input').set 10
+    page.find('.editable-inline .editable-input input').set 11179
     page.find('.editable-inline .editable-submit').click
+
+    expect(page).to have_text "11200 out of #{estimation.decorate.total}"
   end
 end

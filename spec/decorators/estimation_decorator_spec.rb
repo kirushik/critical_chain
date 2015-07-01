@@ -40,4 +40,14 @@ describe EstimationDecorator do
       expect(estimation.items_partial_name).to eq("estimation_items/estimation_item_trackable") 
     end
   end
+
+  describe '#actual_sum' do
+    it 'returns correct partial for estimation mode' do
+      estimation = FactoryGirl.create(:estimation)
+      FactoryGirl.create :estimation_item, estimation: estimation, actual_value: 1
+      FactoryGirl.create :estimation_item, estimation: estimation
+      
+      expect(estimation.decorate.actual_sum).to eq("1") 
+    end
+  end
 end

@@ -43,5 +43,19 @@ RSpec.describe EstimationItemsController, :type => :controller do
 
       expect(JSON.parse(response.body)['success']).to be_falsey
     end
+
+    it 'returns expected set of additional values' do
+      xhr :patch, :update, id: estimation_item.id, estimation_id: estimation.id, estimation_item: { a: 1 }, format: :json
+      decorated_estimation = estimation.decorate
+
+      expect(JSON.parse(response.body)['additionalValues']).to eq(
+        {
+          'buffer' => decorated_estimation.buffer,
+          'sum' => decorated_estimation.sum,
+          'total' => decorated_estimation.total,
+          'actual_sum' => decorated_estimation.actual_sum
+        }
+      )
+    end
   end
 end
