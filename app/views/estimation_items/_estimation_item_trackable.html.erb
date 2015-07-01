@@ -1,17 +1,18 @@
 <tr id="<%= dom_id estimation_item %>">
   <td class="text-right">
     <span class="lead">
-      <%= estimation_item.value %>
+    <% if estimation_item.quantity > 1 %>
+      <span class="small text-muted"><%= "#{estimation_item.quantity}×#{estimation_item.value}=" %></span>
+    <% end %>
+      <%= estimation_item.value * estimation_item.quantity %>
     </span>
   </td>
+
   <td>
     <% if estimation_item.fixed? %>
       <span class="fa fa-dot-circle-o"></span>
     <% end %>
   </td>
+
   <td><%= estimation_item.title %></td>
-  <td>
-    <%= icon(:copy) %>
-    <%= estimation_item.quantity %>
-  </td>
 </tr>
