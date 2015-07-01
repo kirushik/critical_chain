@@ -41,7 +41,8 @@ class EstimationItemsController < ApplicationController
             additionalValues: {
               sum: @estimation.sum,
               buffer: @estimation.buffer,
-              total: @estimation.total
+              total: @estimation.total,
+              actual_sum: @estimation.actual_sum
             }}
         end
         format.js
@@ -53,6 +54,6 @@ class EstimationItemsController < ApplicationController
 
   private
   def estimation_item_params
-    params.require(:estimation_item).permit(:title, :value, :quantity, :fixed)
+    params.require(:estimation_item).permit(:title, :value, :quantity, :fixed, :actual_value)
   end
 end

@@ -39,15 +39,67 @@ RSpec.describe EstimationsController, :type => :controller do
   end
 
   describe "GET show" do
-    it 'decorates loaded Estimation' do
-      user = FactoryGirl.create(:user_with_estimations)
-      sign_in user
-      estimation = user.estimations.first
+    let(:user) { FactoryGirl.create(:user_with_estimations) }
+    let(:estimation) { user.estimations.first }
 
+    before(:each) do
+      sign_in user
+    end
+
+    it 'decorates loaded Estimation' do
       get :show, id: estimation.id
 
       expect(assigns(:estimation)).to be_decorated
     end
+
+
+    context 'estimation in planning mode' do
+      render_views
+      let(:estimation) { FactoryGirl.create(:estimation, user: user, tracking_mode: false) }
+
+      it 'should render planning-related partials' do
+        get :show, id: estimation.id
+        
+        expect(response).to render_template(partial: 'estimation_items/_estimation_item_editable', count: estimation.estimation_items.count)
+        expect(response).to render_template(partial: 'estimation_items/_form_for_new')
+        expect(response).to render_template(partial: 'estimations/_results')
+        expect(response).to render_template(partial: 'estimations/_mode_toggle')
+
+      end
+    end
+
+    context 'estimation in tracking mode' do
+      render_views
+      let(:estimation) { FactoryGirl.create(:estimation, user: user, tracking_mode: true) }
+
+      it 'should render tracking-related partials' do
+        get :show, id: estimation.id
+        
+        expect(response).to render_template(partial: 'estimation_items/_estimation_item_trackable', count: estimation.estimation_items.count)
+        expect(response).to render_template(partial: 'estimations/_graph')
+        expect(response).to render_template(partial: 'estimations/_results')
+        expect(response).to render_template(partial: 'estimations/_mode_toggle')
+      end
+    end
   end
 
+  describe 'PATCH update' do
+    let(:user) { FactoryGirl.create(:user_with_estimations) }
+    let(:estimation) { user.estimations.first }
+
+    before(:each) do
+      sign_in user
+    end
+
+    it 'allows changing of Estimation#tracking_mode' do
+      xhr :patch, :update, id: estimation.id, estimation: { tracking_mode: true }
+
+      expect(estimation.reload.tracking_mode?).to be_truthy
+    end
+
+    it 'redirects to the estimation if no XHR happened' do
+      patch :update, id: estimation.id, estimation: { tracking_mode: true }
+      expect(response).to redirect_to(estimation_path(estimation))
+    end
+  end
 end

@@ -10,6 +10,7 @@
 #  updated_at    :datetime         not null
 #  fixed         :boolean          default(FALSE), not null
 #  quantity      :integer          default(1), not null
+#  actual_value  :float
 #
 # Indexes
 #
@@ -20,5 +21,6 @@ class EstimationItem < ActiveRecord::Base
   belongs_to :estimation
 
   validates :value, presence: true, :numericality => { :greater_than_or_equal_to => 0 }
+  validates :actual_value, :numericality => { :greater_than_or_equal_to => 0, allow_blank: true }
   validates :quantity, presence: true, :numericality => { :greater_than => 0 }
 end

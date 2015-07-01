@@ -27,6 +27,7 @@ var activate_editables = function () {
       $('#total').text(vals.total);
       $('#sum').text(vals.sum);
       $('#buffer').text(vals.buffer);
+      $('#actual_sum').text(vals.actual_sum);
     }
   }});
 }
