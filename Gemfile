@@ -53,6 +53,7 @@ end
 
 group :development, :test do
   gem 'spring'
+  gem 'spring-commands-rspec'
 
   gem 'pry-rails'
   gem 'better_errors'
