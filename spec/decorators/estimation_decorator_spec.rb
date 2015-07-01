@@ -50,4 +50,14 @@ describe EstimationDecorator do
       expect(estimation.decorate.actual_sum).to eq("1") 
     end
   end
+
+  describe '#estimation_items' do
+    it 'orders items by created_at' do
+      estimation = FactoryGirl.create(:estimation)
+      new_item = FactoryGirl.create :estimation_item, estimation: estimation, created_at: 1.minute.ago
+      old_item = FactoryGirl.create :estimation_item, estimation: estimation, created_at: 1.hour.ago
+
+      expect(estimation.decorate.estimation_items).to eq [old_item, new_item]
+    end
+  end
 end
