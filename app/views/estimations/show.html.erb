@@ -2,50 +2,13 @@
 
 <div class="col-md-6">
   <table id="<%= dom_id @estimation %>" class="table table-hover">
-    <%= render @estimation.estimation_items %>
+    <%= render @estimation.estimation_items, locals: { tracking_mode: @estimation.tracking_mode? } %>
   </table>
 </div>
 
 <div class="col-md-5 col-md-offset-1">
-  <p>
-    <%= form_for @estimation, method: :patch do |f| %>
-      <span class="h4"><span class="small">Tracking mode</span></span>
-      <%= f.hidden_field :tracking_mode, :value => !@estimation.tracking_mode? %>
-      <%= f.button type: :submit, class: 'btn btn-link toggle-tracking' do %>
-        <span class="fa fa-lg <%= @estimation.tracking_mode? ? 'fa-toggle-on' : 'fa-toggle-off' %>"></span>
-      <% end %>
-    <% end %>
-  </p>
-  <%= form_for [@estimation, EstimationItem.new], html: { class: 'form-inline' }, remote: true do |f| %>
-    <div class="form-group">
-      <%= f.label :value, class: 'sr-only' %>
-      <%= f.number_field :value, class: 'form-control value', placeholder: 'Value', autofocus: true %>
-    </div>
-    <div class="form-group">
-      <%= f.label :title, class: 'sr-only' %>
-      <%= f.text_field :title, class: 'form-control title', placeholder: 'Item title (optional)' %>
-    </div>
-    <%= f.button class: 'btn btn-success', value: 'Add estimation item', type: :submit do %>
-      <%= icon('plus-circle fa-lg') %>
-    <% end %>
-  <% end %>
-
-
-  <table id="results-table">
-    <tr class="lead">
-      <td class="text-success" id="sum"><%= @estimation.sum %></td>
-      <td class="text-muted"><small>+</small></td>
-      <td class="text-info" id="buffer"><%= @estimation.buffer %></td>
-      <td class="text-muted"><small>=</small></td>
-      <td class="text-warning" id="total"><%= @estimation.total %></td>
-    </tr>
-    <tr class="text-muted text-center">
-      <td><small>Sum</small></td>
-      <td></td>
-      <td><small>Buffer</small></td>
-      <td></td>
-      <td><small>Total</small></td>
-    </tr>
-  </table>
-
+  <%= render 'mode_toggle' %>
+  <%= render 'estimation_items/form_for_new' unless @estimation.tracking_mode? %>
+  <%= render 'results' %>
+  <%= render 'graph' if @estimation.tracking_mode? %>
 </div>
