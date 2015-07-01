@@ -27,6 +27,17 @@ describe EstimationDecorator do
 
     expect(estimation.buffer).to eq("1")
     expect(estimation.total).to eq("2") 
-    
+  end
+
+  describe '#items_partial_name' do
+    it 'returns correct partial for estimation mode' do
+      estimation = FactoryGirl.create(:estimation).decorate
+      expect(estimation.items_partial_name).to eq("estimation_items/estimation_item") 
+    end
+
+    it 'returns correct for tracking mode' do
+      estimation = FactoryGirl.create(:estimation, tracking_mode: true).decorate
+      expect(estimation.items_partial_name).to eq("estimation_items/estimation_item_trackable") 
+    end
   end
 end

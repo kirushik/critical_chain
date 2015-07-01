@@ -60,7 +60,7 @@ RSpec.describe EstimationsController, :type => :controller do
       it 'should render planning-related partials' do
         get :show, id: estimation.id
         
-        expect(response).to render_template(partial: 'estimation_items/_estimation_item', count: estimation.estimation_items.count)
+        expect(response).to render_template(partial: 'estimation_items/_estimation_item_editable', count: estimation.estimation_items.count)
         expect(response).to render_template(partial: 'estimation_items/_form_for_new')
         expect(response).to render_template(partial: 'estimations/_results')
         expect(response).to render_template(partial: 'estimations/_mode_toggle')
@@ -75,7 +75,7 @@ RSpec.describe EstimationsController, :type => :controller do
       it 'should render tracking-related partials' do
         get :show, id: estimation.id
         
-        expect(response).to render_template(partial: 'estimation_items/_estimation_item', count: estimation.estimation_items.count)
+        expect(response).to render_template(partial: 'estimation_items/_estimation_item_trackable', count: estimation.estimation_items.count)
         expect(response).to render_template(partial: 'estimations/_graph')
         expect(response).to render_template(partial: 'estimations/_results')
         expect(response).to render_template(partial: 'estimations/_mode_toggle')

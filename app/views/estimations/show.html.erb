@@ -2,7 +2,7 @@
 
 <div class="col-md-6">
   <table id="<%= dom_id @estimation %>" class="table table-hover">
-    <%= render @estimation.estimation_items, locals: { tracking_mode: @estimation.tracking_mode? } %>
+    <%= render partial: @estimation.items_partial_name, collection: @estimation.estimation_items, as: :estimation_item %>
   </table>
 </div>
 
