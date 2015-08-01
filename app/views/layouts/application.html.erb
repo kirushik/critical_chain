@@ -15,7 +15,16 @@
       <div class="navbar-header">
         <a href="/" class="navbar-brand">Buffer estimator</a>
       </div>
+
+      <% if user_signed_in? %>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <%= link_to "Sign out", :destroy_user_session %>
+          </li>
+        </ul>
+      <% end %>
     </div>
+
   </div>
 <p class="notice"><%= notice %></p>
 <p class="alert"><%= alert %></p>
