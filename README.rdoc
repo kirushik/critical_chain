@@ -3,10 +3,8 @@
 {<img src="https://circleci.com/gh/kirushik/critical_chain.svg?style=svg" alt="Circle CI" />}[https://circleci.com/gh/kirushik/critical_chain]
 
 {<img src="https://codeclimate.com/github/kirushik/critical_chain/badges/gpa.svg" />}[https://codeclimate.com/github/kirushik/critical_chain]
-
 {<img src="https://codeclimate.com/github/kirushik/critical_chain/badges/coverage.svg" />}[https://codeclimate.com/github/kirushik/critical_chain/coverage]
-
-{<img src="https://codeclimate.com/github/kirushik/critical_chain/badges/coverage.svg" />}[https://codeclimate.com/github/kirushik/critical_chain/coverage]
+{<img src="https://gemnasium.com/kirushik/critical_chain.svg" alt="Dependency Status" />}[https://gemnasium.com/kirushik/critical_chain]
 
 == README
 
