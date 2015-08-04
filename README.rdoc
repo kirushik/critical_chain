@@ -1,4 +1,13 @@
 {<img alt='Stories in Ready' src='https://badge.waffle.io/kirushik/critical_chain.png?label=ready&title=Ready' />}[https://waffle.io/kirushik/critical_chain]
+
+{<img src="https://circleci.com/gh/kirushik/critical_chain.svg?style=svg" alt="Circle CI" />}[https://circleci.com/gh/kirushik/critical_chain]
+
+{<img src="https://codeclimate.com/github/kirushik/critical_chain/badges/gpa.svg" />}[https://codeclimate.com/github/kirushik/critical_chain]
+
+{<img src="https://codeclimate.com/github/kirushik/critical_chain/badges/coverage.svg" />}[https://codeclimate.com/github/kirushik/critical_chain/coverage]
+
+{<img src="https://codeclimate.com/github/kirushik/critical_chain/badges/coverage.svg" />}[https://codeclimate.com/github/kirushik/critical_chain/coverage]
+
 == README
 
 This README would normally document whatever steps are necessary to get the
