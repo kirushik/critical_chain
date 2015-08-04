@@ -5,6 +5,7 @@
 {<img src="https://codeclimate.com/github/kirushik/critical_chain/badges/gpa.svg" />}[https://codeclimate.com/github/kirushik/critical_chain]
 {<img src="https://codeclimate.com/github/kirushik/critical_chain/badges/coverage.svg" />}[https://codeclimate.com/github/kirushik/critical_chain/coverage]
 {<img src="https://gemnasium.com/kirushik/critical_chain.svg" alt="Dependency Status" />}[https://gemnasium.com/kirushik/critical_chain]
+{<img src="https://hakiri.io/github/kirushik/critical_chain/master.svg" alt="security" />}[https://hakiri.io/github/kirushik/critical_chain/master]
 
 == README
 
