@@ -1,0 +1,15 @@
+{
+  "name": "Critical Chain Buffers",
+  "description": "Helps users to add sensible buffers to their project estimations.",
+  "keywords": [
+    "productivity",
+    "rails",
+    "estimation",
+    "project management"
+  ],
+  "repository": "https://github.com/kirushik/critical_chain",
+  "success_url": "/",
+  "scripts": {
+    "postdeploy": "bundle exec rake db:migrate"
+  }
+}
