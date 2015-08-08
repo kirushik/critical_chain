@@ -8,11 +8,22 @@
 
 This is a free software, distributed under the GNU AGPL license. See `license.txt` for the full license text.
 
-Critical Chain Buffer Estimator
-========================
+
+# Critical Chain Buffer Estimator
 
 This project helps users to add sensible buffers to their project estimations (costs, lengths, resource usage...)
 The assumptions and math behind it is based on principles of Critical Chain Project Management (CCPM).
 
 
 Please see it in action [here](https://cc.pimenov.cc)
+
+
+## Development instructions
+
+It is a pretty typical Rails project.
+
+Please fork it, clone it, run `bundle install` to fetch all the dependencies.
+
+All tests are written in RSpec, so `bundle exec rspec` should do the trick with testing. `phantomjs` binary should be in `PATH` to run javascript-related feature tests. (See `spec/features` folder.)
+
+Development is managed with [Waffle.io board](https://waffle.io/kirushik/critical_chain); feel free to report bugs, add new ideas and submit pull requests by default GitHub means.
