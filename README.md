@@ -22,12 +22,15 @@ Please see it in action [here](https://cc.pimenov.cc)
 
 It is a pretty typical Rails project.
 
-Please fork it, clone it, run `bundle install` to fetch all the dependencies.
+Please fork it, clone it, run `bundle install` to fetch all the dependencies. Then copy `application.yml.sample` in application.yml, and populate it with proper Google API keys from [here](https://console.developers.google.com). You'll have to create a new OAuth credentials pair, bound to `localhost` host.
 
 All tests are written in RSpec, so `bundle exec rspec` should do the trick with testing. `phantomjs` binary should be in `PATH` to run javascript-related feature tests. (See `spec/features` folder.)
 
 Development is managed with [Waffle.io board](https://waffle.io/kirushik/critical_chain); feel free to report bugs, add new ideas and submit pull requests by default GitHub means.
 
+
 ## Deploy your own
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+**Please note** This project expects `google_oauth2_app_id` and `google_oauth2_app_secret` environment variables to be set. You can do that with `heroku config:set` command or from Heroku GUI.
