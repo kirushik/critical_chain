@@ -111,17 +111,17 @@ RSpec.describe Estimation, :type => :model do
     end
   end
 
-  describe 'buffer consumption should be calculated in tracking mode' do
+  describe 'buffer consumption speed' do
     subject { FactoryGirl.create :estimation_with_items }
 
     it 'should be zero if no items are completed' do
-      expect(subject.buffer_consumption).to eq 0
+      expect(subject.buffer_consumption_speed).to eq 0
     end
 
     it 'should be 1.0 if elapsed is twice estimated' do
       estimation_item = subject.estimation_items.first
       estimation_item.update_attribute(:actual_value, 2 * estimation_item.value)
-      expect(subject.buffer_consumption).to eq 1.0
+      expect(subject.buffer_consumption_speed).to eq 1.0
     end
 
     it 'calculates consumption when several estimation items present' do
@@ -129,7 +129,7 @@ RSpec.describe Estimation, :type => :model do
       estimation_item = estimation.estimation_items.first
       estimation_item.update_attribute(:actual_value, 2 * estimation_item.value)
 
-      expect(estimation.buffer_consumption).to eq 0.5
+      expect(estimation.buffer_consumption_speed).to eq 0.5
     end
   end
 end

@@ -37,4 +37,6 @@ feature "Tracking mode", :type => :feature do
     visit estimation_path(tracking_mode_estimation)
     expect(page).to have_text("50%")
   end
+
+  scenario 'Buffer consumption in tracking mode is recalculated via AJAX', :js
 end

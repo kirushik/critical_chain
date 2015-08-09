@@ -33,7 +33,7 @@ RSpec.describe "estimations/show.html.erb", :type => :view do
     end
 
     it 'doesn\'t show buffer consumption' do
-      expect(rendered).not_to have_text(estimation.buffer_consumption)
+      expect(rendered).not_to have_text(estimation.buffer_consumption_speed)
     end
   end
 
@@ -50,7 +50,7 @@ RSpec.describe "estimations/show.html.erb", :type => :view do
     end
 
     it 'shows buffer consumption' do
-      expect(rendered).to have_text(estimation.buffer_consumption)
+      expect(rendered).to have_text(estimation.buffer_consumption_speed)
     end
   end
 end

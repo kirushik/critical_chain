@@ -28,7 +28,7 @@ class EstimationDecorator < Draper::Decorator
     object.estimation_items.sum(:actual_value)
   end
 
-  def buffer_consumption
-    number_to_percentage(object.buffer_consumption*100, precision: 0)
+  def buffer_consumption_speed
+    number_to_percentage(object.buffer_consumption_speed*100, precision: 0)
   end
 end
