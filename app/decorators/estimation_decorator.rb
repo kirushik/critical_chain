@@ -2,6 +2,8 @@ class EstimationDecorator < Draper::Decorator
   decorates :estimation
   delegate_all
 
+  include ActionView::Helpers::NumberHelper
+
   def estimation_items
     object.estimation_items.order(:created_at)
   end
@@ -24,5 +26,9 @@ class EstimationDecorator < Draper::Decorator
 
   def actual_sum
     object.estimation_items.sum(:actual_value)
+  end
+
+  def buffer_consumption
+    number_to_percentage(object.buffer_consumption*100, precision: 0)
   end
 end

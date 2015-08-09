@@ -4,6 +4,7 @@ feature "Tracking mode", :type => :feature do
   let(:user) { FactoryGirl.create(:user_with_nonempty_estimations, n: 2) }
   let(:estimation) { user.estimations.first }
   let(:tracking_mode_estimation) { FactoryGirl.create(:estimation_with_items, tracking_mode: true, user: user) }
+  let(:first_estimation_item) { tracking_mode_estimation.estimation_items.first }
 
   before(:each) do
     login_as user
@@ -29,5 +30,11 @@ feature "Tracking mode", :type => :feature do
     page.find('.editable-inline .editable-submit').click
 
     expect(page).to have_text "11179 out of #{estimation.decorate.total}"
+  end
+
+  scenario 'I can see buffer consumption in tracking mode' do
+    first_estimation_item.update_attribute(:actual_value, 1.5*first_estimation_item.value)
+    visit estimation_path(tracking_mode_estimation)
+    expect(page).to have_text("50%")
   end
 end

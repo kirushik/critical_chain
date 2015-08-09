@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "estimations/show.html.erb", :type => :view do
 
-  before(:each) do 
+  before(:each) do
     assign(:estimation, estimation)
     render
   end
@@ -25,11 +25,15 @@ RSpec.describe "estimations/show.html.erb", :type => :view do
     end
 
     it 'shows the rounded total value' do
-      expect(rendered).to have_text(6.83) 
+      expect(rendered).to have_text(6.83)
     end
 
     it 'shows tracking mode toggle' do
       expect(rendered).to have_css('.toggle-tracking')
+    end
+
+    it 'doesn\'t show buffer consumption' do
+      expect(rendered).not_to have_text(estimation.buffer_consumption)
     end
   end
 
@@ -38,11 +42,15 @@ RSpec.describe "estimations/show.html.erb", :type => :view do
       estimation = FactoryGirl.create(:estimation, tracking_mode: true)
       FactoryGirl.create :estimation_item, value: 2, actual_value: 3, estimation: estimation
       FactoryGirl.create :estimation_item, value: 2, actual_value: 10, estimation: estimation
-      estimation.decorate 
+      estimation.decorate
     end
 
     it 'shows sum of actual values' do
       expect(rendered).to have_text(estimation.actual_sum)
+    end
+
+    it 'shows buffer consumption' do
+      expect(rendered).to have_text(estimation.buffer_consumption)
     end
   end
 end

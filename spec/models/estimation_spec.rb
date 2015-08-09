@@ -18,7 +18,7 @@ require 'rails_helper'
 
 RSpec.describe Estimation, :type => :model do
   subject { FactoryGirl.create(:estimation) }
-  
+
   describe "estimation_items" do
     it "should be an array" do
       expect(subject.estimation_items).to match_array([])
@@ -38,7 +38,7 @@ RSpec.describe Estimation, :type => :model do
       4.times do
         subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1)
       end
-      
+
       expect(subject.buffer).to eq 2
     end
 
@@ -102,12 +102,34 @@ RSpec.describe Estimation, :type => :model do
       2.times do
         subject.estimation_items << FactoryGirl.create(:estimation_item, value: 3)
       end
-      
+
       expect(EstimationItem.count).to eq(2)
 
       subject.destroy!
 
       expect(EstimationItem.count).to eq(0)
+    end
+  end
+
+  describe 'buffer consumption should be calculated in tracking mode' do
+    subject { FactoryGirl.create :estimation_with_items }
+
+    it 'should be zero if no items are completed' do
+      expect(subject.buffer_consumption).to eq 0
+    end
+
+    it 'should be 1.0 if elapsed is twice estimated' do
+      estimation_item = subject.estimation_items.first
+      estimation_item.update_attribute(:actual_value, 2 * estimation_item.value)
+      expect(subject.buffer_consumption).to eq 1.0
+    end
+
+    it 'calculates consumption when several estimation items present' do
+      estimation = FactoryGirl.create :estimation_with_items, items: { count: 4, size: 10 }
+      estimation_item = estimation.estimation_items.first
+      estimation_item.update_attribute(:actual_value, 2 * estimation_item.value)
+
+      expect(estimation.buffer_consumption).to eq 0.5
     end
   end
 end
