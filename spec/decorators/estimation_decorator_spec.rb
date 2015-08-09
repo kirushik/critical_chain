@@ -12,7 +12,7 @@ describe EstimationDecorator do
     estimation = FactoryGirl.create(:estimation_with_items, items: {count: 2, size: 1}).decorate
 
     expect(estimation.buffer).to eq("1.41")
-    expect(estimation.total).to eq("3.41")    
+    expect(estimation.total).to eq("3.41")
   end
 
   it 'works with empty estimations' do
@@ -26,18 +26,18 @@ describe EstimationDecorator do
     estimation = FactoryGirl.create(:estimation_with_items, items: {count: 1, size: 1}).decorate
 
     expect(estimation.buffer).to eq("1")
-    expect(estimation.total).to eq("2") 
+    expect(estimation.total).to eq("2")
   end
 
   describe '#items_partial_name' do
     it 'returns correct partial for estimation mode' do
       estimation = FactoryGirl.create(:estimation).decorate
-      expect(estimation.items_partial_name).to eq("estimation_items/estimation_item") 
+      expect(estimation.items_partial_name).to eq("estimation_items/estimation_item")
     end
 
     it 'returns correct for tracking mode' do
       estimation = FactoryGirl.create(:estimation, tracking_mode: true).decorate
-      expect(estimation.items_partial_name).to eq("estimation_items/estimation_item_trackable") 
+      expect(estimation.items_partial_name).to eq("estimation_items/estimation_item_trackable")
     end
   end
 
@@ -46,8 +46,8 @@ describe EstimationDecorator do
       estimation = FactoryGirl.create(:estimation)
       FactoryGirl.create :estimation_item, estimation: estimation, actual_value: 1
       FactoryGirl.create :estimation_item, estimation: estimation
-      
-      expect(estimation.decorate.actual_sum).to eq(1.0) 
+
+      expect(estimation.decorate.actual_sum).to eq(1.0)
     end
   end
 
@@ -58,6 +58,15 @@ describe EstimationDecorator do
       old_item = FactoryGirl.create :estimation_item, estimation: estimation, created_at: 1.hour.ago
 
       expect(estimation.decorate.estimation_items).to eq [old_item, new_item]
+    end
+  end
+
+  describe '#buffer_consumption_speed' do
+    it 'outputs percentage' do
+      estimation = FactoryGirl.create(:estimation)
+      new_item = FactoryGirl.create :estimation_item, estimation: estimation, value: 1, actual_value: 2
+
+      expect(estimation.decorate.buffer_consumption_speed).to eq '100%'
     end
   end
 end

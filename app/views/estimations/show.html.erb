@@ -10,5 +10,6 @@
   <%= render 'mode_toggle' %>
   <%= render 'estimation_items/form_for_new' unless @estimation.tracking_mode? %>
   <%= render 'results' %>
+  <%= render 'buffer_consumption' if @estimation.tracking_mode? %>
   <%= render 'graph' if @estimation.tracking_mode? %>
 </div>
