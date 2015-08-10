@@ -54,7 +54,8 @@ RSpec.describe EstimationItemsController, :type => :controller do
           'sum' => decorated_estimation.sum,
           'total' => decorated_estimation.total,
           'actual_sum' => decorated_estimation.actual_sum,
-          'buffer_health' => decorated_estimation.buffer_health
+          'buffer_health' => decorated_estimation.buffer_health,
+          'buffer_health_class' => decorated_estimation.buffer_health_class
         }
       )
     end

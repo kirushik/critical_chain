@@ -36,4 +36,15 @@ class EstimationDecorator < Draper::Decorator
   def buffer_health
     number_to_percentage(object.buffer_health*100, precision: 0)
   end
+
+  def buffer_health_class
+    case object.buffer_health
+    when 0...0.8
+      'bg-success'
+    when 0.8...1.0
+      'bg-warning'
+    else
+      'bg-danger'
+    end
+  end
 end

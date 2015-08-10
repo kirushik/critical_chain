@@ -73,4 +73,45 @@ describe EstimationDecorator do
       expect(estimation.decorate.buffer_health).to eq '100%'
     end
   end
+
+  # TODO Make smarter function here. Buffer health 1.1 is norm at the beginning of the project and critically wrong at the and
+  describe '#buffer_health_class' do
+    subject { FactoryGirl.create(:estimation) }
+
+    it 'is :bg-success when health is less than 0.8' do
+      expect(subject).to receive(:buffer_health).and_return(0.0)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-success'
+
+      expect(subject).to receive(:buffer_health).and_return(0.1)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-success'
+
+      expect(subject).to receive(:buffer_health).and_return(0.7)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-success'
+
+      expect(subject).to receive(:buffer_health).and_return(0.8)
+      expect(subject.decorate.buffer_health_class).not_to eq 'bg-success'
+    end
+
+    it 'is :bg-warning when health belongs to 0.8...10' do
+      expect(subject).to receive(:buffer_health).and_return(0.8)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-warning'
+
+      expect(subject).to receive(:buffer_health).and_return(0.9)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-warning'
+
+      expect(subject).to receive(:buffer_health).and_return(1.0)
+      expect(subject.decorate.buffer_health_class).not_to eq 'bg-warning'
+    end
+
+    it 'is :bg-danger when health is above 1.0' do
+      expect(subject).to receive(:buffer_health).and_return(1)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-danger'
+
+      expect(subject).to receive(:buffer_health).and_return(2)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-danger'
+
+      expect(subject).to receive(:buffer_health).and_return(100)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-danger'
+    end
+  end
 end

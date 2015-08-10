@@ -43,7 +43,8 @@ class EstimationItemsController < ApplicationController
               buffer: @estimation.buffer,
               total: @estimation.total,
               actual_sum: @estimation.actual_sum,
-              buffer_health: @estimation.buffer_health
+              buffer_health: @estimation.buffer_health,
+              buffer_health_class: @estimation.buffer_health_class
             }}
         end
         format.js
