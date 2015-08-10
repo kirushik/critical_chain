@@ -19,7 +19,7 @@ require 'rails_helper'
 RSpec.describe Estimation, :type => :model do
   subject { FactoryGirl.create(:estimation) }
 
-  describe "estimation_items" do
+  describe '#estimation_items' do
     it "should be an array" do
       expect(subject.estimation_items).to match_array([])
     end
@@ -34,7 +34,7 @@ RSpec.describe Estimation, :type => :model do
       expect(subject.sum).to eq 6
     end
 
-    it "should calculate buffer" do
+    it 'should calculate buffer' do
       4.times do
         subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1)
       end
@@ -111,7 +111,7 @@ RSpec.describe Estimation, :type => :model do
     end
   end
 
-  describe 'completed items' do
+  describe '#completed_items' do
     it 'should list only items with actual_value set' do
       FactoryGirl.create(:estimation_item, estimation: subject)
       completed_item = FactoryGirl.create(:estimation_item, estimation: subject, actual_value: 1)
@@ -120,7 +120,7 @@ RSpec.describe Estimation, :type => :model do
     end
   end
 
-  describe 'project progress' do
+  describe '#project_progress' do
     subject { FactoryGirl.create :estimation_with_items, items: {count: 9, size: 1} }
 
     it 'should be zero when no items are finished' do
@@ -138,7 +138,7 @@ RSpec.describe Estimation, :type => :model do
     end
   end
 
-  describe 'buffer consumption speed' do
+  describe '#buffer_consumption_speed' do
     subject { FactoryGirl.create :estimation_with_items }
 
     it 'should be zero if no items are completed' do
