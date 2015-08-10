@@ -19,7 +19,7 @@ class Estimation < ActiveRecord::Base
   has_many :estimation_items, dependent: :destroy
 
   def sum
-    estimation_items.sum('value * quantity')
+    estimation_items.sum('value * quantity').to_f
   end
 
   def buffer

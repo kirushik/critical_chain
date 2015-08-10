@@ -8,6 +8,11 @@ class EstimationDecorator < Draper::Decorator
     object.estimation_items.order(:created_at)
   end
 
+  def sum
+    # TODO Replace whose with a proper number helper
+    object.sum.to_s(:rounded, significant: true).gsub(/\.0+$/, '') rescue "0"
+  end
+
   def buffer
     object.buffer.to_s(:rounded, significant: true).gsub(/\.0+$/, '') rescue "0"
   end
