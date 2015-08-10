@@ -38,5 +38,16 @@ feature "Tracking mode", :type => :feature do
     expect(page).to have_text("50%")
   end
 
-  scenario 'Buffer consumption in tracking mode is recalculated via AJAX', :js
+  scenario 'Buffer consumption in tracking mode is recalculated via AJAX', :js do
+    visit estimation_path(tracking_mode_estimation)
+
+    expect(page).to have_no_text("50%")
+
+    page.find('span.editable.actual_value').click
+    page.find('.editable-inline .editable-input input').set 1.9*first_estimation_item.value
+    page.find('.editable-inline .editable-submit').click
+
+    expect(page).to have_text("90%")
+    expect(page).to have_css('#buffer_health.bg-warning')
+  end
 end

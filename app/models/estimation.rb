@@ -19,7 +19,7 @@ class Estimation < ActiveRecord::Base
   has_many :estimation_items, dependent: :destroy
 
   def sum
-    estimation_items.sum('value * quantity')
+    estimation_items.sum('value * quantity').to_f
   end
 
   def buffer
@@ -30,9 +30,23 @@ class Estimation < ActiveRecord::Base
     sum + buffer
   end
 
-  def buffer_consumption_speed
-    completed_items = estimation_items.where.not(actual_value: nil)
-    (completed_items.sum(:actual_value) - completed_items.sum('value * quantity'))/buffer
+  def completed_items
+    estimation_items.where.not(actual_value: nil)
+  end
+
+  def project_progress
+    progress = completed_items.sum('value * quantity')/sum
+    progress > 0 ? progress : 0.0
+  end
+
+  def buffer_consumption
+    actual_consumption = (completed_items.sum(:actual_value) - completed_items.sum('value * quantity'))/buffer
+    actual_consumption > 0 ? actual_consumption : 0.0
+  end
+
+  def buffer_health
+    health = buffer_consumption/project_progress
+    health.nan? ? 0.0 : health
   end
 
   private

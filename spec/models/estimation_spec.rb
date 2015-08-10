@@ -19,7 +19,7 @@ require 'rails_helper'
 RSpec.describe Estimation, :type => :model do
   subject { FactoryGirl.create(:estimation) }
 
-  describe "estimation_items" do
+  describe '#estimation_items' do
     it "should be an array" do
       expect(subject.estimation_items).to match_array([])
     end
@@ -34,7 +34,7 @@ RSpec.describe Estimation, :type => :model do
       expect(subject.sum).to eq 6
     end
 
-    it "should calculate buffer" do
+    it 'should calculate buffer' do
       4.times do
         subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1)
       end
@@ -111,25 +111,110 @@ RSpec.describe Estimation, :type => :model do
     end
   end
 
-  describe 'buffer consumption speed' do
-    subject { FactoryGirl.create :estimation_with_items }
+  describe '#completed_items' do
+    it 'should list only items with actual_value set' do
+      FactoryGirl.create(:estimation_item, estimation: subject)
+      completed_item = FactoryGirl.create(:estimation_item, estimation: subject, actual_value: 1)
 
-    it 'should be zero if no items are completed' do
-      expect(subject.buffer_consumption_speed).to eq 0
+      expect(subject.completed_items).to contain_exactly completed_item
+    end
+  end
+
+  describe '#project_progress' do
+    subject { FactoryGirl.create :estimation_with_items, items: {count: 9, size: 1} }
+
+    it 'should be zero when no items are finished' do
+      expect(subject.project_progress).to eq 0
     end
 
-    it 'should be 1.0 if elapsed is twice estimated' do
-      estimation_item = subject.estimation_items.first
-      estimation_item.update_attribute(:actual_value, 2 * estimation_item.value)
-      expect(subject.buffer_consumption_speed).to eq 1.0
+    it 'should be zero for empty project' do
+      estimation = FactoryGirl.create :estimation
+      expect(estimation.project_progress).to eq 0
     end
 
-    it 'calculates consumption when several estimation items present' do
-      estimation = FactoryGirl.create :estimation_with_items, items: { count: 4, size: 10 }
-      estimation_item = estimation.estimation_items.first
-      estimation_item.update_attribute(:actual_value, 2 * estimation_item.value)
+    it 'should be a fraction of estimations' do
+      FactoryGirl.create :estimation_item, value: 1, actual_value: 1, estimation: subject
+      expect(subject.project_progress).to eq 0.1
+    end
 
-      expect(estimation.buffer_consumption_speed).to eq 0.5
+    it 'should be 1 when all items are finished' do
+      subject.estimation_items.update_all(actual_value: 1)
+      expect(subject.project_progress).to eq 1
+    end
+  end
+
+  describe '#buffer_consumption' do
+    subject { FactoryGirl.create :estimation_with_items, items: {count: 9, size: 10} }
+
+    it 'is zero when no items completed' do
+      expect(subject.buffer_consumption).to eq 0
+    end
+
+    it 'is zero for empty project' do
+      estimation = FactoryGirl.create :estimation
+      expect(estimation.buffer_consumption).to eq 0
+    end
+
+    it 'is zero when all completed items took exactly their estimated values' do
+      subject.estimation_items.update_all(actual_value: 10)
+      expect(subject.buffer_consumption).to eq 0
+    end
+
+    it 'is zero when all items have been overestimated' do
+      subject.estimation_items.update_all(actual_value: 1)
+      expect(subject.buffer_consumption).to eq 0
+    end
+
+    it 'is 0.1 when 10% of the total buffer spent' do
+      subject.estimation_items.first.update_attribute(:actual_value, 12)
+      subject.estimation_items.second.update_attribute(:actual_value, 11)
+      expect(subject.buffer_consumption).to eq 0.1
+    end
+
+    it 'is 1.0 when all the buffer is spent' do
+      subject.estimation_items.first.update_attribute(:actual_value, 40)
+      expect(subject.buffer_consumption).to eq 1.0
+    end
+
+    it 'can be more than 1.0' do
+      subject.estimation_items.first.update_attribute(:actual_value, 399)
+      expect(subject.buffer_consumption).to be > 1.0
+    end
+  end
+
+  describe '#buffer_health' do
+    subject { FactoryGirl.create :estimation_with_items, items: {count: 4, size: 10} }
+
+    it 'is 0.0 when no actual progress happened' do
+      expect(subject.buffer_health).to eq 0
+    end
+
+    it 'is 0.0 when no bufer consumed' do
+      subject.estimation_items.first.update_attribute(:actual_value, 8)
+      subject.estimation_items.second.update_attribute(:actual_value, 6)
+      expect(subject.buffer_health).to eq 0
+    end
+
+    it 'is 1.0 when buffer consumption happens at par with project progress' do
+      subject.estimation_items.first.update_attribute(:actual_value, 13)
+      subject.estimation_items.second.update_attribute(:actual_value, 17)
+      expect(subject.buffer_health).to eq 1
+    end
+
+    it 'is 0.1 when buffer is spent slower' do
+      subject.estimation_items.first.update_attribute(:actual_value, 10.5)
+      expect(subject.buffer_health).to eq 0.1
+    end
+
+    it 'is working when some items underuse buffer, and some - overuse it' do
+      subject.estimation_items.first.update_attribute(:actual_value, 9)
+      subject.estimation_items.second.update_attribute(:actual_value, 12)
+      expect(subject.buffer_health).to eq 0.1
+    end
+
+    it 'can be more that 1.0' do
+      subject.estimation_items.first.update_attribute(:actual_value, 20)
+      expect(subject.buffer_health).to eq 2
     end
   end
 end

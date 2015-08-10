@@ -4,6 +4,7 @@ describe EstimationDecorator do
   it "rounds large numbers as integers" do
     estimation = FactoryGirl.create(:estimation_with_items, items: {count: 4, size: 100}).decorate
 
+    expect(estimation.sum).to eq("400")
     expect(estimation.buffer).to eq("200")
     expect(estimation.total).to eq("600")
   end
@@ -11,6 +12,7 @@ describe EstimationDecorator do
   it "rounds one-digit values to .XX" do
     estimation = FactoryGirl.create(:estimation_with_items, items: {count: 2, size: 1}).decorate
 
+    expect(estimation.sum).to eq("2")
     expect(estimation.buffer).to eq("1.41")
     expect(estimation.total).to eq("3.41")
   end
@@ -18,6 +20,7 @@ describe EstimationDecorator do
   it 'works with empty estimations' do
     estimation = FactoryGirl.create(:estimation).decorate
 
+    expect(estimation.sum).to eq("0")
     expect(estimation.buffer).to eq("0")
     expect(estimation.total).to eq("0")
   end
@@ -25,6 +28,7 @@ describe EstimationDecorator do
   it "casts round floats to integers" do
     estimation = FactoryGirl.create(:estimation_with_items, items: {count: 1, size: 1}).decorate
 
+    expect(estimation.sum).to eq("1")
     expect(estimation.buffer).to eq("1")
     expect(estimation.total).to eq("2")
   end
@@ -61,12 +65,53 @@ describe EstimationDecorator do
     end
   end
 
-  describe '#buffer_consumption_speed' do
+  describe '#buffer_health' do
     it 'outputs percentage' do
       estimation = FactoryGirl.create(:estimation)
       new_item = FactoryGirl.create :estimation_item, estimation: estimation, value: 1, actual_value: 2
 
-      expect(estimation.decorate.buffer_consumption_speed).to eq '100%'
+      expect(estimation.decorate.buffer_health).to eq '100%'
+    end
+  end
+
+  # TODO Make smarter function here. Buffer health 1.1 is norm at the beginning of the project and critically wrong at the and
+  describe '#buffer_health_class' do
+    subject { FactoryGirl.create(:estimation) }
+
+    it 'is :bg-success when health is less than 0.8' do
+      expect(subject).to receive(:buffer_health).and_return(0.0)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-success'
+
+      expect(subject).to receive(:buffer_health).and_return(0.1)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-success'
+
+      expect(subject).to receive(:buffer_health).and_return(0.7)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-success'
+
+      expect(subject).to receive(:buffer_health).and_return(0.8)
+      expect(subject.decorate.buffer_health_class).not_to eq 'bg-success'
+    end
+
+    it 'is :bg-warning when health belongs to 0.8...10' do
+      expect(subject).to receive(:buffer_health).and_return(0.8)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-warning'
+
+      expect(subject).to receive(:buffer_health).and_return(0.9)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-warning'
+
+      expect(subject).to receive(:buffer_health).and_return(1.0)
+      expect(subject.decorate.buffer_health_class).not_to eq 'bg-warning'
+    end
+
+    it 'is :bg-danger when health is above 1.0' do
+      expect(subject).to receive(:buffer_health).and_return(1)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-danger'
+
+      expect(subject).to receive(:buffer_health).and_return(2)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-danger'
+
+      expect(subject).to receive(:buffer_health).and_return(100)
+      expect(subject.decorate.buffer_health_class).to eq 'bg-danger'
     end
   end
 end

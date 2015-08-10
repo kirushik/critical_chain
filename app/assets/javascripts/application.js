@@ -28,6 +28,8 @@ var activate_editables = function () {
       $('#sum').text(vals.sum);
       $('#buffer').text(vals.buffer);
       $('#actual_sum').text(vals.actual_sum);
+      $('#buffer_health').text(vals.buffer_health);
+      $('#buffer_health').attr('class', vals.buffer_health_class);
     }
   }});
 }
