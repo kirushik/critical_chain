@@ -22,6 +22,7 @@ FactoryGirl.define do
 
     factory :estimation_with_items do
       transient do
+        # TODO Refactor this into a trait with two separate values
         items {{count: 1, size: 10}}
       end
 

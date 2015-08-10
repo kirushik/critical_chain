@@ -111,6 +111,33 @@ RSpec.describe Estimation, :type => :model do
     end
   end
 
+  describe 'completed items' do
+    it 'should list only items with actual_value set' do
+      FactoryGirl.create(:estimation_item, estimation: subject)
+      completed_item = FactoryGirl.create(:estimation_item, estimation: subject, actual_value: 1)
+
+      expect(subject.completed_items).to contain_exactly completed_item
+    end
+  end
+
+  describe 'project progress' do
+    subject { FactoryGirl.create :estimation_with_items, items: {count: 9, size: 1} }
+
+    it 'should be zero when no items are finished' do
+      expect(subject.project_progress).to eq 0
+    end
+
+    it 'should be a fraction of estimations' do
+      FactoryGirl.create :estimation_item, value: 1, actual_value: 1, estimation: subject
+      expect(subject.project_progress).to eq 0.1
+    end
+
+    it 'should be 1 when all items are finished' do
+      subject.estimation_items.update_all(actual_value: 1)
+      expect(subject.project_progress).to eq 1
+    end
+  end
+
   describe 'buffer consumption speed' do
     subject { FactoryGirl.create :estimation_with_items }
 

@@ -30,8 +30,15 @@ class Estimation < ActiveRecord::Base
     sum + buffer
   end
 
+  def completed_items
+    estimation_items.where.not(actual_value: nil)
+  end
+
+  def project_progress
+    completed_items.sum('value * quantity')/sum
+  end
+
   def buffer_consumption_speed
-    completed_items = estimation_items.where.not(actual_value: nil)
     (completed_items.sum(:actual_value) - completed_items.sum('value * quantity'))/buffer
   end
 
