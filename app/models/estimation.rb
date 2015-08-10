@@ -44,7 +44,7 @@ class Estimation < ActiveRecord::Base
     actual_consumption > 0 ? actual_consumption : 0.0
   end
 
-  def buffer_consumption_health
+  def buffer_health
     health = buffer_consumption/project_progress
     health.nan? ? 0.0 : health
   end

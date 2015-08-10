@@ -182,39 +182,39 @@ RSpec.describe Estimation, :type => :model do
     end
   end
 
-  describe '#buffer_consumption_health' do
+  describe '#buffer_health' do
     subject { FactoryGirl.create :estimation_with_items, items: {count: 4, size: 10} }
 
     it 'is 0.0 when no actual progress happened' do
-      expect(subject.buffer_consumption_health).to eq 0
+      expect(subject.buffer_health).to eq 0
     end
 
     it 'is 0.0 when no bufer consumed' do
       subject.estimation_items.first.update_attribute(:actual_value, 8)
       subject.estimation_items.second.update_attribute(:actual_value, 6)
-      expect(subject.buffer_consumption_health).to eq 0
+      expect(subject.buffer_health).to eq 0
     end
 
     it 'is 1.0 when buffer consumption happens at par with project progress' do
       subject.estimation_items.first.update_attribute(:actual_value, 13)
       subject.estimation_items.second.update_attribute(:actual_value, 17)
-      expect(subject.buffer_consumption_health).to eq 1
+      expect(subject.buffer_health).to eq 1
     end
 
     it 'is 0.1 when buffer is spent slower' do
       subject.estimation_items.first.update_attribute(:actual_value, 10.5)
-      expect(subject.buffer_consumption_health).to eq 0.1
+      expect(subject.buffer_health).to eq 0.1
     end
 
     it 'is working when some items underuse buffer, and some - overuse it' do
       subject.estimation_items.first.update_attribute(:actual_value, 9)
       subject.estimation_items.second.update_attribute(:actual_value, 12)
-      expect(subject.buffer_consumption_health).to eq 0.1
+      expect(subject.buffer_health).to eq 0.1
     end
 
     it 'can be more that 1.0' do
       subject.estimation_items.first.update_attribute(:actual_value, 20)
-      expect(subject.buffer_consumption_health).to eq 2
+      expect(subject.buffer_health).to eq 2
     end
   end
 end

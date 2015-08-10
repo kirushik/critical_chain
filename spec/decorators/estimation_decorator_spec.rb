@@ -65,12 +65,12 @@ describe EstimationDecorator do
     end
   end
 
-  describe '#buffer_consumption_health' do
+  describe '#buffer_health' do
     it 'outputs percentage' do
       estimation = FactoryGirl.create(:estimation)
       new_item = FactoryGirl.create :estimation_item, estimation: estimation, value: 1, actual_value: 2
 
-      expect(estimation.decorate.buffer_consumption_health).to eq '100%'
+      expect(estimation.decorate.buffer_health).to eq '100%'
     end
   end
 end

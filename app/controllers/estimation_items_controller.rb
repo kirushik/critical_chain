@@ -30,7 +30,7 @@ class EstimationItemsController < ApplicationController
     result = @estimation_item.update_attributes(estimation_item_params)
 
     @estimation.reload
-    
+
     if request.xhr?
       # return render plain: @estimation_item.errors.first, status: :bad_request unless result
 
@@ -42,7 +42,8 @@ class EstimationItemsController < ApplicationController
               sum: @estimation.sum,
               buffer: @estimation.buffer,
               total: @estimation.total,
-              actual_sum: @estimation.actual_sum
+              actual_sum: @estimation.actual_sum,
+              buffer_health: @estimation.buffer_health
             }}
         end
         format.js

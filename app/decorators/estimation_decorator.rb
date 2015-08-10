@@ -33,7 +33,7 @@ class EstimationDecorator < Draper::Decorator
     object.estimation_items.sum(:actual_value)
   end
 
-  def buffer_consumption_health
-    number_to_percentage(object.buffer_consumption_health*100, precision: 0)
+  def buffer_health
+    number_to_percentage(object.buffer_health*100, precision: 0)
   end
 end

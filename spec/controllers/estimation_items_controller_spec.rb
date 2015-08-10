@@ -8,7 +8,7 @@ RSpec.describe EstimationItemsController, :type => :controller do
   before(:each) do
     sign_in user
   end
-  
+
   describe "POST create" do
     it "adds an item to the estimation when authorized" do
       expect(estimation.estimation_items.size).to eq(0)
@@ -30,7 +30,7 @@ RSpec.describe EstimationItemsController, :type => :controller do
 
     it "decorates loaded Estimation" do
       post :create, estimation_id: estimation.id, estimation_item: { value: 117 }
-      
+
       expect(assigns(:estimation)).to be_decorated
     end
   end
@@ -53,7 +53,8 @@ RSpec.describe EstimationItemsController, :type => :controller do
           'buffer' => decorated_estimation.buffer,
           'sum' => decorated_estimation.sum,
           'total' => decorated_estimation.total,
-          'actual_sum' => decorated_estimation.actual_sum
+          'actual_sum' => decorated_estimation.actual_sum,
+          'buffer_health' => decorated_estimation.buffer_health
         }
       )
     end
