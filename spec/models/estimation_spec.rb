@@ -172,25 +172,39 @@ RSpec.describe Estimation, :type => :model do
     end
   end
 
-  describe '#buffer_consumption_speed' do
-    subject { FactoryGirl.create :estimation_with_items }
+  describe '#buffer_consumption_health' do
+    subject { FactoryGirl.create :estimation_with_items, items: {count: 4, size: 10} }
 
-    it 'should be zero if no items are completed' do
-      expect(subject.buffer_consumption_speed).to eq 0
+    it 'is 0.0 when no actual progress happened' do
+      expect(subject.buffer_consumption_health).to eq 0
     end
 
-    it 'should be 1.0 if elapsed is twice estimated' do
-      estimation_item = subject.estimation_items.first
-      estimation_item.update_attribute(:actual_value, 2 * estimation_item.value)
-      expect(subject.buffer_consumption_speed).to eq 1.0
+    it 'is 0.0 when no bufer consumed' do
+      subject.estimation_items.first.update_attribute(:actual_value, 8)
+      subject.estimation_items.second.update_attribute(:actual_value, 6)
+      expect(subject.buffer_consumption_health).to eq 0
     end
 
-    it 'calculates consumption when several estimation items present' do
-      estimation = FactoryGirl.create :estimation_with_items, items: { count: 4, size: 10 }
-      estimation_item = estimation.estimation_items.first
-      estimation_item.update_attribute(:actual_value, 2 * estimation_item.value)
+    it 'is 1.0 when buffer consumption happens at par with project progress' do
+      subject.estimation_items.first.update_attribute(:actual_value, 13)
+      subject.estimation_items.second.update_attribute(:actual_value, 17)
+      expect(subject.buffer_consumption_health).to eq 1
+    end
 
-      expect(estimation.buffer_consumption_speed).to eq 0.5
+    it 'is 0.1 when buffer is spent slower' do
+      subject.estimation_items.first.update_attribute(:actual_value, 10.5)
+      expect(subject.buffer_consumption_health).to eq 0.1
+    end
+
+    it 'is working when some items underuse buffer, and some - overuse it' do
+      subject.estimation_items.first.update_attribute(:actual_value, 9)
+      subject.estimation_items.second.update_attribute(:actual_value, 12)
+      expect(subject.buffer_consumption_health).to eq 0.1
+    end
+
+    it 'can be more that 1.0' do
+      subject.estimation_items.first.update_attribute(:actual_value, 20)
+      expect(subject.buffer_consumption_health).to eq 2
     end
   end
 end
