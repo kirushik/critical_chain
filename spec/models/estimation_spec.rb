@@ -138,6 +138,40 @@ RSpec.describe Estimation, :type => :model do
     end
   end
 
+  describe '#buffer_consumption' do
+    subject { FactoryGirl.create :estimation_with_items, items: {count: 9, size: 10} }
+
+    it 'is zero when no items completed' do
+      expect(subject.buffer_consumption).to eq 0
+    end
+
+    it 'is zero when all completed items took exactly their estimated values' do
+      subject.estimation_items.update_all(actual_value: 10)
+      expect(subject.buffer_consumption).to eq 0
+    end
+
+    it 'is zero when all items have been overestimated' do
+      subject.estimation_items.update_all(actual_value: 1)
+      expect(subject.buffer_consumption).to eq 0
+    end
+
+    it 'is 0.1 when 10% of the total buffer spent' do
+      subject.estimation_items.first.update_attribute(:actual_value, 12)
+      subject.estimation_items.second.update_attribute(:actual_value, 11)
+      expect(subject.buffer_consumption).to eq 0.1
+    end
+
+    it 'is 1.0 when all the buffer is spent' do
+      subject.estimation_items.first.update_attribute(:actual_value, 40)
+      expect(subject.buffer_consumption).to eq 1.0
+    end
+
+    it 'can be more than 1.0' do
+      subject.estimation_items.first.update_attribute(:actual_value, 399)
+      expect(subject.buffer_consumption).to be > 1.0
+    end
+  end
+
   describe '#buffer_consumption_speed' do
     subject { FactoryGirl.create :estimation_with_items }
 
