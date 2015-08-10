@@ -127,6 +127,11 @@ RSpec.describe Estimation, :type => :model do
       expect(subject.project_progress).to eq 0
     end
 
+    it 'should be zero for empty project' do
+      estimation = FactoryGirl.create :estimation
+      expect(estimation.project_progress).to eq 0
+    end
+
     it 'should be a fraction of estimations' do
       FactoryGirl.create :estimation_item, value: 1, actual_value: 1, estimation: subject
       expect(subject.project_progress).to eq 0.1
@@ -143,6 +148,11 @@ RSpec.describe Estimation, :type => :model do
 
     it 'is zero when no items completed' do
       expect(subject.buffer_consumption).to eq 0
+    end
+
+    it 'is zero for empty project' do
+      estimation = FactoryGirl.create :estimation
+      expect(estimation.buffer_consumption).to eq 0
     end
 
     it 'is zero when all completed items took exactly their estimated values' do

@@ -35,16 +35,18 @@ class Estimation < ActiveRecord::Base
   end
 
   def project_progress
-    completed_items.sum('value * quantity')/sum
+    progress = completed_items.sum('value * quantity')/sum
+    progress > 0 ? progress : 0.0
   end
 
   def buffer_consumption
-    [(completed_items.sum(:actual_value) - completed_items.sum('value * quantity'))/buffer, 0].max
+    actual_consumption = (completed_items.sum(:actual_value) - completed_items.sum('value * quantity'))/buffer
+    actual_consumption > 0 ? actual_consumption : 0.0
   end
 
   def buffer_consumption_health
     health = buffer_consumption/project_progress
-    health.nan? ? 0 : health
+    health.nan? ? 0.0 : health
   end
 
   private
