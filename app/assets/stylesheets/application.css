@@ -1,8 +1,17 @@
-@import "bootstrap-sprockets";
-@import "bootstrap";
-@import "font-awesome-sprockets";
-@import "font-awesome";
-@import "editable/bootstrap-editable";
+//= require pure
+//= require font-awesome
+
+.center-wrapper {
+  text-align: center;
+}
+
+.pull-left {
+  float: left !important;
+}
+
+.pull-right {
+  float: right !important;
+}
 
 .form-inline .form-control.value {
   width: 6em;

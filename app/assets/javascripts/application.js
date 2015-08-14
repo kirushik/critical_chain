@@ -10,29 +10,25 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery_ujs
-//= require jquery-ui/effect-highlight
+//= require vanilla-ujs
 //= require turbolinks
-//= require bootstrap-sprockets
-//= require editable/bootstrap-editable
-//= require editable/rails
 //= require_tree .
 
 var activate_editables = function () {
-  $('.editable').editable({success: function(response, newValue) {
-    if(!response.success) return response.msg; //msg will be shown in editable form
-    var vals = response.additionalValues;
-    if(vals) {
-      $('#total').text(vals.total);
-      $('#sum').text(vals.sum);
-      $('#buffer').text(vals.buffer);
-      $('#actual_sum').text(vals.actual_sum);
-      $('#buffer_health').text(vals.buffer_health);
-      $('#buffer_health').attr('class', vals.buffer_health_class);
-    }
-  }});
+  Turbolinks.enableTransitionCache();
+  console.log('QQQ!')
+  // $('.editable').editable({success: function(response, newValue) {
+  //   if(!response.success) return response.msg; //msg will be shown in editable form
+  //   var vals = response.additionalValues;
+  //   if(vals) {
+  //     $('#total').text(vals.total);
+  //     $('#sum').text(vals.sum);
+  //     $('#buffer').text(vals.buffer);
+  //     $('#actual_sum').text(vals.actual_sum);
+  //     $('#buffer_health').text(vals.buffer_health);
+  //     $('#buffer_health').attr('class', vals.buffer_health_class);
+  //   }
+  // }});
 }
 
-$(document).ready(activate_editables);
-$(document).on('page:load', activate_editables);
+document.addEventListener("DOMContentLoaded", activate_editables);

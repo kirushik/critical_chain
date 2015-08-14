@@ -10,26 +10,25 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <a href="/" class="navbar-brand">Buffer estimator</a>
-      </div>
 
-      <% if user_signed_in? %>
-        <ul class="nav navbar-nav navbar-right">
-          <li>
+  <div class="header">
+    <div class="pure-menu pure-menu-horizontal">
+      <a href="/" class="pure-menu-heading">Buffer estimator</a>
+
+      <%# if user_signed_in? %>
+        <ul class="pure-menu-list pull-right">
+          <li class="pure-menu-item">
             <%= link_to "Sign out", :destroy_user_session %>
           </li>
         </ul>
-      <% end %>
+      <%# end %>
     </div>
-
   </div>
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
-  <div class="container">
-    <%= yield %>
+
+  <div class="content-wrapper">
+    <div class="content">
+      <%= yield %>
+    </div>
   </div>
 
 </body>
