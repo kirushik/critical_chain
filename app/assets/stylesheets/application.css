@@ -13,29 +13,20 @@
   float: right !important;
 }
 
-.form-inline .form-control.value {
-  width: 6em;
+.pure-menu-horizontal {
+  background-color: #444;
+  margin-bottom: 1.2em;
 }
 
-#results-table {
-  margin-top: 15px;
+.pure-menu-heading {
+  color: #BBB;
 }
 
-#results-table td {
-  padding-right: 6px;
+.pure-menu-list {
+  margin-top: 0.4em;
+  margin-right: 1.3em;
 }
 
-.list-group-item .removal-button {
-  margin-top: -1px;
-  margin-right: -4px;
-  margin-left: 10px;
-}
-
-.toggle-fixed {
-  margin-left: -12px;
-}
-
-.toggle-tracking {
-  margin-left: -11px;
-  margin-top: -1px;
+.pure-menu-item > a {
+  color: #DDD
 }

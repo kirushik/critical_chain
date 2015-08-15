@@ -15,13 +15,13 @@
     <div class="pure-menu pure-menu-horizontal">
       <a href="/" class="pure-menu-heading">Buffer estimator</a>
 
-      <%# if user_signed_in? %>
+      <% if user_signed_in? %>
         <ul class="pure-menu-list pull-right">
           <li class="pure-menu-item">
             <%= link_to "Sign out", :destroy_user_session %>
           </li>
         </ul>
-      <%# end %>
+      <% end %>
     </div>
   </div>
 
