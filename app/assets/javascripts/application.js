@@ -16,19 +16,6 @@
 
 var activate_editables = function () {
   Turbolinks.enableTransitionCache();
-  console.log('QQQ!')
-  // $('.editable').editable({success: function(response, newValue) {
-  //   if(!response.success) return response.msg; //msg will be shown in editable form
-  //   var vals = response.additionalValues;
-  //   if(vals) {
-  //     $('#total').text(vals.total);
-  //     $('#sum').text(vals.sum);
-  //     $('#buffer').text(vals.buffer);
-  //     $('#actual_sum').text(vals.actual_sum);
-  //     $('#buffer_health').text(vals.buffer_health);
-  //     $('#buffer_health').attr('class', vals.buffer_health_class);
-  //   }
-  // }});
 }
 
 document.addEventListener("DOMContentLoaded", activate_editables);
