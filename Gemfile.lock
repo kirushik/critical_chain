@@ -7,6 +7,11 @@ GIT
       rspec (>= 2, < 4)
       rspec-core (!= 2.12.0)
 
+PATH
+  remote: ../vanilla-ujs
+  specs:
+    vanilla-ujs (0.1.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -294,7 +299,6 @@ GEM
     uglifier (2.7.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
-    vanilla-ujs (0.1.1)
     warden (1.2.3)
       rack (>= 1.0)
     websocket-driver (0.6.2)
@@ -343,7 +347,7 @@ DEPENDENCIES
   thin
   turbolinks
   uglifier (>= 1.3.0)
-  vanilla-ujs
+  vanilla-ujs!
 
 BUNDLED WITH
    1.10.6
