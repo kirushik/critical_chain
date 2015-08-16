@@ -1,14 +1,23 @@
-<div class="col-md-4 col-md-offset-4">
-  <div class="list-group" data-no-turbolink>
-    <%= render @estimations %>
-  </div>
+<div class="pure-g">
+  <div class="pure-u-9-24"></div>
 
-  <%= form_for Estimation.new, html: {class: 'form-inline'} do |f| %>
-    <div class="form-group">
-      <%= f.label :title, class: 'sr-only' %>
-      <%= f.text_field :title, class: 'form-control', placeholder: 'New list title' %>
+  <div class="pure-u-7-24">
+
+    <div class="estimations-list">
+      <%= render @estimations %>
     </div>
 
-    <%= f.submit 'Create estimation', class: 'btn btn-success' %>
-  <% end %>
+    <%= form_for Estimation.new, html: {class: 'pure-form'} do |f| %>
+      <fieldset>
+        <legend>
+          Create new list
+        </legend>
+
+        <%= f.text_field :title, class: 'form-control', placeholder: 'New list title' %>
+        <%= f.submit 'Create estimation', class: 'pure-button button-secondary' %>
+      </fieldset>
+    <% end %>
+
+    <a ></a>
+  </div>
 </div>

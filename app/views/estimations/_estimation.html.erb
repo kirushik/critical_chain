@@ -1,15 +1,17 @@
-<%= link_to estimation, class: 'list-group-item', id: dom_id(estimation) do %>
-  <%= estimation.title %>
-  <div class="removal-button pull-right">
-    <%= button_to estimation, method: :delete, remote: true, class: 'close' do %>
-      <span>&times;</span>
+<div class="pure-g" id="<%= dom_id(estimation) %>">
+  <div class="pure-u-3-5">
+    <%= link_to estimation, class: 'estimations-list-item' do %>
+      <%= estimation.title %>
     <% end %>
   </div>
-  <span class="text-muted pull-right">
+  <div class="text-muted pure-u-1-5">
     <span class="text-success"><strong><%= estimation.sum %></strong></span>
     +
     <span class="text-info"><strong><%= estimation.buffer %></strong></span>
     =
     <span class="text-warning"><strong><%= estimation.total %></strong></span>
-  </span>
-<% end %>
+  </div>
+  <div class="removal-button pure-u-1-5">
+    <%= link_to '×', estimation, data: {method: :delete, remote: true}, class: 'close pull-right' %>
+  </div>
+</div>
