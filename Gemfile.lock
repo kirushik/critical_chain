@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/kirushik/vanilla-ujs.git
+  revision: b8ed27a218b8ab33ed34af24efa0da4a684ec5ac
+  specs:
+    vanilla-ujs (0.1.1)
+
+GIT
   remote: git@github.com:circleci/rspec_junit_formatter.git
   revision: 6885218137afbadf560c922114767866953f8cbf
   specs:
@@ -6,11 +12,6 @@ GIT
       builder (< 4)
       rspec (>= 2, < 4)
       rspec-core (!= 2.12.0)
-
-PATH
-  remote: ../vanilla-ujs
-  specs:
-    vanilla-ujs (0.1.1)
 
 GEM
   remote: https://rubygems.org/
