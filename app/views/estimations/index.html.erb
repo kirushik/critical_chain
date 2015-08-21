@@ -1,23 +1,21 @@
-<div class="pure-g">
-  <div class="pure-u-9-24"></div>
+<div class="pure-u-9-24"></div>
 
-  <div class="pure-u-7-24">
+<div class="pure-u-7-24">
 
-    <div class="estimations-list">
-      <%= render @estimations %>
-    </div>
-
-    <%= form_for Estimation.new, html: {class: 'pure-form'} do |f| %>
-      <fieldset>
-        <legend>
-          Create new list
-        </legend>
-
-        <%= f.text_field :title, class: 'form-control', placeholder: 'New list title' %>
-        <%= f.submit 'Create estimation', class: 'pure-button button-secondary' %>
-      </fieldset>
-    <% end %>
-
-    <a ></a>
+  <div class="estimations-list">
+    <%= render @estimations %>
   </div>
+
+  <%= form_for Estimation.new, html: {class: 'pure-form'} do |f| %>
+    <fieldset>
+      <legend>
+        Create new list
+      </legend>
+
+      <%= f.text_field :title, class: 'form-control', placeholder: 'New list title' %>
+      <%= f.submit 'Create estimation', class: 'pure-button button-secondary' %>
+    </fieldset>
+  <% end %>
+
+  <a ></a>
 </div>

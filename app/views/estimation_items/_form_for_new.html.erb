@@ -1,13 +1,9 @@
-<%= form_for [@estimation, EstimationItem.new], html: { class: 'form-inline' }, remote: true do |f| %>
-  <div class="form-group">
-    <%= f.label :value, class: 'sr-only' %>
-    <%= f.number_field :value, class: 'form-control value', placeholder: 'Value', autofocus: true %>
-  </div>
-  <div class="form-group">
-    <%= f.label :title, class: 'sr-only' %>
-    <%= f.text_field :title, class: 'form-control title', placeholder: 'Item title (optional)' %>
-  </div>
-  <%= f.button class: 'btn btn-success', value: 'Add estimation item', type: :submit do %>
-    <%= fa_icon('plus-circle', class: 'fa-lg') %>
-  <% end %>
+<%= form_for [@estimation, EstimationItem.new], html: { class: 'pure-form' }, remote: true do |f| %>
+  <fieldset>
+    <%= f.text_field :title, class: 'title', placeholder: 'Item title (optional)', autofocus: true %>
+    <%= f.number_field :value, class: 'value', placeholder: 'Value' %>
+    <%= f.button class: 'pure-button button-success', value: 'Add estimation item', type: :submit do %>
+      <%= fa_icon('plus-circle', class: 'fa-lg') %>
+    <% end %>
+  </fieldset>
 <% end %>

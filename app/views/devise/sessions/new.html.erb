@@ -1,13 +1,11 @@
-<div class="pure-g">
-  <div class="pure-u-2-5"></div>
+<div class="pure-u-2-5"></div>
 
-  <div class="pure-u-1-5">
-    <div class="center-wrapper">
+<div class="pure-u-1-5">
+  <div class="center-wrapper">
 
-      <%= link_to user_omniauth_authorize_path(:google_oauth2), class: 'pure-button pure-button-primary' do %>
-        <%= fa_icon('google', class: 'fa-lg', text: 'Login with Google') %>
-      <% end %>
+    <%= link_to user_omniauth_authorize_path(:google_oauth2), class: 'pure-button pure-button-primary' do %>
+      <%= fa_icon('google', class: 'fa-lg', text: 'Login with Google') %>
+    <% end %>
 
-    </div>
   </div>
 </div>
