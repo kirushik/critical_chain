@@ -1,8 +1,10 @@
 document.getElementById('<%= dom_id @estimation %>').innerHTML += '<%=j render @estimation_item %>';
 document.getElementById('<%= dom_id @estimation_item %>').highlight();
 
-document.getElementById('estimation_item_value').value = '';
+document.getElementById('estimation_item_value').value = 0;
 document.getElementById('estimation_item_title').value = '';
+document.getElementById('estimation_item_title').focus();
+
 
 document.getElementById('total').textContent = '<%=j @estimation.total %>';
 document.getElementById('sum').textContent = '<%=j @estimation.sum %>';
