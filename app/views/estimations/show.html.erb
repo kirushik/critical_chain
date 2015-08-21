@@ -2,8 +2,10 @@
 
 <div class="pure-u-1-12"></div>
 <div class="pure-u-1-2">
-  <table id="<%= dom_id @estimation %>" class="table table-hover">
-    <%= render partial: @estimation.items_partial_name, collection: @estimation.estimation_items, as: :estimation_item %>
+  <table class="table table-hover">
+    <tbody id="<%= dom_id @estimation %>">
+      <%= render partial: @estimation.items_partial_name, collection: @estimation.estimation_items, as: :estimation_item %>
+    </tbody>
   </table>
 </div>
 

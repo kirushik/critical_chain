@@ -68,3 +68,16 @@
 #estimation_item_value {
   width: 5em;
 }
+
+@keyframes highlight {
+  0% {
+    background: #ffff99; /* lovely yellow colour */
+  }
+  100% {
+    background: none;
+  }
+}
+
+.highlight {
+    animation: highlight 1s ease-in-out;
+}

@@ -1,4 +1,4 @@
-document.getElementById('<%=j dom_id @estimation_item %>').remove();
+document.getElementById('<%= dom_id @estimation_item %>').remove();
 document.getElementById('total').textContent = '<%=j @estimation.total %>';
 document.getElementById('sum').textContent = '<%=j @estimation.sum %>';
 document.getElementById('buffer').textContent = '<%=j @estimation.buffer %>';
