@@ -1,7 +1,7 @@
 <%= form_for [@estimation, EstimationItem.new], html: { class: 'pure-form' }, remote: true do |f| %>
   <fieldset>
-    <%= f.text_field :title, class: 'title', placeholder: 'Item title (optional)', autofocus: true %>
-    <%= f.number_field :value, class: 'value', placeholder: 'Value' %>
+    <%= f.text_field :title, class: 'title', placeholder: 'Item title', autofocus: true %>
+    <%= f.number_field :value, class: 'value' %>
     <%= f.button class: 'pure-button button-success', value: 'Add estimation item', type: :submit do %>
       <%= fa_icon('plus-circle', class: 'fa-lg') %>
     <% end %>

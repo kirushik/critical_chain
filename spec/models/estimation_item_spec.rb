@@ -22,24 +22,34 @@ require 'rails_helper'
 RSpec.describe EstimationItem, :type => :model do
   subject { FactoryGirl.build(:estimation_item) }
 
-  def should_not_accept_value value
-    subject.value = value
+  def it_should_not_accept field, value
+    subject.update_attribute field, value
     expect(subject).not_to be_valid
   end
 
-  def should_accept_value value
-    subject.value = value
+  def it_should_accept field, value
+    subject.update_attribute field, value
     expect(subject).to be_valid
   end
 
-  it 'should validate presence of value' do
-    should_not_accept_value nil
-    should_accept_value 1
+  describe '#value' do
+    it 'should validate presence' do
+      it_should_not_accept :value, nil
+      it_should_accept :value, 1
+    end
+
+    it 'should accept non-negative integers only' do
+      it_should_not_accept :value, -1
+      it_should_accept :value, 0
+    end
   end
 
-  it 'should accept non-negative integers only' do
-    should_not_accept_value -1
-    should_accept_value 0
+  describe '#title' do
+    it 'should validate presence' do
+      it_should_not_accept :title, nil
+      it_should_not_accept :title, ''
+      it_should_accept :title, 'q'
+    end
   end
 
   it 'should be not-fixed by default' do
