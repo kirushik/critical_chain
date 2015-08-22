@@ -1,9 +1,10 @@
-<p>
+<div class="pure-u-1">
   <%= form_for @estimation, method: :patch do |f| %>
-    <span class="h4"><span class="small">Tracking mode</span></span>
-    <%= f.hidden_field :tracking_mode, :value => !@estimation.tracking_mode? %>
-    <%= f.button type: :submit, class: 'btn btn-link toggle-tracking' do %>
-      <span class="fa fa-lg <%= @estimation.tracking_mode? ? 'fa-toggle-on' : 'fa-toggle-off' %>"></span>
-    <% end %>
+    <p class="h4"><span class="small">Tracking mode</span>
+      <%= f.hidden_field :tracking_mode, :value => !@estimation.tracking_mode? %>
+      <%= f.button type: :submit, class: 'pure-button button-link' do %>
+        <span class="fa fa-lg <%= @estimation.tracking_mode? ? 'fa-toggle-on' : 'fa-toggle-off' %>"></span>
+      <% end %>
+      </p>
   <% end %>
-</p>
+</div>

@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   end
 
 private
- 
+
   def permission_denied
     head 403
   end

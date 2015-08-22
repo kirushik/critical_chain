@@ -1,10 +1,10 @@
 <% if @estimation.tracking_mode? %>
 
-  <h4>
+  <p class="pure-u-1">
     <span class="text-success" id="actual_sum"><%= @estimation.actual_sum %></span>
     out of
     <span id="total" class="text-warning"><%= @estimation.total %></span>
-  </h4>
+  </p>
 
 <% else %>
 

@@ -12,7 +12,6 @@
 .pull-left {
   float: left !important;
 }
-
 .pull-right {
   float: right !important;
 }
@@ -47,17 +46,54 @@
 .button-success {
   background: rgb(28, 184, 65); /* this is a green */
 }
-
 .button-error {
   background: rgb(202, 60, 60); /* this is a maroon */
 }
-
 .button-warning {
   background: rgb(223, 117, 20); /* this is an orange */
 }
-
 .button-secondary {
   background: rgb(66, 184, 221); /* this is a light blue */
+}
+
+/*Bootstrap-like colors*/
+.text-muted {
+  color: #777;
+}
+.text-primary {
+  color: #337ab7;
+}
+.text-success {
+  color: #3c763d;
+}
+.text-info {
+  color: #31708f;
+}
+.text-warning {
+  color: #8a6d3b;
+}
+.text-danger {
+  color: #a94442;
+}
+
+a {
+  color: #337ab7;
+}
+a:hover {
+  color: #23527c;
+}
+
+.button-link {
+  background:none!important;
+  border:none;
+  padding:0!important;
+  font: inherit;
+  /*border is optional*/
+  cursor: pointer;
+  color: #337ab7;
+}
+.button-link:hover {
+  color: #23527c;
 }
 
 .pure-form legend {
@@ -80,4 +116,17 @@
 
 .highlight {
     animation: highlight 1s ease-in-out;
+}
+
+#results-table {
+  letter-spacing: initial;
+}
+
+#results-table td {
+  text-align: center;
+  padding-right: 5px;
+}
+
+.lead {
+  font-size: 150%;
 }
