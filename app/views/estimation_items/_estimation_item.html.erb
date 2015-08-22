@@ -16,12 +16,12 @@
     </div>
     <div class="pure-u-18-24"><%= estimation_item.decorate.editable :title %></div>
     <div class="pure-u-1-24">
-      <%= fa_icon(:copy) %>
+      <%= fa_icon :copy %>
       <%= estimation_item.quantity %>
     </div>
     <div class="pure-u-1-24">
-      <%= button_to [estimation_item.estimation, estimation_item], method: :delete, remote: true, class: 'close pull-right' do %>
-        <span>&times;</span>
+      <%= button_to [estimation_item.estimation, estimation_item], method: :delete, remote: true, class: 'button-link' do %>
+        <%= fa_icon :close %>
       <% end %>
     </div>
   </div>
