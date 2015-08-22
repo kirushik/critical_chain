@@ -12,6 +12,8 @@
     <span class="text-warning"><strong><%= estimation.total %></strong></span>
   </div>
   <div class="removal-button pure-u-1-5">
-    <%= link_to '×', estimation, data: {method: :delete, remote: true}, class: 'close pull-right' %>
+    <%= button_to estimation, method: :delete, remote: true, class: 'button-link' do %>
+        <%= fa_icon :close %>
+      <% end %>
   </div>
 </div>
