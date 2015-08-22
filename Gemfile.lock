@@ -1,6 +1,7 @@
 GIT
   remote: git://github.com/kirushik/vanilla-ujs.git
-  revision: b8ed27a218b8ab33ed34af24efa0da4a684ec5ac
+  revision: 2aa8ed70567bc683fcf15ba4552da5d2f34481a9
+  branch: json
   specs:
     vanilla-ujs (0.1.1)
 
