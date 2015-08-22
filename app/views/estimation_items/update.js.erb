@@ -1,6 +1,8 @@
 document.getElementById('<%= dom_id @estimation_item %>').replaceWith('<%=j render @estimation_item %>');
 document.getElementById('<%= dom_id @estimation_item %>').highlight();
 
+document.getElementById('estimation_item_title').focus();
+
 document.getElementById('total').textContent = '<%=j @estimation.total %>';
 document.getElementById('sum').textContent = '<%=j @estimation.sum %>';
 document.getElementById('buffer').textContent = '<%=j @estimation.buffer %>';

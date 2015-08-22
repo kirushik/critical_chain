@@ -8,5 +8,14 @@ HTMLDocument.prototype.activate_editables = function() {
 
       LiteAjax.ajax(editable.dataset.path, {data: data, method: 'PATCH', json: true})
     }
+
+    editable.onkeypress = function(e){
+    if (!e) e = window.event;
+    var keyCode = e.keyCode || e.which;
+    if (keyCode == '13'){
+      editable.blur();
+      return false;
+    }
+  }
   });
 }

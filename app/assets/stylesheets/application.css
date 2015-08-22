@@ -135,4 +135,5 @@ a:hover {
   width: 80%;
   border: none;
   border-bottom: 1px dashed #337ab7;
+  background-color: transparent;
 }
