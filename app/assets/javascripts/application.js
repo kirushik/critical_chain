@@ -14,8 +14,7 @@
 //= require turbolinks
 //= require_tree .
 
-var activate_editables = function () {
+document.addEventListener("DOMContentLoaded", function() {
   Turbolinks.enableTransitionCache();
-}
-
-document.addEventListener("DOMContentLoaded", activate_editables);
+  document.activate_editables();
+});

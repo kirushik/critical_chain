@@ -130,3 +130,9 @@ a:hover {
 .lead {
   font-size: 150%;
 }
+
+.editable {
+  width: 80%;
+  border: none;
+  border-bottom: 1px dashed #337ab7;
+}
