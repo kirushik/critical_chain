@@ -1,0 +1,28 @@
+<div class="pure-u-1" id="<%= dom_id estimation_item_plannable %>">
+  <div class="pure-g">
+    <div class="pure-u-2-24">
+      <span class="lead">
+        <%= estimation_item_plannable.decorate.editable :value, type: :number %>
+      </span>
+    </div>
+    <div class="pure-u-2-24">
+      <%= form_for [estimation_item_plannable.estimation, estimation_item_plannable], method: :patch, remote: true do |f| %>
+        <%= f.hidden_field :fixed, :value => !estimation_item_plannable.fixed? %>
+        <span class="fa fa-dot-circle-o"></span>
+        <%= f.button type: :submit, class: 'pure-buton button-link' do %>
+          <span class="fa <%= estimation_item_plannable.fixed? ? 'fa-toggle-on' : 'fa-toggle-off' %>"></span>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="pure-u-17-24"><%= estimation_item_plannable.decorate.editable :title %></div>
+    <div class="pure-u-1-12">
+      <%= fa_icon :copy %>
+      <%= estimation_item_plannable.decorate.editable :quantity, type: :number %>
+    </div>
+    <div class="pure-u-1-24">
+      <%= button_to [estimation_item_plannable.estimation, estimation_item_plannable], method: :delete, remote: true, class: 'button-link' do %>
+        <%= fa_icon :close %>
+      <% end %>
+    </div>
+  </div>
+</div>

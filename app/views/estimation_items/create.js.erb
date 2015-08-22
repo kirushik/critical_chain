@@ -5,9 +5,8 @@ document.getElementById('estimation_item_value').value = 0;
 document.getElementById('estimation_item_title').value = '';
 document.getElementById('estimation_item_title').focus();
 
-
-document.getElementById('total').textContent = '<%=j @estimation.total %>';
-document.getElementById('sum').textContent = '<%=j @estimation.sum %>';
-document.getElementById('buffer').textContent = '<%=j @estimation.buffer %>';
+document.getElementById('total').textContent = '<%= @estimation.total %>';
+document.getElementById('sum').textContent = '<%= @estimation.sum %>';
+document.getElementById('buffer').textContent = '<%= @estimation.buffer %>';
 
 document.activate_editables();

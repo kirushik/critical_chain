@@ -3,7 +3,7 @@
 <div class="pure-u-1-12"></div>
 <div class="pure-u-1-2">
   <div class="pure-g" id="<%= dom_id @estimation %>">
-    <%= render partial: @estimation.items_partial_name, collection: @estimation.estimation_items, as: :estimation_item %>
+    <%= render @estimation.estimation_items %>
   </div>
 </div>
 

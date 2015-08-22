@@ -1,23 +1,23 @@
-<div class="pure-u-1">
-  <div class="pure-g" id="<%= dom_id estimation_item %>">
+<div class="pure-u-1" id="<%= dom_id estimation_item_trackable %>">
+  <div class="pure-g">
     <div class="pure-u-1-12 text-right">
       <span class="lead">
-        <% if estimation_item.quantity > 1 %>
-          <span class="small text-muted"><%= "#{estimation_item.quantity}×#{estimation_item.value}=" %></span>
+        <% if estimation_item_trackable.quantity > 1 %>
+          <span class="small text-muted"><%= "#{estimation_item_trackable.quantity}×#{estimation_item_trackable.value}=" %></span>
         <% end %>
-        <%= estimation_item.value * estimation_item.quantity %>
+        <%= estimation_item_trackable.value * estimation_item_trackable.quantity %>
       </span>
     </div>
 
     <div class="pure-u-1-24">
-      <% if estimation_item.fixed? %>
+      <% if estimation_item_trackable.fixed? %>
         <span class="fa fa-dot-circle-o"></span>
       <% end %>
     </div>
 
-    <div class="pure-u-19-24"><%= estimation_item.title %></div>
+    <div class="pure-u-19-24"><%= estimation_item_trackable.title %></div>
     <div class="pure-u-1-12">
-      <%= estimation_item.actual_value %>
+      <%= estimation_item_trackable.decorate.editable :actual_value, type: :number %>
     </div>
   </div>
 </div>

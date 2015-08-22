@@ -1,10 +1,18 @@
 document.getElementById('<%= dom_id @estimation_item %>').replaceWith('<%=j render @estimation_item %>');
 document.getElementById('<%= dom_id @estimation_item %>').highlight();
 
-document.getElementById('estimation_item_title').focus();
+<% if @estimation.tracking_mode? %>
 
-document.getElementById('total').textContent = '<%=j @estimation.total %>';
-document.getElementById('sum').textContent = '<%=j @estimation.sum %>';
-document.getElementById('buffer').textContent = '<%=j @estimation.buffer %>';
+  document.getElementById('actual_sum').textContent = '<%= @estimation.actual_sum %>';
+  document.getElementById('buffer_health').textContent = '<%= @estimation.buffer_health %>';
+  document.getElementById('buffer_health').className = '<%= @estimation.buffer_health_class %>'
+
+<% else %>
+  document.getElementById('estimation_item_title').focus();
+
+  document.getElementById('total').textContent = '<%= @estimation.total %>';
+  document.getElementById('sum').textContent = '<%= @estimation.sum %>';
+  document.getElementById('buffer').textContent = '<%= @estimation.buffer %>';
+<% end %>
 
 document.activate_editables();
