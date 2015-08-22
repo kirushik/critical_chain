@@ -2,7 +2,7 @@
   <div class="pure-g">
     <div class="pure-u-2-24">
       <span class="lead">
-        <%= estimation_item.value %>
+        <%= estimation_item.decorate.editable :value, type: :number %>
       </span>
     </div>
     <div class="pure-u-2-24">
@@ -14,10 +14,10 @@
         <% end %>
       <% end %>
     </div>
-    <div class="pure-u-18-24"><%= estimation_item.decorate.editable :title %></div>
-    <div class="pure-u-1-24">
+    <div class="pure-u-17-24"><%= estimation_item.decorate.editable :title %></div>
+    <div class="pure-u-1-12">
       <%= fa_icon :copy %>
-      <%= estimation_item.quantity %>
+      <%= estimation_item.decorate.editable :quantity, type: :number %>
     </div>
     <div class="pure-u-1-24">
       <%= button_to [estimation_item.estimation, estimation_item], method: :delete, remote: true, class: 'button-link' do %>
