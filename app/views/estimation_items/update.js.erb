@@ -1,8 +1,6 @@
-$('#<%= dom_id @estimation_item %>').replaceWith('<%=j render @estimation_item %>');
-$('#<%= dom_id @estimation_item %>').effect('highlight', {color:"#f7f7e5"}, 1000);
+document.getElementById('<%= dom_id @estimation_item %>').replaceWith('<%=j render @estimation_item %>');
+document.getElementById('<%= dom_id @estimation_item %>').highlight();
 
-$('#total').text('<%= @estimation.total %>');
-$('#sum').text('<%= @estimation.sum %>');
-$('#buffer').text('<%= @estimation.buffer %>');
-
-activate_editables();
+document.getElementById('total').textContent = '<%=j @estimation.total %>';
+document.getElementById('sum').textContent = '<%=j @estimation.sum %>';
+document.getElementById('buffer').textContent = '<%=j @estimation.buffer %>';

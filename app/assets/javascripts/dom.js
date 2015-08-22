@@ -1,5 +1,13 @@
+String.prototype.parseHTML = function() {
+  return document.createRange().createContextualFragment(this);
+}
+
 Element.prototype.remove = function() {
   this.parentElement.removeChild(this);
+}
+
+Element.prototype.replaceWith = function(newHTMLValue) {
+  this.parentElement.replaceChild(newHTMLValue.parseHTML(), this);
 }
 
 HTMLElement.prototype.highlight = function() {
