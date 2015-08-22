@@ -20,6 +20,6 @@ RSpec.describe "estimation_items/_estimation_item.html.erb", :type => :view do
     html = Nokogiri::HTML.parse(rendered)
 
     expect(html.css('.fa-copy')).not_to be_empty
-    expect(html.css('.quantity').first.attributes['data-value'].value).to eq '17'
+    expect(html.at('.quantity')['value']).to eq '17'
   end
 end
