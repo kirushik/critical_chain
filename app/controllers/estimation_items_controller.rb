@@ -27,7 +27,7 @@ class EstimationItemsController < ApplicationController
     @estimation_item = EstimationItem.find(params[:id])
 
     authorize @estimation, :update?
-    result = @estimation_item.update_attributes(estimation_item_params)
+    result = @estimation_item.update_attributes!(estimation_item_params)
 
     @estimation.reload
 
