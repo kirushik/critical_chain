@@ -17,7 +17,7 @@ gem 'uglifier', '>= 1.3.0'
 
 # Use jquery as the JavaScript library
 gem "pure-css-rails"
-gem 'vanilla-ujs', github: 'kirushik/vanilla-ujs', branch: 'json'
+gem 'vanilla-ujs', github: 'kirushik/vanilla-ujs', branch: 'ajax_requests_in_progress'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
@@ -43,8 +43,7 @@ group :development, :test do
   gem 'spring'
   gem 'spring-commands-rspec'
 
-  gem 'pry-rails'
-  gem 'better_errors'
+  gem 'super-pry-rails'
   gem 'binding_of_caller'
 
   gem 'sqlite3'
