@@ -25,11 +25,10 @@ feature "Tracking mode", :type => :feature do
   scenario 'I can enter value for an item of tracking-mode estimation', :js do
     visit estimation_path(tracking_mode_estimation)
 
-    page.first('span.editable.actual_value').click
-    page.find('.editable-inline .editable-input input').set 11179
-    page.find('.editable-inline .editable-submit').click
+    page.first('input.editable.actual_value').set 11179
+    page.first('input.editable.actual_value').native.send_keys(:return)
 
-    expect(page).to have_text "11179 out of #{estimation.decorate.total}"
+    expect(page).to have_text "11179.0 out of #{estimation.decorate.total}"
   end
 
   scenario 'I can see buffer consumption in tracking mode' do
@@ -43,9 +42,8 @@ feature "Tracking mode", :type => :feature do
 
     expect(page).to have_no_text("50%")
 
-    page.find('span.editable.actual_value').click
-    page.find('.editable-inline .editable-input input').set 1.9*first_estimation_item.value
-    page.find('.editable-inline .editable-submit').click
+    page.find('input.editable.actual_value').set 1.9*first_estimation_item.value
+    page.find('input.editable.actual_value').native.send_keys(:return)
 
     expect(page).to have_text("90%")
     expect(page).to have_css('#buffer_health.bg-warning')
