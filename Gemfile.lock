@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/kirushik/vanilla-ujs.git
-  revision: 2a5a983068a18d3643b38a7bcf1e656503e52603
+  revision: 106d7aeff132d1cefbbbb4bc698783a948b9fcc7
   branch: ajax_requests_in_progress
   specs:
     vanilla-ujs (0.1.1)
