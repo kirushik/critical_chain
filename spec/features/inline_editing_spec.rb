@@ -34,19 +34,19 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
 
   scenario 'I can modify estimation item value', :js do
     value_input = page.find("input#{value_field_id}")
-    expect(value_input.value).to eq old_estimation_value
+    expect(value_input.value).to eq old_estimation_value.to_s
 
     value_input.set new_estimation_value
     value_input.native.send_keys(:return)
 
     wait_for_ajax
 
-    expect(page.find("input#{value_field_id}")).to eq new_estimation_value
+    expect(page.find("input#{value_field_id}").value).to eq new_estimation_value.to_s
     expect(page).to have_text '7 + 7 = 14'
 
     visit current_path
 
-    expect(page.find("input#{value_field_id}")).to eq new_estimation_value
+    expect(page.find("input#{value_field_id}").value).to eq new_estimation_value.to_s
     expect(page).to have_text '7 + 7 = 14'
   end
 

@@ -1,5 +1,7 @@
 String.prototype.parseHTML = function() {
-  return document.createRange().createContextualFragment(this);
+  var fakeBody = document.createElement('body');
+  fakeBody.innerHTML = this;
+  return fakeBody.children[0];
 }
 
 Element.prototype.remove = function() {
