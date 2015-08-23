@@ -1,9 +1,13 @@
 require 'rails_helper'
 
 describe EstimationItemDecorator do
-  let(:estimation) {FactoryGirl.create(:estimation_with_items)}
-  let(:value) {estimation.estimation_items.first.title}
-  subject {estimation.estimation_items.first.decorate.editable :title}
+  let(:estimation) { FactoryGirl.create(:estimation_with_items) }
+  let(:estimation_item) { estimation.estimation_items.first }
+
+  subject { estimation_item.decorate.editable :title }
+
+  let(:value) { estimation_item.title }
+  let(:field_id) { "estimation_item_#{estimation_item.id}_title" }
 
   it 'renders editable as an HTML string' do
     expect(subject).to be_a String
@@ -31,5 +35,9 @@ describe EstimationItemDecorator do
     expect(Nokogiri::HTML::fragment(subject).at('input.editable')['data-field']).
       to eq 'title'
     expect(Nokogiri::HTML::fragment(subject).css('input.title')).not_to be_empty
+  end
+
+  it 'assigns right id to the element' do
+    expect(Nokogiri::HTML::fragment(subject).css("input\##{field_id}")).not_to be_empty
   end
 end

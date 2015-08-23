@@ -13,6 +13,6 @@ class EstimationItemDecorator < Draper::Decorator
   def editable field, type: :text
     helpers.content_tag :input, nil, type: type, value: object.send(field),
       data: { path: helpers.estimation_estimation_item_path(object.estimation, object), field: field, object: :estimation_item },
-      class: [:editable, field]
+      id: "#{helpers.dom_id object}_#{field}", class: [:editable, field]
   end
 end
