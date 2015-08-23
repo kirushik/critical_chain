@@ -9,7 +9,7 @@
       <%= form_for [estimation_item_plannable.estimation, estimation_item_plannable], method: :patch, remote: true do |f| %>
         <%= f.hidden_field :fixed, :value => !estimation_item_plannable.fixed? %>
         <span class="fa fa-dot-circle-o"></span>
-        <%= f.button type: :submit, class: 'pure-buton button-link' do %>
+        <%= f.button type: :submit, class: 'pure-buton button-link toggle-fixed' do %>
           <span class="fa <%= estimation_item_plannable.fixed? ? 'fa-toggle-on' : 'fa-toggle-off' %>"></span>
         <% end %>
       <% end %>
