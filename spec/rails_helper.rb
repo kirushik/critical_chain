@@ -11,6 +11,7 @@ require 'capybara/rspec'
 require 'capybara/poltergeist'
 require 'support/database_cleaner'
 require 'support/wait_for_ajax'
+require 'support/debugit'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -59,6 +60,11 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers, type: :feature
   config.include WaitForAjax, type: :feature
   config.include ActionView::RecordIdentifier, type: :feature
+end
+
+
+Capybara.register_driver :poltergeist_debug do |app|
+  Capybara::Poltergeist::Driver.new(app, :inspector => true)
 end
 
 Capybara.javascript_driver = :poltergeist
