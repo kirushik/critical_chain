@@ -33,6 +33,7 @@ feature "Estimated values", :type => :feature do
 
     wait_for_ajax
 
+    # FIXME Flickering test!
     expect(page).to have_text(8)
     expect(page).to have_text(5.66)
     expect(page).to have_text(13.7)
