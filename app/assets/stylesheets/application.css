@@ -56,6 +56,23 @@
   background: rgb(66, 184, 221); /* this is a light blue */
 }
 
+.notification {
+  border: 1px solid;
+  border-radius: 0.3em;
+  padding: 0.6em;
+  margin-bottom: 1em;
+}
+
+.notification.alert {
+  border-color: red;
+  background-color: #fee;
+}
+
+.notification.notice {
+  border-color: green;
+  background-color: #efe;
+}
+
 /*Bootstrap-like colors*/
 .text-muted {
   color: #777;

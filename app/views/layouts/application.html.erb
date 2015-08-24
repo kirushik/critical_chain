@@ -25,9 +25,17 @@
     </div>
   </div>
 
+
   <div class="content-wrapper">
     <div class="content">
       <div class="pure-g">
+        <div class="pure-u-1 center-wrapper">
+          <% flash.each do |key, value| %>
+            <div class="notification <%= key %>">
+              <%= value %>
+            </div>
+          <% end %>
+        </div>
         <%= yield %>
       </div>
     </div>

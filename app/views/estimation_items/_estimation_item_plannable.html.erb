@@ -20,7 +20,7 @@
       <%= estimation_item_plannable.decorate.editable :quantity, type: :number %>
     </div>
     <div class="pure-u-1-24">
-      <%= button_to [estimation_item_plannable.estimation, estimation_item_plannable], method: :delete, remote: true, class: 'button-link' do %>
+      <%= button_to [estimation_item_plannable.estimation, estimation_item_plannable], method: :delete, remote: true, class: 'close button-link' do %>
         <%= fa_icon :close %>
       <% end %>
     </div>

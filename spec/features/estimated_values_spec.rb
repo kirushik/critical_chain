@@ -23,9 +23,11 @@ feature "Estimated values", :type => :feature do
 
     expect(page).to have_text(0)
 
+    fill_in 'estimation_item_title', with: 'A'
     fill_in 'estimation_item_value', with: 1
     click_button 'Add estimation item'
 
+    fill_in 'estimation_item_title', with: 'B'
     fill_in 'estimation_item_value', with: 7
     click_button 'Add estimation item'
 

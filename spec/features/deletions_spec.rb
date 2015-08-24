@@ -16,36 +16,34 @@ feature "Deletions", :type => :feature do
     it 'should be possible without AJAX' do
       visit estimation_path(estimation)
 
-      buttons = page.all('button', :text => '×')
+      buttons = page.all('button.close')
       expect(buttons.size).to eq(items_count)
-      expect(page).to have_text(first_item.title)
+      expect(page).to have_selector("input[value='#{first_item.title}']")
 
       buttons.first.click
 
-      expect(page.status_code).to eq(200)
-
-      new_buttons = page.all('button', :text => '×')
+      new_buttons = page.all('button.close')
+      expect(page).to have_no_selector("input[value='#{first_item.title}']")
       expect(new_buttons.size).to eq(items_count-1)
-      expect(page).not_to have_text(first_item.title)
     end
 
     it 'should be possible with AJAX', :js do
       visit estimation_path(estimation)
 
-      buttons = page.all('button', :text => '×')
+      buttons = page.all('button.close')
       expect(buttons.size).to eq(items_count)
-      expect(page).to have_text(first_item.title)
+      expect(page).to have_selector("input[value='#{first_item.title}']")
 
       buttons.first.click
 
       wait_for_ajax
 
-      new_buttons = page.all('button', :text => '×')
+      new_buttons = page.all('button.close')
       expect(new_buttons.size).to eq(items_count-1)
-      expect(page).not_to have_text(first_item.title)
+      expect(page).to have_no_selector("input[value='#{first_item.title}']")
 
-      estimation.reload.estimation_items.each do |i|  
-        expect(page).to have_text(i.title) 
+      estimation.reload.estimation_items.each do |i|
+        expect(page).to have_selector("input[value='#{i.title}']")
       end
     end
   end
@@ -54,7 +52,7 @@ feature "Deletions", :type => :feature do
     it 'should be possible without AJAX' do
       visit estimations_path
 
-      buttons = page.all('button', :text => '×')
+      buttons = page.all('button.close')
       expect(buttons.size).to eq(estimations_count)
       expect(page).to have_text(estimation.title)
 
@@ -62,32 +60,28 @@ feature "Deletions", :type => :feature do
 
       expect(page.status_code).to eq(200)
 
-      new_buttons = page.all('button', :text => '×')
+      new_buttons = page.all('button.close')
       expect(new_buttons.size).to eq(estimations_count-1)
       expect(page).not_to have_text(estimation.title)
     end
 
-    # TODO This is not working because of button-inside-link composition
-    # Proven to work OK in manual test (with 'data-no-turbolink')
-    # it 'should be possible with AJAX', :js do
-    #   visit estimations_path
+    it 'should be possible with AJAX', :js do
+      visit estimations_path
 
-    #   buttons = page.all('button', :text => '×')
-    #   expect(buttons.size).to eq(estimations_count)
-    #   expect(page).to have_text(estimation.title)
+      buttons = page.all('button.close')
+      expect(buttons.size).to eq(estimations_count)
+      expect(page).to have_text(estimation.title)
 
-    #   within("\##{dom_id estimation}") do
-    #     click_button '×'
-    #   end
+      buttons.first.click
 
-    #   wait_for_ajax
+      wait_for_ajax
 
-    #   expect(page).not_to have_text(estimation.title)
+      expect(page).not_to have_text(estimation.title)
 
-    #   user.reload.estimations.each do |e|  
-    #     expect(page).to have_text(e.title) 
-    #   end
-    # end
+      user.reload.estimations.each do |e|
+        expect(page).to have_text(e.title)
+      end
+    end
   end
 
 end

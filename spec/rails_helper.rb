@@ -9,6 +9,7 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'capybara/rspec'
 require 'capybara/poltergeist'
+
 require 'support/database_cleaner'
 require 'support/wait_for_ajax'
 require 'support/debugit'
