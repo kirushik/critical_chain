@@ -2,6 +2,7 @@ module WaitForAjax
   def wait_for_ajax
     Timeout.timeout(Capybara.default_wait_time) do
       loop until finished_all_ajax_requests?
+      sleep 0.05 # To allow all DOM changes to be processed
     end
   end
 

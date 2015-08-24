@@ -71,7 +71,7 @@ group :test do
   gem 'guard-rspec'
   gem 'libnotify'
 
-  gem 'rspec_junit_formatter', :git => 'git@github.com:circleci/rspec_junit_formatter.git'
+  gem 'rspec_junit_formatter'
   gem "codeclimate-test-reporter", require: false
 end
 
