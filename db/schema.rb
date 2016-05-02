@@ -11,10 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150701170544) do
+ActiveRecord::Schema.define(version: 20150821230438) do
 
   create_table "estimation_items", force: :cascade do |t|
-    t.integer  "value"
+    t.integer  "value",         default: 0
     t.string   "title"
     t.integer  "estimation_id"
     t.datetime "created_at",                    null: false
