@@ -8,6 +8,9 @@
     <span class="lead">
       <%= estimation_item.decorate.editable :value, type: :number %>
     </span>
+    <span class="multiplier-total lead">=
+      <%= estimation_item.value * estimation_item.quantity %>
+    </span>
   </td>
   <td>
     <%= form_for [estimation_item.estimation, estimation_item], method: :patch, remote: true do |f| %>
