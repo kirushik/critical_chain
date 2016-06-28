@@ -30,6 +30,9 @@ var activate_editables = function () {
       $('#actual_sum').text(vals.actual_sum);
       $('#buffer_health').text(vals.buffer_health);
       $('#buffer_health').attr('class', vals.buffer_health_class);
+      if(vals.update_item_total) {
+        $(vals.update_item_total.item + ' .total_value').text(vals.update_item_total.total)
+      }
     }
   }});
 }

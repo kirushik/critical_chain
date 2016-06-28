@@ -6,7 +6,7 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
 
   let(:new_estimation_title) { 'Kapandlya' }
   let(:new_estimation_value) { 7 }
-  
+
   let(:old_estimation_value) { estimation.estimation_items.first.value }
 
   before(:each) do
@@ -73,5 +73,20 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     page.find('.editable-inline .editable-submit').click
 
     expect(page).to have_text "#{4*old_estimation_value} + #{2*old_estimation_value} = #{6*old_estimation_value}"
+  end
+
+  scenario 'I can see updated total when estimation or count has been changed', :js do
+
+    page.find('span.editable.quantity').click
+    page.find('.editable-inline .editable-input input').set '20'
+    page.find('.editable-inline .editable-submit').click
+
+    page.find('span.editable.value').click
+    page.find('.editable-inline .editable-input input').set '17'
+    page.find('.editable-inline .editable-submit').click
+
+    wait_for_ajax
+
+    expect(page).to have_text '= 340'
   end
 end

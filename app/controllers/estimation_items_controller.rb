@@ -18,6 +18,8 @@
 #
 
 class EstimationItemsController < ApplicationController
+  include ActionView::RecordIdentifier
+
   def create
     @estimation = Estimation.find(params[:estimation_id]).decorate
 
@@ -63,7 +65,11 @@ class EstimationItemsController < ApplicationController
               total: @estimation.total,
               actual_sum: @estimation.actual_sum,
               buffer_health: @estimation.buffer_health,
-              buffer_health_class: @estimation.buffer_health_class
+              buffer_health_class: @estimation.buffer_health_class,
+              update_item_total: {
+                  item: '#' + dom_id(@estimation_item),
+                  total: @estimation_item.total
+              }
             }}
         end
         format.js

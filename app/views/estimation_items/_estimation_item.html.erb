@@ -1,7 +1,18 @@
 <tr id="<%= dom_id estimation_item %>">
-  <td class="text-right">
+  <td class="text-right copies">
+    <%= icon(:copy) %>
+    <%= estimation_item.decorate.editable :quantity, type: :number %>
+    <span class="multiplier">×</span>
+  </td>
+  <td>
     <span class="lead">
       <%= estimation_item.decorate.editable :value, type: :number %>
+    </span>
+    <span class="multiplier-total lead">
+      =
+      <span class="total_value">
+        <%= estimation_item.total %>
+      </span>
     </span>
   </td>
   <td>
@@ -14,10 +25,6 @@
     <% end %>
   </td>
   <td><%= estimation_item.decorate.editable :title %></td>
-  <td>
-    <%= icon(:copy) %>
-    <%= estimation_item.decorate.editable :quantity, type: :number %>
-  </td>
   <td>
     <%= button_to [estimation_item.estimation, estimation_item], method: :delete, remote: true, class: 'close pull-right' do %>
       <span>&times;</span>

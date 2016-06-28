@@ -22,4 +22,13 @@ RSpec.describe "estimation_items/_estimation_item.html.erb", :type => :view do
     expect(html.css('.fa-copy')).not_to be_empty
     expect(html.css('.quantity').first.attributes['data-value'].value).to eq '17'
   end
+
+  it 'should multiply subitem estimate and quantity' do
+    foo = FactoryGirl.create(:estimation_item, quantity: 3, value: 7)
+    render partial: "estimation_items/estimation_item", locals: { estimation_item: foo }
+
+    html = Nokogiri::HTML.parse(rendered)
+
+    expect(html.css('.multiplier-total').text).to include('21')
+  end
 end
