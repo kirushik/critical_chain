@@ -8,8 +8,11 @@
     <span class="lead">
       <%= estimation_item.decorate.editable :value, type: :number %>
     </span>
-    <span class="multiplier-total lead">=
-      <%= estimation_item.value * estimation_item.quantity %>
+    <span class="multiplier-total lead">
+      =
+      <span class="total_value">
+        <%= estimation_item.total %>
+      </span>
     </span>
   </td>
   <td>
