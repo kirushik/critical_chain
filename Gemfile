@@ -72,6 +72,8 @@ end
 group :development do
   gem 'guard-livereload', require: false
   gem 'rack-livereload'
+
+  gem 'foreman'
 end
 
 group :test do
