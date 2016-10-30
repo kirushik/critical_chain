@@ -38,4 +38,4 @@ var activate_editables = function () {
 }
 
 $(document).ready(activate_editables);
-$(document).on('page:load', activate_editables);
+document.addEventListener("turbolinks:render", activate_editables);
