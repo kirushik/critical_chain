@@ -24,6 +24,9 @@ It is a pretty typical Rails project.
 
 Please fork it, clone it, run `bundle install` to fetch all the dependencies. Then copy `application.yml.sample` in application.yml, and populate it with proper Google API keys from [here](https://console.developers.google.com). You'll have to create a new OAuth credentials pair, bound to `localhost` host.
 
+The project uses FOREMAN to properly set up processes and env variables. It comes with Google OAuth secrets valid for localhost:3000, in the `.env` file.
+To properly launch Rails server in development mode, please run `env RAILS_ENV=development bundle exec foreman start`.
+
 All tests are written in RSpec, so `bundle exec rspec` should do the trick with testing. `phantomjs` binary should be in `PATH` to run javascript-related feature tests. (See `spec/features` folder.)
 
 Development is managed with [Waffle.io board](https://waffle.io/kirushik/critical_chain); feel free to report bugs, add new ideas and submit pull requests by default GitHub means.
