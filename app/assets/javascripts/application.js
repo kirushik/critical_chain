@@ -12,7 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui/effect-highlight
+//= require jquery-ui/effects/effect-highlight
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require editable/bootstrap-editable
