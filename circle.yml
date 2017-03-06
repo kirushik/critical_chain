@@ -1,6 +1,6 @@
-test:
-  post:
-    - bundle exec codeclimate-test-reporter
+#test:
+  #post:
+    #- bundle exec codeclimate-test-reporter
 
 deployment:
   production:
