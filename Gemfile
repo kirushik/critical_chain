@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.4.0'
+ruby '2.5.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.0'
@@ -9,7 +9,7 @@ gem 'sass-rails', '~> 5.0'
 
 gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
-gem 'font-awesome-sass'
+gem 'font-awesome-sass', '~> 4.7'
 
 gem 'page_title_helper'
 
@@ -81,7 +81,7 @@ group :test do
   gem 'poltergeist'
 
   gem 'database_cleaner'
-  
+
   gem 'guard-rspec'
   gem 'libnotify'
 
