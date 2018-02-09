@@ -45,7 +45,7 @@ gem 'annotate', group: :development
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 group :production do
-  gem 'pg'
+  gem 'pg', '~> 0.21'
   gem 'rails_12factor'
   gem 'rack-ssl', require: 'rack/ssl'
   gem 'thin'

@@ -204,7 +204,7 @@ GEM
     orm_adapter (0.5.0)
     page_title_helper (2.1.0)
       rails (>= 3.0.0)
-    pg (1.0.0)
+    pg (0.21.0)
     poltergeist (1.17.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -369,7 +369,7 @@ DEPENDENCIES
   libnotify
   omniauth-google-oauth2
   page_title_helper
-  pg
+  pg (~> 0.21)
   poltergeist
   pry-rails
   pundit
