@@ -1,0 +1,69 @@
+version: 2
+
+jobs:
+  build:
+    parallelism: 3
+    docker:
+      - image: circleci/ruby:2.5-node-browsers
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          RAILS_ENV: test
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - criticalchain-bundle-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Bundle Install
+          command: bundle check || bundle install
+      - save_cache:
+          key: criticalchain-bundle-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - run:
+          name: Database setup
+          command: bundle exec rake db:schema:load --trace
+
+      - type: shell
+        command: |
+          bundle exec rspec --profile 10 \
+                            --format RspecJunitFormatter \
+                            --out test_results/rspec.xml \
+                            --format progress \
+                            $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+      - store_test_results:
+          path: test_results
+
+
+  deploy:
+    machine:
+      enabled: true
+    working_directory: ~/circleci-demo-workflows
+    environment:
+      HEROKU_APP: criticalchain
+    steps:
+      - checkout
+      - run:
+          command: bash .circleci/setup-heroku.sh
+      - run:
+          command: heroku pg:backups capture --app criticalchain
+      - run:
+          command: git push git@heroku.com:criticalchain.git $CIRCLE_SHA1:refs/heads/master
+      - run:
+          command: heroku run rake db:migrate --app criticalchain
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches: 
+              only: master
