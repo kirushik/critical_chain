@@ -86,6 +86,7 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     page.find('.editable-inline .editable-submit').click
 
     wait_for_ajax
+    sleep(1)
 
     expect(page).to have_text '= 340'
   end
