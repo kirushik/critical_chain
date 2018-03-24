@@ -50,6 +50,8 @@ jobs:
       - run:
           command: bash .circleci/setup-heroku.sh
       - run:
+          command: heroku git:remote -a criticalchain
+      - run:
           command: heroku pg:backups capture --app criticalchain
       - run:
           command: git push git@heroku.com:criticalchain.git $CIRCLE_SHA1:refs/heads/master
