@@ -9,7 +9,7 @@ gem 'sass-rails', '~> 5.0'
 
 gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
-gem 'font-awesome-sass', '~> 4.7'
+gem 'font-awesome-sass', '~> 5.0'
 
 gem 'page_title_helper'
 
