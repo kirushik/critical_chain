@@ -62,7 +62,7 @@ jobs:
           command: bundle check || bundle install
       - run:
           name: Merge and copy coverage data
-          command: bundle exec report_coverage
+          command: bundle exec report_coverage -b $CIRCLE_BRANCH
 
 
   deploy:
