@@ -53,6 +53,7 @@ jobs:
           BUNDLE_PATH: vendor/bundle
           RAILS_ENV: test
     steps:
+      - checkout
       - restore_cache:
           keys:
             - criticalchain-bundle-{{ checksum "Gemfile.lock" }}
