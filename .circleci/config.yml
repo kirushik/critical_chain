@@ -92,7 +92,9 @@ workflows:
   build-and-deploy:
     jobs:
       - build
-      - report-coverage
+      - report-coverage:
+          requires:
+            - build
       - deploy:
           requires:
             - build
