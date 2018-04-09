@@ -218,7 +218,7 @@ GEM
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     rack (1.6.9)
-    rack-livereload (0.3.16)
+    rack-livereload (0.3.17)
       rack
     rack-ssl (1.4.1)
       rack
