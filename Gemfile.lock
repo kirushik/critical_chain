@@ -217,7 +217,7 @@ GEM
     public_suffix (3.0.2)
     pundit (2.0.0)
       activesupport (>= 3.0.0)
-    rack (1.6.10)
+    rack (1.6.11)
     rack-livereload (0.3.17)
       rack
     rack-ssl (1.4.1)
