@@ -57,9 +57,13 @@ jobs:
       - run:
           command: heroku pg:backups capture --app criticalchain
       - run:
+          command: heroku maintenance:on --app criticalchain
+      - run:
           command: git push git@heroku.com:criticalchain.git $CIRCLE_SHA1:refs/heads/master
       - run:
           command: heroku run rake db:migrate --app criticalchain
+      - run:
+          command: heroku maintenance:off --app criticalchain
 
 workflows:
   version: 2
@@ -70,5 +74,5 @@ workflows:
           requires:
             - build
           filters:
-            branches: 
+            branches:
               only: master
