@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.5.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.11'
+gem 'rails', '~> 6.0.1'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
 
@@ -14,9 +14,9 @@ gem 'font-awesome-sass', '~> 4.7'
 gem 'page_title_helper'
 
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.2.2'
+gem 'coffee-rails'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -63,7 +63,7 @@ group :development, :test do
 
   gem 'rspec-rails'
 
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'faker'
 
   gem 'guard-migrate'
