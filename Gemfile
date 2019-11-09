@@ -80,7 +80,7 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'poltergeist'
+  gem 'apparition'
 
   gem 'database_cleaner'
 

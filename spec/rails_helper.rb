@@ -3,7 +3,7 @@ if ENV["CIRCLE_ARTIFACTS"]
   dir = File.join(ENV["CIRCLE_ARTIFACTS"], "coverage")
   SimpleCov.coverage_dir(dir)
 end
-SimpleCov.start
+SimpleCov.start "rails"
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= "test"
@@ -12,7 +12,9 @@ require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 require "capybara/rspec"
-require "capybara/poltergeist"
+require "capybara/rails"
+require "capybara/apparition"
+
 require "support/database_cleaner"
 require "support/wait_for_ajax"
 
@@ -67,4 +69,7 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 end
 
-Capybara.javascript_driver = :poltergeist
+Capybara.register_driver :apparition do |app|
+  Capybara::Apparition::Driver.new(app, headless: true)
+end
+Capybara.javascript_driver = :apparition
