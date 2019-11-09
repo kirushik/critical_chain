@@ -7,6 +7,8 @@ gem 'rails', '~> 6.0.1'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
 
+gem 'puma'
+
 gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
 gem 'font-awesome-sass', '~> 4.7'
@@ -61,7 +63,7 @@ group :development, :test do
 
   gem 'sqlite3'
 
-  gem 'rspec-rails'
+  gem 'rspec-rails', '>= 4.0.0.beta3'
 
   gem 'factory_bot_rails'
   gem 'faker'

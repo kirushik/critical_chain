@@ -1,20 +1,20 @@
-require 'simplecov'
-if ENV['CIRCLE_ARTIFACTS']
-  dir = File.join(ENV['CIRCLE_ARTIFACTS'], "coverage")
+require "simplecov"
+if ENV["CIRCLE_ARTIFACTS"]
+  dir = File.join(ENV["CIRCLE_ARTIFACTS"], "coverage")
   SimpleCov.coverage_dir(dir)
 end
 SimpleCov.start
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV["RAILS_ENV"] ||= 'test'
-require 'spec_helper'
+ENV["RAILS_ENV"] ||= "test"
+require "spec_helper"
 require File.expand_path("../../config/environment", __FILE__)
-require 'rspec/rails'
+require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
-require 'capybara/rspec'
-require 'capybara/poltergeist'
-require 'support/database_cleaner'
-require 'support/wait_for_ajax'
+require "capybara/rspec"
+require "capybara/poltergeist"
+require "support/database_cleaner"
+require "support/wait_for_ajax"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -59,7 +59,7 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Warden::Test::Helpers, type: :feature
   config.include WaitForAjax, type: :feature
   config.include ActionView::RecordIdentifier, type: :feature
