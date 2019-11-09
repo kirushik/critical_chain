@@ -14,18 +14,17 @@
 #  index_estimations_on_user_id  (user_id)
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe EstimationsController, :type => :controller do
-
-  describe 'GET index' do
-    it 'redirects to /sign_in if not authenticated' do
+  describe "GET index" do
+    it "redirects to /sign_in if not authenticated" do
       get :index
 
       expect(response).to redirect_to(new_user_session_path)
     end
 
-    it 'returns http success when logged in' do
+    it "returns http success when logged in" do
       user = FactoryBot.create(:user)
       sign_in user
 
@@ -34,7 +33,7 @@ RSpec.describe EstimationsController, :type => :controller do
       expect(response).to have_http_status(:success)
     end
 
-    it 'loads estimations for the current user' do
+    it "loads estimations for the current user" do
       user = FactoryBot.create(:user_with_estimations)
       sign_in user
 
@@ -43,7 +42,7 @@ RSpec.describe EstimationsController, :type => :controller do
       expect(assigns(:estimations)).to match_array(user.estimations)
     end
 
-    it 'decorates collection of Estimations' do
+    it "decorates collection of Estimations" do
       user = FactoryBot.create(:user_with_estimations)
       sign_in user
 
@@ -62,44 +61,42 @@ RSpec.describe EstimationsController, :type => :controller do
       sign_in user
     end
 
-    it 'decorates loaded Estimation' do
-      get :show, id: estimation.id
+    it "decorates loaded Estimation" do
+      get :show, params: { id: estimation.id }
 
       expect(assigns(:estimation)).to be_decorated
     end
 
-
-    context 'estimation in planning mode' do
+    context "estimation in planning mode" do
       render_views
       let(:estimation) { FactoryBot.create(:estimation, user: user, tracking_mode: false) }
 
-      it 'should render planning-related partials' do
-        get :show, id: estimation.id
+      it "should render planning-related partials" do
+        get :show, params: { id: estimation.id }
 
-        expect(response).to render_template(partial: 'estimation_items/_estimation_item_editable', count: estimation.estimation_items.count)
-        expect(response).to render_template(partial: 'estimation_items/_form_for_new')
-        expect(response).to render_template(partial: 'estimations/_results')
-        expect(response).to render_template(partial: 'estimations/_mode_toggle')
-
+        expect(response).to render_template(partial: "estimation_items/_estimation_item_editable", count: estimation.estimation_items.count)
+        expect(response).to render_template(partial: "estimation_items/_form_for_new")
+        expect(response).to render_template(partial: "estimations/_results")
+        expect(response).to render_template(partial: "estimations/_mode_toggle")
       end
     end
 
-    context 'estimation in tracking mode' do
+    context "estimation in tracking mode" do
       render_views
       let(:estimation) { FactoryBot.create(:estimation, user: user, tracking_mode: true) }
 
-      it 'should render tracking-related partials' do
-        get :show, id: estimation.id
+      it "should render tracking-related partials" do
+        get :show, params: { id: estimation.id }
 
-        expect(response).to render_template(partial: 'estimation_items/_estimation_item_trackable', count: estimation.estimation_items.count)
-        expect(response).to render_template(partial: 'estimations/_graph')
-        expect(response).to render_template(partial: 'estimations/_results')
-        expect(response).to render_template(partial: 'estimations/_mode_toggle')
+        expect(response).to render_template(partial: "estimation_items/_estimation_item_trackable", count: estimation.estimation_items.count)
+        expect(response).to render_template(partial: "estimations/_graph")
+        expect(response).to render_template(partial: "estimations/_results")
+        expect(response).to render_template(partial: "estimations/_mode_toggle")
       end
     end
   end
 
-  describe 'PATCH update' do
+  describe "PATCH update" do
     let(:user) { FactoryBot.create(:user_with_estimations) }
     let(:estimation) { user.estimations.first }
 
@@ -107,14 +104,14 @@ RSpec.describe EstimationsController, :type => :controller do
       sign_in user
     end
 
-    it 'allows changing of Estimation#tracking_mode' do
-      xhr :patch, :update, id: estimation.id, estimation: { tracking_mode: true }
+    it "allows changing of Estimation#tracking_mode" do
+      patch :update, params: { id: estimation.id, estimation: { tracking_mode: true } }, xhr: true
 
       expect(estimation.reload.tracking_mode?).to be_truthy
     end
 
-    it 'redirects to the estimation if no XHR happened' do
-      patch :update, id: estimation.id, estimation: { tracking_mode: true }
+    it "redirects to the estimation if no XHR happened" do
+      patch :update, params: { id: estimation.id, estimation: { tracking_mode: true } }
       expect(response).to redirect_to(estimation_path(estimation))
     end
   end
