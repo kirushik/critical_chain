@@ -1,4 +1,4 @@
-class CreateEstimationItems < ActiveRecord::Migration
+class CreateEstimationItems < ActiveRecord::Migration[4.2]
   def change
     create_table :estimation_items do |t|
       t.integer :value
