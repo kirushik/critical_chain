@@ -2,8 +2,8 @@ require 'rails_helper'
 
 feature "UserPermissions", :type => :feature do
   scenario 'I shouldn\'t be allowed to view other people estimations' do
-    user_a = FactoryGirl.create(:user)
-    user_b = FactoryGirl.create(:user_with_estimations)
+    user_a = FactoryBot.create(:user)
+    user_b = FactoryBot.create(:user_with_estimations)
     others_estimation = user_b.estimations.first
 
     login_as user_a

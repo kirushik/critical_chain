@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature "Deletions", :type => :feature do
-  let(:user) { FactoryGirl.create(:user_with_nonempty_estimations, n: 2) }
+  let(:user) { FactoryBot.create(:user_with_nonempty_estimations, n: 2) }
   let(:estimation) { user.estimations.first }
   let(:estimations_count) {user.estimations.size }
 
@@ -44,8 +44,8 @@ feature "Deletions", :type => :feature do
       expect(new_buttons.size).to eq(items_count-1)
       expect(page).not_to have_text(first_item.title)
 
-      estimation.reload.estimation_items.each do |i|  
-        expect(page).to have_text(i.title) 
+      estimation.reload.estimation_items.each do |i|
+        expect(page).to have_text(i.title)
       end
     end
   end
@@ -84,8 +84,8 @@ feature "Deletions", :type => :feature do
 
     #   expect(page).not_to have_text(estimation.title)
 
-    #   user.reload.estimations.each do |e|  
-    #     expect(page).to have_text(e.title) 
+    #   user.reload.estimations.each do |e|
+    #     expect(page).to have_text(e.title)
     #   end
     # end
   end

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature "AdditionOfEstimationsAndItems", :type => :feature do
-  let(:user) { FactoryGirl.create(:user_with_nonempty_estimations) }
+  let(:user) { FactoryBot.create(:user_with_nonempty_estimations) }
   let(:estimation) { user.estimations.first }
 
   let(:new_estimation_title) { 'Kapandlya' }
@@ -57,7 +57,7 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     expect(page).to have_css('span.editable.quantity', count: estimation.estimation_items.count)
 
     page.find('span.editable', text: estimation.estimation_items.last.value).click
-    
+
     expect(page).to have_css('.editable-inline')
   end
 

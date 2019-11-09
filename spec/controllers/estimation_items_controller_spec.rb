@@ -21,7 +21,7 @@ require 'rails_helper'
 
 RSpec.describe EstimationItemsController, :type => :controller do
 
-  let(:user) { FactoryGirl.create(:user_with_estimations) }
+  let(:user) { FactoryBot.create(:user_with_estimations) }
   let(:estimation) { user.estimations.first }
 
   before(:each) do
@@ -39,7 +39,7 @@ RSpec.describe EstimationItemsController, :type => :controller do
     end
 
     it "doesn\'t allow to add items to estimations of others" do
-      sign_in FactoryGirl.create(:user)
+      sign_in FactoryBot.create(:user)
 
       post :create, estimation_id: estimation.id, estimation_item: { value: 117 }
 
@@ -55,7 +55,7 @@ RSpec.describe EstimationItemsController, :type => :controller do
   end
 
   describe "PATCH update" do
-    let(:estimation_item) { FactoryGirl.create :estimation_item, estimation: estimation }
+    let(:estimation_item) { FactoryBot.create :estimation_item, estimation: estimation }
 
     it 'denies to update quantity to negative numbers' do
       xhr :patch, :update, id: estimation_item.id, estimation_id: estimation.id, estimation_item: { quantity: -1 }, format: :json

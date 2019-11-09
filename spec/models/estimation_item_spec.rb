@@ -20,7 +20,7 @@
 require 'rails_helper'
 
 RSpec.describe EstimationItem, :type => :model do
-  subject { FactoryGirl.build(:estimation_item) }
+  subject { FactoryBot.build(:estimation_item) }
 
   def should_not_accept_value value
     subject.value = value

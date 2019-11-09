@@ -22,32 +22,32 @@
 #  index_users_on_uid       (uid)
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     sequence(:email) { Faker::Internet.email }
 
     factory :google_user do
-      provider 'google_oauth2'
-      sequence(:uid) { Faker::Number.number(25) }
+      provider { "google_oauth2" }
+      sequence(:uid) { Faker::Number.number(digits: 25) }
     end
 
     factory :user_with_nonempty_estimations do
       transient do
-        n 1
+        n { 1 }
       end
 
       after(:create) do |user, evaluator|
-        FactoryGirl.create_list(:estimation_with_items, evaluator.n, :user => user)
+        FactoryBot.create_list(:estimation_with_items, evaluator.n, :user => user)
       end
     end
-    
+
     factory :user_with_estimations do
       transient do
-        n 2
+        n { 2 }
       end
 
       after(:create) do |user, evaluator|
-        FactoryGirl.create_list(:estimation, evaluator.n, :user => user)
+        FactoryBot.create_list(:estimation, evaluator.n, :user => user)
       end
     end
   end

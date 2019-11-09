@@ -17,7 +17,7 @@
 require 'rails_helper'
 
 RSpec.describe Estimation, :type => :model do
-  subject { FactoryGirl.create(:estimation) }
+  subject { FactoryBot.create(:estimation) }
 
   describe '#estimation_items' do
     it "should be an array" do
@@ -28,7 +28,7 @@ RSpec.describe Estimation, :type => :model do
   describe 'mathematics' do
     it "should calculate sum of all items" do
       2.times do
-        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 3)
+        subject.estimation_items << FactoryBot.create(:estimation_item, value: 3)
       end
 
       expect(subject.sum).to eq 6
@@ -36,30 +36,30 @@ RSpec.describe Estimation, :type => :model do
 
     it 'should calculate buffer' do
       4.times do
-        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1)
+        subject.estimation_items << FactoryBot.create(:estimation_item, value: 1)
       end
 
       expect(subject.buffer).to eq 2
     end
 
     it 'should calculate total' do
-      subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1)
+      subject.estimation_items << FactoryBot.create(:estimation_item, value: 1)
 
       expect(subject.total).to eq 2
     end
 
     context 'with fixed items' do
       it 'should yield zero buffer if only fixed items present' do
-        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1, fixed: true)
-        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1, fixed: true)
+        subject.estimation_items << FactoryBot.create(:estimation_item, value: 1, fixed: true)
+        subject.estimation_items << FactoryBot.create(:estimation_item, value: 1, fixed: true)
 
         expect(subject.buffer).to eq 0
       end
 
       it 'should count buffers ignoring fixed items' do
         4.times do
-          subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1)
-          subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1, fixed: true)
+          subject.estimation_items << FactoryBot.create(:estimation_item, value: 1)
+          subject.estimation_items << FactoryBot.create(:estimation_item, value: 1, fixed: true)
         end
 
         expect(subject.sum).to eq 8
@@ -70,7 +70,7 @@ RSpec.describe Estimation, :type => :model do
 
     context 'with batch items' do
       it 'takes quantity in account' do
-        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1, quantity: 4)
+        subject.estimation_items << FactoryBot.create(:estimation_item, value: 1, quantity: 4)
 
         expect(subject.sum).to eq 4
         expect(subject.buffer).to eq 2
@@ -78,8 +78,8 @@ RSpec.describe Estimation, :type => :model do
       end
 
       it 'can mix batches and ordinary items' do
-        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1, quantity: 3)
-        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1)
+        subject.estimation_items << FactoryBot.create(:estimation_item, value: 1, quantity: 3)
+        subject.estimation_items << FactoryBot.create(:estimation_item, value: 1)
 
         expect(subject.sum).to eq 4
         expect(subject.buffer).to eq 2
@@ -87,8 +87,8 @@ RSpec.describe Estimation, :type => :model do
       end
 
       it 'avoids fixed items in calculations' do
-        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 1, quantity: 4)
-        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 10, fixed: true)
+        subject.estimation_items << FactoryBot.create(:estimation_item, value: 1, quantity: 4)
+        subject.estimation_items << FactoryBot.create(:estimation_item, value: 10, fixed: true)
 
         expect(subject.sum).to eq 14
         expect(subject.buffer).to eq 2
@@ -100,7 +100,7 @@ RSpec.describe Estimation, :type => :model do
   describe 'deletions' do
     it 'should happen with dependent items' do
       2.times do
-        subject.estimation_items << FactoryGirl.create(:estimation_item, value: 3)
+        subject.estimation_items << FactoryBot.create(:estimation_item, value: 3)
       end
 
       expect(EstimationItem.count).to eq(2)
@@ -113,27 +113,27 @@ RSpec.describe Estimation, :type => :model do
 
   describe '#completed_items' do
     it 'should list only items with actual_value set' do
-      FactoryGirl.create(:estimation_item, estimation: subject)
-      completed_item = FactoryGirl.create(:estimation_item, estimation: subject, actual_value: 1)
+      FactoryBot.create(:estimation_item, estimation: subject)
+      completed_item = FactoryBot.create(:estimation_item, estimation: subject, actual_value: 1)
 
       expect(subject.completed_items).to contain_exactly completed_item
     end
   end
 
   describe '#project_progress' do
-    subject { FactoryGirl.create :estimation_with_items, items: {count: 9, size: 1} }
+    subject { FactoryBot.create :estimation_with_items, items: {count: 9, size: 1} }
 
     it 'should be zero when no items are finished' do
       expect(subject.project_progress).to eq 0
     end
 
     it 'should be zero for empty project' do
-      estimation = FactoryGirl.create :estimation
+      estimation = FactoryBot.create :estimation
       expect(estimation.project_progress).to eq 0
     end
 
     it 'should be a fraction of estimations' do
-      FactoryGirl.create :estimation_item, value: 1, actual_value: 1, estimation: subject
+      FactoryBot.create :estimation_item, value: 1, actual_value: 1, estimation: subject
       expect(subject.project_progress).to eq 0.1
     end
 
@@ -144,14 +144,14 @@ RSpec.describe Estimation, :type => :model do
   end
 
   describe '#buffer_consumption' do
-    subject { FactoryGirl.create :estimation_with_items, items: {count: 9, size: 10} }
+    subject { FactoryBot.create :estimation_with_items, items: {count: 9, size: 10} }
 
     it 'is zero when no items completed' do
       expect(subject.buffer_consumption).to eq 0
     end
 
     it 'is zero for empty project' do
-      estimation = FactoryGirl.create :estimation
+      estimation = FactoryBot.create :estimation
       expect(estimation.buffer_consumption).to eq 0
     end
 
@@ -183,7 +183,7 @@ RSpec.describe Estimation, :type => :model do
   end
 
   describe '#buffer_health' do
-    subject { FactoryGirl.create :estimation_with_items, items: {count: 4, size: 10} }
+    subject { FactoryBot.create :estimation_with_items, items: {count: 4, size: 10} }
 
     it 'is 0.0 when no actual progress happened' do
       expect(subject.buffer_health).to eq 0

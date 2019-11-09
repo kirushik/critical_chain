@@ -26,7 +26,7 @@ RSpec.describe EstimationsController, :type => :controller do
     end
 
     it 'returns http success when logged in' do
-      user = FactoryGirl.create(:user)
+      user = FactoryBot.create(:user)
       sign_in user
 
       get :index
@@ -35,7 +35,7 @@ RSpec.describe EstimationsController, :type => :controller do
     end
 
     it 'loads estimations for the current user' do
-      user = FactoryGirl.create(:user_with_estimations)
+      user = FactoryBot.create(:user_with_estimations)
       sign_in user
 
       get :index
@@ -44,7 +44,7 @@ RSpec.describe EstimationsController, :type => :controller do
     end
 
     it 'decorates collection of Estimations' do
-      user = FactoryGirl.create(:user_with_estimations)
+      user = FactoryBot.create(:user_with_estimations)
       sign_in user
 
       get :index
@@ -55,7 +55,7 @@ RSpec.describe EstimationsController, :type => :controller do
   end
 
   describe "GET show" do
-    let(:user) { FactoryGirl.create(:user_with_estimations) }
+    let(:user) { FactoryBot.create(:user_with_estimations) }
     let(:estimation) { user.estimations.first }
 
     before(:each) do
@@ -71,11 +71,11 @@ RSpec.describe EstimationsController, :type => :controller do
 
     context 'estimation in planning mode' do
       render_views
-      let(:estimation) { FactoryGirl.create(:estimation, user: user, tracking_mode: false) }
+      let(:estimation) { FactoryBot.create(:estimation, user: user, tracking_mode: false) }
 
       it 'should render planning-related partials' do
         get :show, id: estimation.id
-        
+
         expect(response).to render_template(partial: 'estimation_items/_estimation_item_editable', count: estimation.estimation_items.count)
         expect(response).to render_template(partial: 'estimation_items/_form_for_new')
         expect(response).to render_template(partial: 'estimations/_results')
@@ -86,11 +86,11 @@ RSpec.describe EstimationsController, :type => :controller do
 
     context 'estimation in tracking mode' do
       render_views
-      let(:estimation) { FactoryGirl.create(:estimation, user: user, tracking_mode: true) }
+      let(:estimation) { FactoryBot.create(:estimation, user: user, tracking_mode: true) }
 
       it 'should render tracking-related partials' do
         get :show, id: estimation.id
-        
+
         expect(response).to render_template(partial: 'estimation_items/_estimation_item_trackable', count: estimation.estimation_items.count)
         expect(response).to render_template(partial: 'estimations/_graph')
         expect(response).to render_template(partial: 'estimations/_results')
@@ -100,7 +100,7 @@ RSpec.describe EstimationsController, :type => :controller do
   end
 
   describe 'PATCH update' do
-    let(:user) { FactoryGirl.create(:user_with_estimations) }
+    let(:user) { FactoryBot.create(:user_with_estimations) }
     let(:estimation) { user.estimations.first }
 
     before(:each) do

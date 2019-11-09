@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature "EstimationsOnDashboards", :type => :feature do
 
-  let(:user) { FactoryGirl.create(:user_with_estimations) }
+  let(:user) { FactoryBot.create(:user_with_estimations) }
   before(:each) do
     login_as user
   end
@@ -21,7 +21,7 @@ feature "EstimationsOnDashboards", :type => :feature do
   end
 
   scenario 'won\'t show me other people\'s estimations' do
-    other_user = FactoryGirl.create(:user_with_estimations)
+    other_user = FactoryBot.create(:user_with_estimations)
 
     visit root_path
 
@@ -32,5 +32,5 @@ feature "EstimationsOnDashboards", :type => :feature do
     other_user.estimations.each do |e|
       expect(page).not_to have_text(e.title)
     end
-  end 
+  end
 end

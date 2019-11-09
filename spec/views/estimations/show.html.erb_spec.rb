@@ -8,7 +8,7 @@ RSpec.describe "estimations/show.html.erb", :type => :view do
   end
 
   context 'in planning mode' do
-    let(:estimation) { FactoryGirl.create(:estimation_with_items, items: {count: 2, size: 2}).decorate }
+    let(:estimation) { FactoryBot.create(:estimation_with_items, items: {count: 2, size: 2}).decorate }
 
     it 'lists the values of the estimation items' do
       estimation.estimation_items.each do |item|
@@ -39,9 +39,9 @@ RSpec.describe "estimations/show.html.erb", :type => :view do
 
   context 'in tracking mode' do
     let(:estimation) do
-      estimation = FactoryGirl.create(:estimation, tracking_mode: true)
-      FactoryGirl.create :estimation_item, value: 2, actual_value: 3, estimation: estimation
-      FactoryGirl.create :estimation_item, value: 2, actual_value: 10, estimation: estimation
+      estimation = FactoryBot.create(:estimation, tracking_mode: true)
+      FactoryBot.create :estimation_item, value: 2, actual_value: 3, estimation: estimation
+      FactoryBot.create :estimation_item, value: 2, actual_value: 10, estimation: estimation
       estimation.decorate
     end
 

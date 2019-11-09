@@ -63,6 +63,8 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers, type: :feature
   config.include WaitForAjax, type: :feature
   config.include ActionView::RecordIdentifier, type: :feature
+
+  config.include FactoryBot::Syntax::Methods
 end
 
 Capybara.javascript_driver = :poltergeist
