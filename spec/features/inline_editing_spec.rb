@@ -40,7 +40,6 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
 
     wait_for_ajax
 
-    expect(page).to have_text new_estimation_title
     expect(page).to have_text "7 + 7 = 14"
   end
 
