@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 feature "Tracking mode", :type => :feature do
-  let(:user) { FactoryGirl.create(:user_with_nonempty_estimations, n: 2) }
+  let(:user) { FactoryBot.create(:user_with_nonempty_estimations, n: 2) }
   let(:estimation) { user.estimations.first }
-  let(:tracking_mode_estimation) { FactoryGirl.create(:estimation_with_items, tracking_mode: true, user: user) }
+  let(:tracking_mode_estimation) { FactoryBot.create(:estimation_with_items, tracking_mode: true, user: user) }
   let(:first_estimation_item) { tracking_mode_estimation.estimation_items.first }
 
   before(:each) do

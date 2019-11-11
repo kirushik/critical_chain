@@ -1,4 +1,4 @@
-class CreateEstimations < ActiveRecord::Migration
+class CreateEstimations < ActiveRecord::Migration[4.2]
   def change
     create_table :estimations do |t|
       t.string :title

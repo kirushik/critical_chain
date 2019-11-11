@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature "AdditionOfEstimationsAndItems", :type => :feature do
-  let(:user) { FactoryGirl.create(:user_with_estimations) }
+  let(:user) { FactoryBot.create(:user_with_estimations) }
   let(:estimation) {user.estimations.first}
 
   let(:new_title) {'Akukaracha'}
@@ -29,7 +29,7 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     click_button 'Add estimation item'
 
     wait_for_ajax
-    
+
     expect(find_field('estimation_item_value').value).not_to eq('7')
     expect(find_field('estimation_item_title').value).not_to eq(new_title)
 

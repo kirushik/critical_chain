@@ -28,7 +28,7 @@ def oauth_payload_for uid, email = Faker::Internet.email
 end
 
 RSpec.describe User, :type => :model do
-  let(:user) { FactoryGirl.create(:google_user) }
+  let(:user) { FactoryBot.create(:google_user) }
   def oauth_payload email = nil
     payload = double
     allow(payload).to receive_messages(provider: 'google_oauth2', uid: user.uid)
@@ -45,7 +45,7 @@ RSpec.describe User, :type => :model do
   describe 'from_omniauth method' do
     it 'should return existing object when second parameter is present' do
       new_user = User.from_omniauth(nil, user)
-      
+
       expect(new_user.object_id).to eq(user.object_id)
     end
 
@@ -73,8 +73,8 @@ RSpec.describe User, :type => :model do
     end
 
     it "should not include other user's estimations" do
-      user = FactoryGirl.create(:user_with_estimations, n: 3)
-      FactoryGirl.create(:user_with_estimations)
+      user = FactoryBot.create(:user_with_estimations, n: 3)
+      FactoryBot.create(:user_with_estimations)
 
       user = User.find(user.id)
 

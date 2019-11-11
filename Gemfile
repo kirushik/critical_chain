@@ -1,22 +1,24 @@
 source 'https://rubygems.org'
 
-ruby '2.5.0'
+ruby '2.5.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.11'
+gem 'rails', '~> 6.0.1'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
 
-gem 'bootstrap-sass'
+gem 'puma'
+
+gem 'bootstrap', '~>4.3.1'
 gem 'autoprefixer-rails'
 gem 'font-awesome-sass', '~> 4.7'
 
 gem 'page_title_helper'
 
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.2.2'
+gem 'coffee-rails'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -61,9 +63,10 @@ group :development, :test do
 
   gem 'sqlite3'
 
-  gem 'rspec-rails'
+  gem 'rspec-rails', '>= 4.0.0.beta3'
+  gem 'rails-controller-testing'
 
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'faker'
 
   gem 'guard-migrate'
@@ -78,14 +81,14 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'poltergeist'
+  gem 'apparition'
 
   gem 'database_cleaner'
 
   gem 'guard-rspec'
   gem 'libnotify'
 
-  gem 'rspec_junit_formatter', :git => 'git@github.com:circleci/rspec_junit_formatter.git'
+  gem 'rspec_junit_formatter'
 
   gem 'simplecov', require: false
   gem "codeclimate-test-reporter", require: false

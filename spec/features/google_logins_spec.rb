@@ -10,7 +10,7 @@ feature "can login with Google", :type => :feature do
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end
 
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
 
   scenario 'redirects to login page if not authorized' do
     visit root_path
@@ -23,7 +23,7 @@ feature "can login with Google", :type => :feature do
   end
 
   scenario 'when I click "Login with Google" button, I\'m logged in' do
-    OmniAuth.config.add_mock :google_oauth2, uid: Faker::Number.number(25), info: {email: Faker::Internet.email}
+    OmniAuth.config.add_mock :google_oauth2, uid: Faker::Number.number(digits: 25), info: {email: Faker::Internet.email}
 
     log_me_in
 

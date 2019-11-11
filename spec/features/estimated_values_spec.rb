@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature "Estimated values", :type => :feature do
-  let(:user) { FactoryGirl.create(:user_with_estimations) }
+  let(:user) { FactoryBot.create(:user_with_estimations) }
   let(:estimation) {user.estimations.first}
 
   before(:each) do
@@ -10,7 +10,7 @@ feature "Estimated values", :type => :feature do
 
   scenario 'should be calculated on the estimation page' do
     2.times do
-      estimation.estimation_items << FactoryGirl.create(:estimation_item, value: 2)
+      estimation.estimation_items << FactoryBot.create(:estimation_item, value: 2)
     end
 
     visit estimation_path(estimation)

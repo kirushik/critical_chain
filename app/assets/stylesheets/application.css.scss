@@ -1,4 +1,3 @@
-@import "bootstrap-sprockets";
 @import "bootstrap";
 @import "font-awesome-sprockets";
 @import "font-awesome";
@@ -42,4 +41,13 @@
 .turbolinks-progress-bar {
   height: 5px;
   background-color: blue;
+}
+
+#estimations-index {
+  margin-top: 1.2em;
+  margin-bottom: 0.6em;
+}
+
+.estimation-items-index {
+  margin-top: 1.2em;
 }

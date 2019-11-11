@@ -3,7 +3,7 @@
 # Table name: estimation_items
 #
 #  id            :integer          not null, primary key
-#  value         :integer          default(0)
+#  value         :integer
 #  title         :string
 #  estimation_id :integer
 #  created_at    :datetime         not null
@@ -20,7 +20,7 @@
 require 'rails_helper'
 
 RSpec.describe EstimationItem, :type => :model do
-  subject { FactoryGirl.build(:estimation_item) }
+  subject { FactoryBot.build(:estimation_item) }
 
   def should_not_accept_value value
     subject.value = value

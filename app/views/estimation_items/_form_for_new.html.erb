@@ -1,13 +1,14 @@
 <%= form_for [@estimation, EstimationItem.new], html: { class: 'form-inline' }, remote: true do |f| %>
-  <div class="form-group">
-    <%= f.label :value, class: 'sr-only' %>
+  <div class="input-group">
     <%= f.number_field :value, class: 'form-control value', placeholder: 'Value', autofocus: true %>
   </div>
-  <div class="form-group">
-    <%= f.label :title, class: 'sr-only' %>
+  <div class="input-group">
     <%= f.text_field :title, class: 'form-control title', placeholder: 'Item title (optional)' %>
+
+    <div class="input-group-append">
+      <%= f.button class: 'btn btn-success', value: 'Add estimation item', type: :submit do %>
+        <%= icon('plus-circle fa-lg') %>
+      <% end %>
+    </div>
   </div>
-  <%= f.button class: 'btn btn-success', value: 'Add estimation item', type: :submit do %>
-    <%= icon('plus-circle fa-lg') %>
-  <% end %>
 <% end %>

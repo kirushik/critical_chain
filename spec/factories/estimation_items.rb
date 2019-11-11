@@ -3,7 +3,7 @@
 # Table name: estimation_items
 #
 #  id            :integer          not null, primary key
-#  value         :integer          default(0)
+#  value         :integer
 #  title         :string
 #  estimation_id :integer
 #  created_at    :datetime         not null
@@ -17,12 +17,12 @@
 #  index_estimation_items_on_estimation_id  (estimation_id)
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :estimation_item do
-    sequence(:value) { Faker::Number.number(2) }
+    sequence(:value) { Faker::Number.number(digits: 2) }
     sequence(:title) { Faker::Lorem.sentence }
-    fixed false
-    quantity 1
+    fixed { false }
+    quantity { 1 }
 
     estimation
   end

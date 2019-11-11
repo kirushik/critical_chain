@@ -1,15 +1,17 @@
 <% page_title! @estimation.title %>
 
-<div class="col-md-6">
-  <table id="<%= dom_id @estimation %>" class="table table-hover">
-    <%= render partial: @estimation.items_partial_name, collection: @estimation.estimation_items, as: :estimation_item %>
-  </table>
-</div>
+<div class="row">
+  <div class="col-md-6">
+    <table id="<%= dom_id @estimation %>" class="table table-hover estimation-items-index">
+      <%= render partial: @estimation.items_partial_name, collection: @estimation.estimation_items, as: :estimation_item %>
+    </table>
+  </div>
 
-<div class="col-md-5 col-md-offset-1">
-  <%= render 'mode_toggle' %>
-  <%= render 'estimation_items/form_for_new' unless @estimation.tracking_mode? %>
-  <%= render 'results' %>
-  <%= render 'buffer_consumption' if @estimation.tracking_mode? %>
-  <%= render 'graph' if @estimation.tracking_mode? %>
+  <div class="col-md-5 offset-md-1">
+    <%= render 'mode_toggle' %>
+    <%= render 'estimation_items/form_for_new' unless @estimation.tracking_mode? %>
+    <%= render 'results' %>
+    <%= render 'buffer_consumption' if @estimation.tracking_mode? %>
+    <%= render 'graph' if @estimation.tracking_mode? %>
+  </div>
 </div>
