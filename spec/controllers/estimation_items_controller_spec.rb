@@ -3,7 +3,7 @@
 # Table name: estimation_items
 #
 #  id            :integer          not null, primary key
-#  value         :integer          default(0)
+#  value         :integer
 #  title         :string
 #  estimation_id :integer
 #  created_at    :datetime         not null
