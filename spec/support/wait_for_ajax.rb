@@ -6,6 +6,7 @@ module WaitForAjax
   end
 
   def finished_all_ajax_requests?
+    sleep 0.05
     page.evaluate_script("jQuery.active").zero?
   end
 end
