@@ -70,7 +70,7 @@ RSpec.configure do |config|
 end
 
 Capybara.register_driver :apparition do |app|
-  Capybara::Apparition::Driver.new(app, headless: true, js_errors: false)
+  Capybara::Apparition::Driver.new(app, headless: true, js_errors: true)
 end
 Capybara.configure do |config|
   config.default_normalize_ws = true
