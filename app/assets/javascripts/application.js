@@ -15,7 +15,7 @@
 //= require jquery-ui/effects/effect-highlight
 //= require turbolinks
 //= require bootstrap-sprockets
-//= require editable/bootstrap-editable
+//= require ./x-editable
 //= require editable/rails
 //= require_tree .
 

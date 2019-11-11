@@ -9,7 +9,7 @@ gem 'sass-rails', '~> 6.0'
 
 gem 'puma'
 
-gem 'bootstrap-sass'
+gem 'bootstrap', '~>4.3.1'
 gem 'autoprefixer-rails'
 gem 'font-awesome-sass', '~> 4.7'
 
@@ -88,7 +88,7 @@ group :test do
   gem 'guard-rspec'
   gem 'libnotify'
 
-  gem 'rspec_junit_formatter', :git => 'git@github.com:circleci/rspec_junit_formatter.git'
+  gem 'rspec_junit_formatter'
 
   gem 'simplecov', require: false
   gem "codeclimate-test-reporter", require: false
