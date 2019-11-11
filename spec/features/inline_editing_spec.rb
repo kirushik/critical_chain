@@ -32,7 +32,7 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
   end
 
   scenario "I can modify estimation item value", :js do
-    expect(page).to have_no_text new_estimation_title
+    expect(page).to have_no_text new_estimation_value
 
     page.find("span.editable.value", text: estimation.estimation_items.first.value).click
     page.find(".editable-inline .editable-input input").set new_estimation_value
@@ -40,7 +40,8 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
 
     wait_for_ajax
 
-    expect(page).to have_text "7 + 7 = 14"
+    expect(page).to have_text new_estimation_value
+    expect(page).to have_text '7 + 7 = 14'
   end
 
   scenario "AJAX-added items are editable", :js do
