@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.5.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.1'
+gem 'rails', '~> 6.0.2'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
 
