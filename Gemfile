@@ -48,7 +48,6 @@ gem 'annotate', group: :development
 # gem 'capistrano-rails', group: :development
 group :production do
   gem 'pg', '~> 0.21'
-  gem 'rails_12factor'
   gem 'rack-ssl', require: 'rack/ssl'
   gem 'thin'
 end
