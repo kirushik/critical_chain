@@ -14,7 +14,7 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     visit estimation_path(estimation)
   end
 
-  scenario "I can modify the estimation item title", :js, pending: "there's a race condition in Ajax somewhere" do
+  scenario "I can modify the estimation item title", :js do
     expect(page).to have_no_text new_estimation_title
 
     page.find("span.editable.title", text: estimation.estimation_items.first.title).click
