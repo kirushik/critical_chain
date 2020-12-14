@@ -326,7 +326,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    sdoc (2.0.2)
+    sdoc (2.0.3)
       rdoc (>= 5.0)
     shellany (0.0.1)
     simplecov (0.13.0)
@@ -410,7 +410,7 @@ DEPENDENCIES
   rspec-rails (>= 4.0.0.beta3)
   rspec_junit_formatter
   sass-rails (~> 6.0)
-  sdoc (~> 2.0.2)
+  sdoc (~> 2.0.3)
   simplecov
   spring
   spring-commands-rspec
