@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.5.5'
+ruby '3.0.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.1.3'
@@ -47,7 +47,7 @@ gem 'annotate', group: :development
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 group :production do
-  gem 'pg', '~> 0.21'
+  gem 'pg'
   gem 'rack-ssl', require: 'rack/ssl'
   gem 'thin'
 end
@@ -97,6 +97,11 @@ end
 gem 'devise'
 # To auth with Google
 gem 'omniauth-google-oauth2'
+
+# Temporary fix till Devise Omniauth version detection is fixed upstream
+# https://github.com/heartcombo/devise/issues/5326
+gem 'omniauth', '~>1.9.0'
+
 # To enable privilege separation
 gem 'pundit'
 

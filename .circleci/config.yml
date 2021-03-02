@@ -4,23 +4,24 @@ jobs:
   build:
     parallelism: 2
     docker:
-      - image: circleci/ruby:2.5.5-node-browsers
+      - image: circleci/ruby:3.0.0-node-browsers
         environment:
           BUNDLE_JOBS: 3
           BUNDLE_RETRY: 3
           BUNDLE_PATH: vendor/bundle
           RAILS_ENV: test
+          CACHE_VERSION: 1
     steps:
       - checkout
 
       - restore_cache:
           keys:
-            - criticalchain-bundle-{{ checksum "Gemfile.lock" }}
+            - criticalchain-bundle-{{ .Environment.CACHE_VERSION }}-{{ checksum "Gemfile.lock" }}
       - run:
           name: Bundle Install
           command: bundle check || bundle install
       - save_cache:
-          key: criticalchain-bundle-{{ checksum "Gemfile.lock" }}
+          key: criticalchain-bundle-{{ .Environment.CACHE_VERSION }}-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
