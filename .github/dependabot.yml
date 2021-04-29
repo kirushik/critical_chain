@@ -1,0 +1,24 @@
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - kirushik
+  ignore:
+  - dependency-name: font-awesome-sass
+    versions:
+    - "< 6, >= 5.0.a"
+  - dependency-name: poltergeist
+    versions:
+    - "< 1.19, >= 1.18.a"
+  - dependency-name: rails
+    versions:
+    - "< 6, >= 5.0.a"
+  - dependency-name: omniauth
+    versions:
+    - 2.0.0
+    - 2.0.3
