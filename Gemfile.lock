@@ -293,7 +293,7 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rdoc (6.3.0)
+    rdoc (6.3.1)
     regexp_parser (2.1.1)
     request_store (1.5.0)
       rack (>= 1.4)
@@ -339,7 +339,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    sdoc (2.1.0)
+    sdoc (2.2.0)
       rdoc (>= 5.0)
     shellany (0.0.1)
     simplecov (0.13.0)
@@ -424,7 +424,7 @@ DEPENDENCIES
   rspec-rails (>= 4.0.0.beta3)
   rspec_junit_formatter
   sass-rails (~> 6.0)
-  sdoc (~> 2.1.0)
+  sdoc (~> 2.2.0)
   simplecov
   spring
   spring-commands-rspec
