@@ -8,7 +8,7 @@
     "project management"
   ],
   "repository": "https://github.com/kirushik/critical_chain",
-  "stack": "heroku-18",
+  "stack": "heroku-20",
   "success_url": "/",
   "scripts": {
     "postdeploy": "bundle exec rake db:migrate"
