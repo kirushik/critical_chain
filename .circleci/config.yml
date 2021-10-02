@@ -48,9 +48,6 @@ jobs:
       HEROKU_APP: criticalchain
     steps:
       - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "e0:5c:e4:90:34:64:a8:54:84:02:40:b8:97:d6:12:0a"
       - run:
           command: bash .circleci/setup-heroku.sh
       - run:
@@ -60,7 +57,7 @@ jobs:
       - run:
           command: heroku maintenance:on --app criticalchain
       - run:
-          command: git push git@heroku.com:criticalchain.git $CIRCLE_SHA1:refs/heads/master
+          command: git push https://heroku:${HEROKU_API_KEY}@git.heroku.com/criticalchain.git $CIRCLE_SHA1:refs/heads/master
       - run:
           command: heroku run rake db:migrate --app criticalchain
       - run:
