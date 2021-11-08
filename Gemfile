@@ -9,7 +9,7 @@ gem 'sass-rails', '~> 6.0'
 
 gem 'puma'
 
-gem 'bootstrap', '~>4.6.0'
+gem 'bootstrap', '~>4.6.1'
 gem 'autoprefixer-rails'
 gem 'font-awesome-sass', '~> 4.7'
 
