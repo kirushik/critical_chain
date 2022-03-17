@@ -11,7 +11,7 @@ gem 'puma'
 
 gem 'bootstrap', '~>4.6.1'
 gem 'autoprefixer-rails'
-gem 'font-awesome-sass', '~> 4.7'
+gem 'font-awesome-sass', '~> 6.1'
 
 gem 'page_title_helper'
 
