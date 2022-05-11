@@ -366,7 +366,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    sdoc (2.3.2)
+    sdoc (2.4.0)
       rdoc (>= 5.0)
     shellany (0.0.1)
     simplecov (0.13.0)
@@ -385,7 +385,7 @@ GEM
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     sqlite3 (1.4.2)
-    stringio (3.0.1)
+    stringio (3.0.2)
     strscan (3.0.2)
     thin (1.8.1)
       daemons (~> 1.0, >= 1.0.9)
@@ -454,7 +454,7 @@ DEPENDENCIES
   rspec-rails (>= 4.0.0.beta3)
   rspec_junit_formatter
   sass-rails (~> 6.0)
-  sdoc (~> 2.3.2)
+  sdoc (~> 2.4.0)
   simplecov
   spring
   spring-commands-rspec
