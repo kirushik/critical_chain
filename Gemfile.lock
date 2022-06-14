@@ -384,7 +384,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.2)
+    sqlite3 (1.4.3)
     stringio (3.0.2)
     strscan (3.0.2)
     thin (1.8.1)
