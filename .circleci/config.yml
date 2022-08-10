@@ -1,10 +1,13 @@
-version: 2
+version: 2.1
+
+orbs:
+  browser-tools: circleci/browser-tools@1.4.0
 
 jobs:
   build:
     parallelism: 2
     docker:
-      - image: circleci/ruby:3.0.0-node-browsers
+      - image: cimg/ruby:3.1.2-browsers
         environment:
           BUNDLE_JOBS: 3
           BUNDLE_RETRY: 3
@@ -12,6 +15,9 @@ jobs:
           RAILS_ENV: test
           CACHE_VERSION: 1
     steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      
       - checkout
 
       - restore_cache:
@@ -29,13 +35,15 @@ jobs:
           name: Database setup
           command: bundle exec rake db:schema:load --trace
 
-      - type: shell
-        command: |
-          bundle exec rspec --profile 10 \
-                            --format RspecJunitFormatter \
-                            --out test_results/rspec.xml \
-                            --format progress \
-                            $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+      - run:
+          name: Run rspec with JUnit formatter
+          shell: /bin/bash
+          command: |
+            bundle exec rspec --profile 10 \
+                              --format RspecJunitFormatter \
+                              --out test_results/rspec.xml \
+                              --format progress \
+                              $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
       - store_test_results:
           path: test_results
 
