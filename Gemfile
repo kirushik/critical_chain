@@ -100,7 +100,7 @@ gem 'omniauth-google-oauth2'
 
 # Temporary fix till Devise Omniauth version detection is fixed upstream
 # https://github.com/heartcombo/devise/issues/5326
-gem 'omniauth', '~>1.9.2'
+gem 'omniauth', '~>2.1.0'
 
 # To enable privilege separation
 gem 'pundit'
