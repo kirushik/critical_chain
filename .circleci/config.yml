@@ -17,7 +17,7 @@ jobs:
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
-      
+
       - checkout
 
       - restore_cache:
@@ -48,37 +48,8 @@ jobs:
           path: test_results
 
 
-  deploy:
-    machine:
-      enabled: true
-    working_directory: ~/circleci-demo-workflows
-    environment:
-      HEROKU_APP: criticalchain
-    steps:
-      - checkout
-      - run:
-          command: bash .circleci/setup-heroku.sh
-      - run:
-          command: heroku git:remote -a criticalchain
-      - run:
-          command: heroku pg:backups capture --app criticalchain
-      - run:
-          command: heroku maintenance:on --app criticalchain
-      - run:
-          command: git push https://heroku:${HEROKU_API_KEY}@git.heroku.com/criticalchain.git $CIRCLE_SHA1:refs/heads/master
-      - run:
-          command: heroku run rake db:migrate --app criticalchain
-      - run:
-          command: heroku maintenance:off --app criticalchain
-
 workflows:
   version: 2
   build-and-deploy:
     jobs:
       - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
