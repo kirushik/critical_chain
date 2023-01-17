@@ -15,10 +15,10 @@ jobs:
           RAILS_ENV: test
           CACHE_VERSION: 1
     steps:
+      - checkout
+
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
-
-      - checkout
 
       - restore_cache:
           keys:
