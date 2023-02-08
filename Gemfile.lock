@@ -265,7 +265,7 @@ GEM
       method_source (~> 1.0)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
-    psych (5.0.1)
+    psych (5.1.0)
       stringio
     public_suffix (5.0.0)
     puma (6.0.2)
@@ -361,7 +361,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    sdoc (2.6.0)
+    sdoc (2.6.1)
       rdoc (>= 5.0)
     shellany (0.0.1)
     simplecov (0.21.2)
@@ -383,7 +383,7 @@ GEM
     sqlite3 (1.6.0)
       mini_portile2 (~> 2.8.0)
     sqlite3 (1.6.0-x86_64-linux)
-    stringio (3.0.4)
+    stringio (3.0.5)
     thin (1.8.1)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
@@ -451,7 +451,7 @@ DEPENDENCIES
   rspec-rails (>= 4.0.0.beta3)
   rspec_junit_formatter
   sass-rails (~> 6.0)
-  sdoc (~> 2.6.0)
+  sdoc (~> 2.6.1)
   simplecov
   spring
   spring-commands-rspec
