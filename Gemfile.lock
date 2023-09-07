@@ -78,7 +78,7 @@ GEM
     apparition (0.6.0)
       capybara (~> 3.13, < 4)
       websocket-driver (>= 0.6.5)
-    autoprefixer-rails (10.4.13.0)
+    autoprefixer-rails (10.4.15.0)
       execjs (~> 2)
     bcrypt (3.1.18)
     better_errors (2.10.1)
