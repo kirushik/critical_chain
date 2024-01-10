@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '3.1.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.0.8'
+gem 'rails', '~> 7.1.2'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
 
@@ -80,7 +80,9 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'apparition'
+
+  # Since https://github.com/twalpole/apparition/pull/79 is not released to Rubygems
+  gem 'apparition', github: 'twalpole/apparition'
 
   gem 'database_cleaner'
 
