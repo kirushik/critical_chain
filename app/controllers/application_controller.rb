@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user!
 
-  include Pundit
+  include Pundit::Authorization
   # Exception to ensure every action contains authorization call
   after_action :verify_authorized, :except => :index, :unless => :devise_controller?
   # Exception to ensure out indices are authorized with scope
@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   end
 
 private
- 
+
   def permission_denied
     head 403
   end
