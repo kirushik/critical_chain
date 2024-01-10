@@ -10,15 +10,15 @@ class EstimationDecorator < Draper::Decorator
 
   def sum
     # TODO Replace whose with a proper number helper
-    object.sum.to_s(:rounded, significant: true).gsub(/\.0+$/, '') rescue "0"
+    object.sum.to_fs(:rounded, significant: true).gsub(/\.0+$/, '') rescue "0"
   end
 
   def buffer
-    object.buffer.to_s(:rounded, significant: true).gsub(/\.0+$/, '') rescue "0"
+    object.buffer.to_fs(:rounded, significant: true).gsub(/\.0+$/, '') rescue "0"
   end
 
   def total
-    object.total.to_s(:rounded, significant: true).gsub(/\.0+$/, '') rescue "0"
+    object.total.to_fs(:rounded, significant: true).gsub(/\.0+$/, '') rescue "0"
   end
 
   def items_partial_name
