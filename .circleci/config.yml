@@ -18,8 +18,8 @@ jobs:
       - checkout
 
       - browser-tools/install-chrome:
-        replace-existing: true # TODO: Fix for the https://github.com/CircleCI-Public/browser-tools-orb/issues/108, remove when resolved
-        chrome-version: 116.0.5845.110
+          replace-existing: true # TODO: Fix for the https://github.com/CircleCI-Public/browser-tools-orb/issues/108, remove when resolved
+          chrome-version: 116.0.5845.110
       - browser-tools/install-chromedriver
 
       - restore_cache:
