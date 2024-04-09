@@ -99,9 +99,10 @@ end
 gem 'devise'
 # To auth with Google
 gem 'omniauth-google-oauth2'
-# In Omniauth2, we need to use POST to navigate to Google's authorization route, which triggers CSRF protection failures without this gem
+# In Omniauth2, we need to use POST to navigate to Google's authorization route,
+# which triggers CSRF protection failures without this gem
 # See also: https://github.com/omniauth/omniauth/wiki/Upgrading-to-2.0#rails
-gem "omniauth-rails_csrf_protection"
+gem 'omniauth-rails_csrf_protection'
 
 # Temporary fix till Devise Omniauth version detection is fixed upstream
 # https://github.com/heartcombo/devise/issues/5326
