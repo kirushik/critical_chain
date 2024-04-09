@@ -3,7 +3,7 @@ require 'rails_helper'
 feature "can login with Google", :type => :feature do
   def log_me_in
     visit root_path
-    click_link('Login with Google')
+    click_button('Login with Google')
   end
 
   before :each do
@@ -19,7 +19,7 @@ feature "can login with Google", :type => :feature do
 
   scenario 'shows "Login with Google" button when unauthorized' do
     visit root_path
-    expect(page).to have_link('Login with Google')
+    expect(page).to have_button('Login with Google')
   end
 
   scenario 'when I click "Login with Google" button, I\'m logged in' do
@@ -43,7 +43,7 @@ feature "can login with Google", :type => :feature do
 
     click_link "Sign out"
 
-    expect(page).to have_link('Login with Google')
+    expect(page).to have_button('Login with Google')
   end
 
   scenario 'won\'t let me in when I\'m not authorized in Google' do
