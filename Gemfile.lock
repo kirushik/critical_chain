@@ -290,6 +290,9 @@ GEM
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
       omniauth (~> 2.0)
+    omniauth-rails_csrf_protection (1.0.1)
+      actionpack (>= 4.2)
+      omniauth (~> 2.0)
     orm_adapter (0.5.0)
     page_title_helper (7.0.0)
       rails (>= 6.1.0, < 7.2)
@@ -500,6 +503,7 @@ DEPENDENCIES
   libnotify
   omniauth (~> 2.1.2)
   omniauth-google-oauth2
+  omniauth-rails_csrf_protection
   page_title_helper
   pg
   pry-rails
