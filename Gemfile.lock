@@ -177,7 +177,7 @@ GEM
       thor (>= 0.14.0, < 2)
     font-awesome-sass (4.7.0)
       sass (>= 3.2)
-    foreman (0.87.2)
+    foreman (0.88.1)
     formatador (1.1.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
