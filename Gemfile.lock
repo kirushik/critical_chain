@@ -457,7 +457,7 @@ GEM
     sqlite3 (2.7.0-x86_64-darwin)
     sqlite3 (2.7.0-x86_64-linux-gnu)
     stringio (3.1.7)
-    thin (2.0.0)
+    thin (2.0.1)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
       logger
