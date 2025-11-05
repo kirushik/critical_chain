@@ -7,7 +7,7 @@ RSpec.describe "estimations/index.html.erb", :type => :view do
 
     render
 
-    expect(rendered.scan('</a>').size).to eq(6) # Counting number of links; Each estimation has 2 links (title + stats)
+    expect(rendered).to have_selector('.estimation-item', count: 3)
     estimations.each do |estimation|
       expect(rendered).to have_text(estimation.title)
     end

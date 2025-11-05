@@ -1,4 +1,4 @@
-<div class='list-group-item' id="<%= dom_id(estimation) %>">
+<div class='list-group-item estimation-item' id="<%= dom_id(estimation) %>">
   <%= link_to estimation.title, estimation %>
   <div class="removal-button pull-right">
     <%= button_to estimation, method: :delete, remote: true, class: 'close', data: { confirm: 'Are you sure you want to delete this estimation?' } do %>
