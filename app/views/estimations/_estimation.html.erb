@@ -1,15 +1,15 @@
-<%= link_to estimation, class: 'list-group-item', id: dom_id(estimation) do %>
-  <%= estimation.title %>
+<div class='list-group-item estimation-item' id="<%= dom_id(estimation) %>">
+  <%= link_to estimation.title, estimation %>
   <div class="removal-button pull-right">
-    <%= button_to estimation, method: :delete, remote: true, class: 'close' do %>
+    <%= button_to estimation, method: :delete, remote: true, class: 'close', data: { confirm: 'Are you sure you want to delete this estimation?' } do %>
       <span>&times;</span>
     <% end %>
   </div>
-  <span class="text-muted pull-right">
+  <%= link_to estimation, class: 'text-muted pull-right' do %>
     <span class="text-success"><strong><%= estimation.sum %></strong></span>
     +
     <span class="text-info"><strong><%= estimation.buffer %></strong></span>
     =
     <span class="text-warning"><strong><%= estimation.total %></strong></span>
-  </span>
-<% end %>
+  <% end %>
+</div>
