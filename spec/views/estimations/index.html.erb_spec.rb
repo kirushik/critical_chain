@@ -7,7 +7,7 @@ RSpec.describe "estimations/index.html.erb", :type => :view do
 
     render
 
-    expect(rendered.scan('</a>').size).to eq(3) # Counting number of links; Closing tags are always look the same → PROFIT
+    expect(rendered.scan('</a>').size).to eq(6) # Counting number of links; Each estimation has 2 links (title + stats)
     estimations.each do |estimation|
       expect(rendered).to have_text(estimation.title)
     end
