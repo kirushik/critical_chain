@@ -47,4 +47,8 @@ class EstimationDecorator < Draper::Decorator
       'bg-danger'
     end
   end
+
+  def editable field, type: :text
+    helpers.editable object, field, url: helpers.estimation_path(object), mode: :inline, type: type, class: field
+  end
 end
