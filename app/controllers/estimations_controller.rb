@@ -50,7 +50,7 @@ class EstimationsController < ApplicationController
       respond_to do |format|
         format.json do
           response_data = { success: result }
-          response_data[:msg] = @estimation.errors.full_messages.first if !result && @estimation.errors.any?
+          response_data[:msg] = @estimation.errors.full_messages.first unless result
           render json: response_data
         end
       end
