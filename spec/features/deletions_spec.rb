@@ -67,27 +67,27 @@ feature "Deletions", :type => :feature do
       expect(page).not_to have_text(estimation.title)
     end
 
-    # TODO This is not working because of button-inside-link composition
-    # Proven to work OK in manual test (with 'data-no-turbolink')
-    # it 'should be possible with AJAX', :js do
-    #   visit estimations_path
+    it 'should be possible with AJAX', :js do
+      visit estimations_path
 
-    #   buttons = page.all('button', :text => '×')
-    #   expect(buttons.size).to eq(estimations_count)
-    #   expect(page).to have_text(estimation.title)
+      buttons = page.all('button', :text => '×')
+      expect(buttons.size).to eq(estimations_count)
+      expect(page).to have_text(estimation.title)
 
-    #   within("\##{dom_id estimation}") do
-    #     click_button '×'
-    #   end
+      within("\##{dom_id estimation}") do
+        accept_confirm do
+          click_button '×'
+        end
+      end
 
-    #   wait_for_ajax
+      wait_for_ajax
 
-    #   expect(page).not_to have_text(estimation.title)
+      expect(page).not_to have_text(estimation.title)
 
-    #   user.reload.estimations.each do |e|
-    #     expect(page).to have_text(e.title)
-    #   end
-    # end
+      user.reload.estimations.each do |e|
+        expect(page).to have_text(e.title)
+      end
+    end
   end
 
 end
