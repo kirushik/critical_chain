@@ -51,9 +51,11 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
 
     wait_for_ajax
 
-    expect(page).to have_css("span.editable.value", count: estimation.estimation_items.count)
-    expect(page).to have_css("span.editable.title", count: estimation.estimation_items.count)
-    expect(page).to have_css("span.editable.quantity", count: estimation.estimation_items.count)
+    within("table.estimation-items-index") do
+      expect(page).to have_css("span.editable.value", count: estimation.estimation_items.count)
+      expect(page).to have_css("span.editable.title", count: estimation.estimation_items.count)
+      expect(page).to have_css("span.editable.quantity", count: estimation.estimation_items.count)
+    end
 
     page.find("span.editable", text: estimation.estimation_items.last.value).click
 
