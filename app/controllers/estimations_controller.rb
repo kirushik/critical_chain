@@ -49,8 +49,9 @@ class EstimationsController < ApplicationController
     if request.xhr?
       respond_to do |format|
         format.json do
-          render json: { success: result,
-                   msg: @estimation.errors.full_messages.first }
+          response_data = { success: result }
+          response_data[:msg] = @estimation.errors.full_messages.first if !result && @estimation.errors.any?
+          render json: response_data
         end
       end
     else
