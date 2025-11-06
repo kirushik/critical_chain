@@ -94,6 +94,21 @@ RSpec.describe EstimationsController, :type => :controller do
         expect(response).to render_template(partial: "estimations/_mode_toggle")
       end
     end
+
+    it "displays estimation items in order specified by order field" do
+      # Create items with specific order values (not in creation order)
+      item1 = FactoryBot.create(:estimation_item, estimation: estimation, title: 'Third by order', value: 10, order: 3.0)
+      item2 = FactoryBot.create(:estimation_item, estimation: estimation, title: 'First by order', value: 20, order: 1.0)
+      item3 = FactoryBot.create(:estimation_item, estimation: estimation, title: 'Second by order', value: 30, order: 2.0)
+
+      get :show, params: { id: estimation.id }
+
+      # Verify items are ordered by the order field in the decorated collection
+      items = assigns(:estimation).estimation_items.to_a
+      expect(items[0].title).to eq('First by order')
+      expect(items[1].title).to eq('Second by order')
+      expect(items[2].title).to eq('Third by order')
+    end
   end
 
   describe "PATCH update" do
