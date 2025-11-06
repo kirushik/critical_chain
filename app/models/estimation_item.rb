@@ -35,6 +35,9 @@ class EstimationItem < ActiveRecord::Base
   def set_default_order
     return if order.present? && order > 0
     
+    # Note: This queries maximum order for each new item creation.
+    # For bulk inserts, consider using insert_all which bypasses callbacks,
+    # or set order explicitly when creating multiple items.
     max_order = estimation&.estimation_items&.maximum(:order) || 0
     self.order = max_order + 1.0
   end
