@@ -51,6 +51,33 @@ RSpec.describe EstimationItemsController, :type => :controller do
 
       expect(assigns(:estimation)).to be_decorated
     end
+
+    it "assigns order to newly created item" do
+      post :create, params: { estimation_id: estimation.id, estimation_item: { value: 117 } }
+
+      created_item = estimation.reload.estimation_items.first
+      expect(created_item.order).to be > 0
+    end
+
+    it "assigns incrementing order values to multiple new items" do
+      post :create, params: { estimation_id: estimation.id, estimation_item: { value: 10 } }
+      first_item = estimation.reload.estimation_items.first
+
+      post :create, params: { estimation_id: estimation.id, estimation_item: { value: 20 } }
+      second_item = estimation.reload.estimation_items.last
+
+      expect(first_item.order).to be > 0
+      expect(second_item.order).to be > first_item.order
+    end
+
+    it "assigns order after existing items" do
+      existing_item = FactoryBot.create :estimation_item, estimation: estimation, order: 5.0
+
+      post :create, params: { estimation_id: estimation.id, estimation_item: { value: 30 } }
+      new_item = estimation.reload.estimation_items.last
+
+      expect(new_item.order).to be > existing_item.order
+    end
   end
 
   describe "PATCH update" do
