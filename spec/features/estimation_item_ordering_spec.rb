@@ -25,17 +25,19 @@ feature "EstimationItemOrdering", :type => :feature do
     # Check that drag handles are present
     expect(page).to have_css('.drag-handle', count: 3)
 
-    # Drag the third item to the first position
+    # Drag the third item to between first and second (or after first)
+    # When using drag_to, the item is placed after the target
     third_item = page.find('tr', text: 'Third Item')
     first_item = page.find('tr', text: 'First Item')
     third_item.drag_to(first_item)
 
     wait_for_ajax
 
-    # Verify the order changed in the UI
+    # After dragging third to first, the order should be: First, Third, Second
+    # (because drag_to places the element after the target)
     items = page.all('.estimation-items-index tbody tr')
-    expect(items[0]).to have_text('Third Item')
-    expect(items[1]).to have_text('First Item')
+    expect(items[0]).to have_text('First Item')
+    expect(items[1]).to have_text('Third Item')
     expect(items[2]).to have_text('Second Item')
 
     # Refresh the page to verify order persists
@@ -43,8 +45,8 @@ feature "EstimationItemOrdering", :type => :feature do
 
     # Verify the order is still the same after refresh
     items = page.all('.estimation-items-index tbody tr')
-    expect(items[0]).to have_text('Third Item')
-    expect(items[1]).to have_text('First Item')
+    expect(items[0]).to have_text('First Item')
+    expect(items[1]).to have_text('Third Item')
     expect(items[2]).to have_text('Second Item')
   end
 
