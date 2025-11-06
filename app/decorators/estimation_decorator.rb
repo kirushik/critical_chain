@@ -5,7 +5,7 @@ class EstimationDecorator < Draper::Decorator
   include ActionView::Helpers::NumberHelper
 
   def estimation_items
-    object.estimation_items.order(:created_at)
+    object.estimation_items.order(:order)
   end
 
   def sum

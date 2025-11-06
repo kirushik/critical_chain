@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2015_07_01_170544) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_06_105927) do
   create_table "estimation_items", force: :cascade do |t|
     t.integer "value"
     t.string "title"
@@ -20,6 +20,8 @@ ActiveRecord::Schema[7.2].define(version: 2015_07_01_170544) do
     t.boolean "fixed", default: false, null: false
     t.integer "quantity", default: 1, null: false
     t.float "actual_value"
+    t.float "order", default: 0.0, null: false
+    t.index ["estimation_id", "order"], name: "index_estimation_items_on_estimation_id_and_order"
     t.index ["estimation_id"], name: "index_estimation_items_on_estimation_id"
   end
 

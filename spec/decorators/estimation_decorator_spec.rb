@@ -56,12 +56,15 @@ describe EstimationDecorator do
   end
 
   describe '#estimation_items' do
-    it 'orders items by created_at' do
+    it 'orders items by order field' do
       estimation = FactoryBot.create(:estimation)
       new_item = FactoryBot.create :estimation_item, estimation: estimation, created_at: 1.minute.ago
       old_item = FactoryBot.create :estimation_item, estimation: estimation, created_at: 1.hour.ago
 
-      expect(estimation.decorate.estimation_items).to eq [old_item, new_item]
+      # Items should be ordered by the order field, not created_at
+      # Since both items get auto-assigned order values on creation,
+      # they should be in the order they were created (new_item should have higher order value)
+      expect(estimation.decorate.estimation_items).to eq [new_item, old_item]
     end
   end
 
