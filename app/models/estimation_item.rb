@@ -24,7 +24,18 @@ class EstimationItem < ActiveRecord::Base
   validates :actual_value, :numericality => { :greater_than_or_equal_to => 0, allow_blank: true }
   validates :quantity, presence: true, :numericality => { :greater_than => 0 }
 
+  before_create :set_default_order
+
   def total
      quantity * value
+  end
+
+  private
+
+  def set_default_order
+    return if order.present? && order > 0
+    
+    max_order = estimation&.estimation_items&.maximum(:order) || 0
+    self.order = max_order + 1.0
   end
 end

@@ -16,7 +16,7 @@
 
 class Estimation < ActiveRecord::Base
   belongs_to :user
-  has_many :estimation_items, dependent: :destroy
+  has_many :estimation_items, -> { order(:order) }, dependent: :destroy
 
   def sum
     estimation_items.sum('value * quantity').to_f
