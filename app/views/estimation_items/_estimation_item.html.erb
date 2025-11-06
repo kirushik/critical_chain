@@ -1,4 +1,7 @@
-<tr id="<%= dom_id estimation_item %>">
+<tr id="<%= dom_id estimation_item %>" data-order="<%= estimation_item.order %>">
+  <td class="drag-handle" style="cursor: move; width: 30px;">
+    <span class="fa fa-grip-vertical text-muted" style="opacity: 0.5;"></span>
+  </td>
   <td class="text-right copies">
     <%= icon(:copy) %>
     <%= estimation_item.decorate.editable :quantity, type: :number %>

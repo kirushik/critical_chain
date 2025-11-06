@@ -5,7 +5,9 @@
 <div class="row">
   <div class="col-md-6">
     <table id="<%= dom_id @estimation %>" class="table table-hover estimation-items-index">
-      <%= render partial: @estimation.items_partial_name, collection: @estimation.estimation_items, as: :estimation_item %>
+      <tbody>
+        <%= render partial: @estimation.items_partial_name, collection: @estimation.estimation_items, as: :estimation_item %>
+      </tbody>
     </table>
   </div>
 

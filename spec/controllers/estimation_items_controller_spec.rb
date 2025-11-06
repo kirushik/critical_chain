@@ -51,6 +51,33 @@ RSpec.describe EstimationItemsController, :type => :controller do
 
       expect(assigns(:estimation)).to be_decorated
     end
+
+    it "assigns order to newly created item" do
+      post :create, params: { estimation_id: estimation.id, estimation_item: { value: 117 } }
+
+      created_item = estimation.reload.estimation_items.first
+      expect(created_item.order).to be > 0
+    end
+
+    it "assigns incrementing order values to multiple new items" do
+      post :create, params: { estimation_id: estimation.id, estimation_item: { value: 10 } }
+      first_item = estimation.reload.estimation_items.first
+
+      post :create, params: { estimation_id: estimation.id, estimation_item: { value: 20 } }
+      second_item = estimation.reload.estimation_items.last
+
+      expect(first_item.order).to be > 0
+      expect(second_item.order).to be > first_item.order
+    end
+
+    it "assigns order after existing items" do
+      existing_item = FactoryBot.create :estimation_item, estimation: estimation, order: 5.0
+
+      post :create, params: { estimation_id: estimation.id, estimation_item: { value: 30 } }
+      new_item = estimation.reload.estimation_items.last
+
+      expect(new_item.order).to be > existing_item.order
+    end
   end
 
   describe "PATCH update" do
@@ -80,6 +107,36 @@ RSpec.describe EstimationItemsController, :type => :controller do
           },
         }
       )
+    end
+
+    it "updates the order of an estimation item" do
+      item1 = FactoryBot.create :estimation_item, estimation: estimation, order: 1.0
+      item2 = FactoryBot.create :estimation_item, estimation: estimation, order: 2.0
+      item3 = FactoryBot.create :estimation_item, estimation: estimation, order: 3.0
+
+      # Move item3 between item1 and item2
+      new_order = 1.5
+      patch :update, params: { id: item3.id, estimation_id: estimation.id, estimation_item: { order: new_order }, format: :json }, xhr: true
+
+      expect(response).to have_http_status(:success)
+      expect(item3.reload.order).to eq(new_order)
+    end
+
+    it "maintains order between 0 and existing items when moving to first position" do
+      item1 = FactoryBot.create :estimation_item, estimation: estimation, order: 1.0
+      item2 = FactoryBot.create :estimation_item, estimation: estimation, order: 2.0
+
+      # Move item2 to first position (order should be 0.5)
+      new_order = 0.5
+      patch :update, params: { id: item2.id, estimation_id: estimation.id, estimation_item: { order: new_order }, format: :json }, xhr: true
+
+      expect(response).to have_http_status(:success)
+      expect(item2.reload.order).to eq(new_order)
+      
+      # Verify items are in correct order
+      items = estimation.reload.estimation_items.to_a
+      expect(items[0]).to eq(item2)
+      expect(items[1]).to eq(item1)
     end
   end
 end
