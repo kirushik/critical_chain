@@ -2,6 +2,8 @@ module ApplicationHelper
   BRAND_ICONS = %w[google facebook twitter github linkedin].freeze
   
   def icon(icon_name, text = nil)
+    return '' if icon_name.blank?
+    
     # Extract icon name and additional classes
     parts = icon_name.split(' ')
     name = parts.first
@@ -12,7 +14,7 @@ module ApplicationHelper
     style_class = BRAND_ICONS.include?(name) ? 'fa-brands' : 'fa-solid'
     
     # Build the icon HTML
-    icon_class = [style_class, "fa-#{name}", additional_classes].join(' ').strip
+    icon_class = [style_class, "fa-#{name}", additional_classes].reject(&:empty?).join(' ')
     icon_html = content_tag(:i, '', class: icon_class)
     
     # Add text if provided (properly escaped)
