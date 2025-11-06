@@ -1,5 +1,7 @@
 module ApplicationHelper
-  def icon(icon_name, text = nil, html_options = {})
+  BRAND_ICONS = %w[google facebook twitter github linkedin].freeze
+  
+  def icon(icon_name, text = nil)
     # Extract icon name and additional classes
     parts = icon_name.split(' ')
     name = parts.first
@@ -7,20 +9,15 @@ module ApplicationHelper
     
     # Font Awesome 6 uses 'fa-brands' for brand icons like google
     # and 'fa-solid' for regular icons
-    style_class = case name
-    when 'google', 'facebook', 'twitter', 'github', 'linkedin'
-      'fa-brands'
-    else
-      'fa-solid'
-    end
+    style_class = BRAND_ICONS.include?(name) ? 'fa-brands' : 'fa-solid'
     
     # Build the icon HTML
     icon_class = [style_class, "fa-#{name}", additional_classes].join(' ').strip
     icon_html = content_tag(:i, '', class: icon_class)
     
-    # Add text if provided
+    # Add text if provided (properly escaped)
     if text
-      icon_html + ' ' + text
+      safe_join([icon_html, text], ' ')
     else
       icon_html
     end
