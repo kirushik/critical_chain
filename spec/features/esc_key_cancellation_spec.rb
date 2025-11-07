@@ -109,7 +109,7 @@ feature "EscKeyCancellation", :type => :feature do
     visit current_path
     page.find("span.editable.quantity").click
     expect(page).to have_css(".editable-inline")
-    
+
     # The original quantity should still be there
     input_value = page.find(".editable-inline .editable-input input").value
     expect(input_value).to eq(original_quantity.to_s)
