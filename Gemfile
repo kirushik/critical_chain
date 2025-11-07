@@ -13,8 +13,10 @@ gem 'puma'
 
 gem 'page_title_helper'
 
-# Turbo makes following links in your web application faster. Read more: https://turbo.hotwired.dev
+# Hotwire's SPA-like page accelerator and form submissions
 gem 'turbo-rails'
+# Hotwire's modest JavaScript framework
+gem 'stimulus-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
