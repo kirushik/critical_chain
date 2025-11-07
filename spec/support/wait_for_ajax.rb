@@ -7,6 +7,7 @@ module WaitForAjax
 
   def finished_all_ajax_requests?
     sleep 0.05
-    page.evaluate_script("jQuery.active").zero?
+    # Check if Turbo is idle (no pending requests)
+    page.evaluate_script("typeof Turbo === 'undefined' || !document.documentElement.hasAttribute('data-turbo-preview')")
   end
 end
