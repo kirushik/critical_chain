@@ -29,8 +29,8 @@ gem 'jquery-ui-rails'
 # In-place editing for Bootstrap and Rails
 gem 'x-editable-rails'
 
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+# Turbo makes following links in your web application faster. Read more: https://turbo.hotwired.dev
+gem 'turbo-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.

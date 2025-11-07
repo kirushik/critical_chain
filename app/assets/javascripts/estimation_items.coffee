@@ -38,5 +38,6 @@ activate_sortable = ->
           $(this).sortable('cancel')
 
 $(document).ready(activate_sortable)
-document.addEventListener('turbolinks:render', activate_sortable)
+document.addEventListener('turbo:load', activate_sortable)
+document.addEventListener('turbo:render', activate_sortable)
 

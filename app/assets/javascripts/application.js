@@ -14,7 +14,7 @@
 //= require jquery_ujs
 //= require jquery-ui/effects/effect-highlight
 //= require jquery-ui/widgets/sortable
-//= require turbolinks
+//= require turbo
 //= require bootstrap-sprockets
 //= require ./x-editable
 //= require editable/rails
@@ -39,4 +39,5 @@ var activate_editables = function () {
 }
 
 $(document).ready(activate_editables);
-document.addEventListener("turbolinks:render", activate_editables);
+document.addEventListener("turbo:load", activate_editables);
+document.addEventListener("turbo:render", activate_editables);
