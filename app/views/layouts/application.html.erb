@@ -10,7 +10,16 @@
   <%= stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/css/bootstrap-editable.css', 'data-turbo-track' => 'reload' %>
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track' => 'reload' %>
   <%= csrf_meta_tags %>
+  <%# Load jQuery synchronously before importmap to ensure it's globally available immediately %>
+  <script src="https://ga.jspm.io/npm:jquery@3.6.0/dist/jquery.js" data-turbo-track="reload"></script>
+  <script>
+    // Ensure jQuery is available globally for plugins and legacy code
+    window.jQuery = window.jQuery || jQuery;
+    window.$ = window.$ || jQuery;
+  </script>
   <%= javascript_importmap_tags %>
+  <%# X-editable loaded as script (not ES module) since it's not available as ES module %>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/js/bootstrap-editable.min.js" data-turbo-track="reload"></script>
 </head>
 <body>
   <div class="navbar navbar-dark bg-dark">

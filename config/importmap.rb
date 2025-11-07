@@ -2,20 +2,19 @@
 
 pin "application", preload: true
 
-# jQuery - Required for Bootstrap 4 and x-editable
-pin "jquery", to: "https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js", preload: true
+# jQuery is loaded directly via script tag in layout for immediate global availability
+# This ensures compatibility with jQuery plugins and legacy code that expect window.$
 
-# jQuery UI - For sortable drag-and-drop
-pin "jquery-ui", to: "https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.13.2/jquery-ui.min.js"
+# jQuery UI - Using ESM-compatible version from ga.jspm.io
+pin "jquery-ui", to: "https://ga.jspm.io/npm:jquery-ui@1.13.2/dist/jquery-ui.js"
 
 # Popper.js - Required by Bootstrap 4
 pin "@popperjs/core", to: "https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
 
-# Bootstrap 4 JavaScript
+# Bootstrap 4 JavaScript - Using bundle that includes Popper
 pin "bootstrap", to: "https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
 
-# X-editable - In-place editing
-pin "bootstrap-editable", to: "https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/js/bootstrap-editable.min.js"
+# X-editable is loaded as script tag, not module (not available as ES module)
 
 # Turbo (already included via gem)
 pin "@hotwired/turbo-rails", to: "turbo.min.js"
