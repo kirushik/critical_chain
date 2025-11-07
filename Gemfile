@@ -38,6 +38,15 @@ gem 'annotate', group: :development
 gem 'brakeman', group: :development, require: false
 gem 'bundler-audit', group: :development, require: false
 
+# Code quality tools
+gem 'rubocop', group: :development, require: false
+gem 'rubocop-rails', group: :development, require: false
+gem 'rubocop-rspec', group: :development, require: false
+gem 'rubocop-performance', group: :development, require: false
+
+# Performance monitoring
+gem 'bullet', group: :development
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
