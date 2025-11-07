@@ -17,10 +17,6 @@ gem 'page_title_helper'
 
 # Use Terser as compressor for JavaScript assets
 gem 'terser'
-# Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails'
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
