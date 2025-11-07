@@ -1,7 +1,4 @@
-@import "bootstrap";
-
-@import "font-awesome";
-@import "editable/bootstrap-editable";
+/* Custom application styles */
 
 .form-inline .form-control.value {
   width: 6em;

@@ -13,6 +13,7 @@
 /db/*.sqlite3-journal
 /db/*.sqlite3-shm
 /db/*.sqlite3-wal
+/db/backups
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -25,4 +26,6 @@
 .idea
 
 /coverage
-db/backups/
+
+/app/assets/builds/*
+!/app/assets/builds/.keep

@@ -5,9 +5,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= page_title %></title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbo-track' => 'reload' %>
-  <%= javascript_include_tag 'application', 'data-turbo-track' => 'reload' %>
+  <%= stylesheet_link_tag 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css', integrity: 'sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N', crossorigin: 'anonymous', 'data-turbo-track' => 'reload' %>
+  <%= stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css', integrity: 'sha512-9xKTRVabjVeZmc+GUW8GgSmcREDunMM+Dt/GrzchfN8tkwHizc5RP4Ok/MXFFy5rIjJjzhndFScTceq5e6GvVQ==', crossorigin: 'anonymous', 'data-turbo-track' => 'reload' %>
+  <%= stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/css/bootstrap-editable.css', 'data-turbo-track' => 'reload' %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track' => 'reload' %>
   <%= csrf_meta_tags %>
+  <%= javascript_importmap_tags %>
 </head>
 <body>
   <div class="navbar navbar-dark bg-dark">

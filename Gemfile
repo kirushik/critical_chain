@@ -4,26 +4,14 @@ ruby '3.3.6'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 7.2.3'
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 6.0'
+
+# Modern asset pipeline
+gem 'propshaft'
+gem 'importmap-rails'
 
 gem 'puma'
 
-gem 'bootstrap', '~>4.6.2'
-gem 'autoprefixer-rails'
-gem 'font-awesome-sass', '~> 6.7'
-
 gem 'page_title_helper'
-
-# Use Terser as compressor for JavaScript assets
-gem 'terser'
-
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
-
-# In-place editing for Bootstrap and Rails
-gem 'x-editable-rails'
 
 # Turbo makes following links in your web application faster. Read more: https://turbo.hotwired.dev
 gem 'turbo-rails'
