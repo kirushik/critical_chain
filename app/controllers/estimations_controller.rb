@@ -29,7 +29,7 @@ class EstimationsController < ApplicationController
   end
 
   def show
-    @estimation = Estimation.find(params[:id]).decorate
+    @estimation = Estimation.includes(estimation_items: :estimation).find(params[:id]).decorate
     authorize @estimation
   end
 
