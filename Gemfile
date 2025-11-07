@@ -15,8 +15,8 @@ gem 'font-awesome-sass', '~> 6.7'
 
 gem 'page_title_helper'
 
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier'
+# Use Terser as compressor for JavaScript assets
+gem 'terser'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
@@ -52,14 +52,10 @@ gem 'bundler-audit', group: :development, require: false
 # gem 'capistrano-rails', group: :development
 group :production do
   gem 'pg'
-  gem 'rack-ssl', require: 'rack/ssl'
   gem 'thin'
 end
 
 group :development, :test do
-  gem 'spring'
-  gem 'spring-commands-rspec'
-
   gem 'pry-rails'
   gem 'better_errors'
   gem 'binding_of_caller'
