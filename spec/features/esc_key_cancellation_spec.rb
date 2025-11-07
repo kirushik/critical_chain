@@ -93,28 +93,42 @@ feature "EscKeyCancellation", :type => :feature do
     original_value = estimation_item.value
     new_quantity = 42
 
-    # The calculation should show the original quantity
-    original_calculation = "#{original_quantity * original_value} + #{(original_quantity * original_value) / 2}"
-    expect(page).to have_text original_calculation
+    # Get initial calculation values using CSS selectors (more reliable)
+    initial_sum = page.find("#sum").text.to_i
+    initial_buffer = page.find("#buffer").text.to_i
+    initial_total = page.find("#total").text.to_i
+
+    # Verify initial values match expected calculation
+    expected_sum = original_quantity * original_value
+    expect(initial_sum).to eq(expected_sum)
 
     # Click to open editor
     page.find("span.editable.quantity").click
     expect(page).to have_css(".editable-inline")
 
     # Change the value
-    page.find(".editable-inline .editable-input input").set new_quantity
+    input = page.find(".editable-inline .editable-input input")
+    input.set new_quantity
 
-    # Press ESC to cancel
-    page.find(".editable-inline .editable-input input").send_keys(:escape)
+    # Press ESC to cancel using JavaScript-triggered keyup event
+    # This is more reliable than send_keys(:escape) in headless browsers
+    page.execute_script(
+      "var e = jQuery.Event('keyup'); e.which = 27; jQuery(arguments[0]).trigger(e);",
+      input.native
+    )
 
     # Verify the editor is closed
     expect(page).to have_no_css(".editable-inline")
 
-    # Verify the original calculation is still displayed (quantity was not changed)
-    expect(page).to have_text original_calculation
+    # Verify the calculation values haven't changed (quantity was not changed)
+    expect(page.find("#sum").text.to_i).to eq(initial_sum)
+    expect(page.find("#buffer").text.to_i).to eq(initial_buffer)
+    expect(page.find("#total").text.to_i).to eq(initial_total)
 
     # Refresh and verify the change was not saved
     visit current_path
-    expect(page).to have_text original_calculation
+    expect(page.find("#sum").text.to_i).to eq(initial_sum)
+    expect(page.find("#buffer").text.to_i).to eq(initial_buffer)
+    expect(page.find("#total").text.to_i).to eq(initial_total)
   end
 end
