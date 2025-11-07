@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.3.0'
+ruby '3.3.6'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 7.2.3'
@@ -37,6 +37,10 @@ gem 'turbolinks'
 gem 'sdoc', '~> 2.6.5', group: :doc
 
 gem 'annotate', group: :development
+
+# Security scanning tools
+gem 'brakeman', group: :development, require: false
+gem 'bundler-audit', group: :development, require: false
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -111,7 +115,7 @@ gem 'omniauth', '~>2.1.2'
 # To enable privilege separation
 gem 'pundit'
 
-# Heroku-friendly configuration management
+# Environment variable configuration management
 gem 'figaro'
 
 gem 'draper'

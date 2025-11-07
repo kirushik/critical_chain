@@ -1,13 +1,13 @@
 version: 2.1
 
 orbs:
-  browser-tools: circleci/browser-tools@1.4.8
+  browser-tools: circleci/browser-tools@1.4.12
 
 jobs:
   build:
     parallelism: 2
     docker:
-      - image: cimg/ruby:3.3.0-browsers
+      - image: cimg/ruby:3.3.6-browsers
         environment:
           BUNDLE_JOBS: 3
           BUNDLE_RETRY: 3
@@ -46,6 +46,14 @@ jobs:
                               $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
       - store_test_results:
           path: test_results
+
+      - run:
+          name: Security - Brakeman
+          command: bundle exec brakeman -q -z --no-pager
+
+      - run:
+          name: Security - Bundle Audit
+          command: bundle exec bundle-audit check --update
 
 
 workflows:
