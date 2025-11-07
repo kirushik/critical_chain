@@ -1,7 +1,9 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 
-// jQuery is loaded synchronously in the layout before this module loads,
-// so it's already available as window.jQuery and window.$
+// Import jQuery and make it globally available (required for jQuery plugins)
+import jquery from "jquery";
+window.jQuery = jquery;
+window.$ = jquery;
 
 // Import jQuery UI (depends on jQuery being global)
 import "jquery-ui";
@@ -11,6 +13,10 @@ import "bootstrap";
 
 // Import Turbo
 import "@hotwired/turbo-rails";
+
+// Import x-editable (UMD module that expects jQuery to be global)
+// Note: This will attach itself to jQuery automatically
+import "bootstrap-editable";
 
 // Configure jQuery to include CSRF token in AJAX requests
 $.ajaxSetup({
@@ -25,7 +31,6 @@ $.ajaxSetup({
 });
 
 // Initialize x-editable on page load
-// Note: x-editable is loaded via script tag in layout since it's not available as ES module
 var activate_editables = function () {
   if (typeof $.fn.editable !== 'undefined') {
     $(".editable").editable({
