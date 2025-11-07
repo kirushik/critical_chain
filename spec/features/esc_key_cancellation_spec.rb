@@ -90,7 +90,12 @@ feature "EscKeyCancellation", :type => :feature do
 
   scenario "I can cancel editing estimation item quantity with ESC key", :js do
     original_quantity = estimation_item.quantity
+    original_value = estimation_item.value
     new_quantity = 42
+
+    # The calculation should show the original quantity
+    original_calculation = "#{original_quantity * original_value} + #{(original_quantity * original_value) / 2}"
+    expect(page).to have_text original_calculation
 
     # Click to open editor
     page.find("span.editable.quantity").click
@@ -105,13 +110,11 @@ feature "EscKeyCancellation", :type => :feature do
     # Verify the editor is closed
     expect(page).to have_no_css(".editable-inline")
 
+    # Verify the original calculation is still displayed (quantity was not changed)
+    expect(page).to have_text original_calculation
+
     # Refresh and verify the change was not saved
     visit current_path
-    page.find("span.editable.quantity").click
-    expect(page).to have_css(".editable-inline")
-
-    # The original quantity should still be there
-    input_value = page.find(".editable-inline .editable-input input").value
-    expect(input_value).to eq(original_quantity.to_s)
+    expect(page).to have_text original_calculation
   end
 end
