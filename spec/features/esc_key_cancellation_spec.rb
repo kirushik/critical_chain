@@ -110,12 +110,8 @@ feature "EscKeyCancellation", :type => :feature do
     input = page.find(".editable-inline .editable-input input")
     input.set new_quantity
 
-    # Press ESC to cancel using JavaScript-triggered keyup event
-    # This is more reliable than send_keys(:escape) in headless browsers
-    page.execute_script(
-      "var e = jQuery.Event('keyup'); e.which = 27; jQuery(arguments[0]).trigger(e);",
-      input.native
-    )
+    # Press ESC to cancel
+    input.send_keys(:escape)
 
     # Verify the editor is closed
     expect(page).to have_no_css(".editable-inline")

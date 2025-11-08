@@ -36,7 +36,9 @@ feature "Deletions", :type => :feature do
       expect(buttons.size).to eq(items_count)
       expect(page).to have_text(first_item.title)
 
-      buttons.first.click
+      accept_confirm do
+        buttons.first.click
+      end
 
       wait_for_ajax
 
@@ -74,10 +76,14 @@ feature "Deletions", :type => :feature do
       expect(buttons.size).to eq(estimations_count)
       expect(page).to have_text(estimation.title)
 
-      within("\##{dom_id estimation}") do
-        accept_confirm do
-          click_button '×'
-        end
+      # Find the specific button within the estimation div
+      button_to_click = within("\##{dom_id estimation}") do
+        find('button', :text => '×')
+      end
+
+      accept_confirm do
+        button_to_click.click
+        sleep 0.1  # Give the modal a moment to appear
       end
 
       wait_for_ajax
