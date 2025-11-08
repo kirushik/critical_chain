@@ -1,4 +1,4 @@
-<tr id="<%= dom_id estimation_item %>" 
+<tr id="<%= dom_id estimation_item %>"
     data-order="<%= estimation_item.order %>"
     data-sortable-target="item"
     draggable="true"
@@ -23,9 +23,8 @@
     </span>
   </td>
   <td>
-    <%= form_with model: [estimation_item.estimation, estimation_item], 
-                  method: :patch,
-                  data: { turbo_frame: "_top" } do |f| %>
+    <%= form_with model: [estimation_item.estimation, estimation_item],
+                  method: :patch do |f| %>
       <%= f.hidden_field :fixed, value: !estimation_item.fixed? %>
       <span class="fa fa-dot-circle-o"></span>
       <%= f.button type: :submit, class: 'btn btn-link toggle-fixed' do %>
@@ -35,8 +34,8 @@
   </td>
   <td><%= estimation_item.decorate.editable :title %></td>
   <td>
-    <%= button_to [estimation_item.estimation, estimation_item], 
-                  method: :delete, 
+    <%= button_to [estimation_item.estimation, estimation_item],
+                  method: :delete,
                   form: { data: { turbo_confirm: 'Are you sure?' } },
                   class: 'close pull-right' do %>
       <span>&times;</span>

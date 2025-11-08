@@ -91,7 +91,7 @@ feature "Deletions", :type => :feature do
       # Verify the estimation is still gone after a full page reload
       visit estimations_path
       expect(page).not_to have_text(estimation.title)
-      
+
       user.reload.estimations.each do |e|
         expect(page).to have_text(e.title)
       end
