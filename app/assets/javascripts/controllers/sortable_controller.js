@@ -73,7 +73,13 @@ export default class extends Controller {
   async updateOrder() {
     const item = this.draggedItem
     const itemId = item.id.split("_").pop()
-    const estimationId = this.element.id.split("_").pop()
+    
+    // Get the update URL from the table's data attribute
+    const updateUrl = this.element.dataset.sortableUpdateUrl
+    if (!updateUrl) {
+      console.error("No update URL provided in data-sortable-update-url")
+      return
+    }
     
     // Get previous and next items
     const prevItem = item.previousElementSibling
@@ -88,7 +94,7 @@ export default class extends Controller {
     item.dataset.order = newOrder
     
     try {
-      const response = await fetch(`/estimations/${estimationId}/estimation_items/${itemId}`, {
+      const response = await fetch(`${updateUrl}/${itemId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
