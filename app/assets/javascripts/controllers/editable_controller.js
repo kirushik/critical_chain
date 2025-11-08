@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Stimulus controller for inline editing
+// Stimulus controller for inline editing (x-editable compatible)
 export default class extends Controller {
-  static targets = ["field", "input", "display"]
+  static targets = ["field", "display"]
   static values = {
     url: String,
     name: String,
@@ -21,36 +21,48 @@ export default class extends Controller {
     this.editing = true
     const value = this.displayTarget.textContent.trim()
     
+    // Create editable-inline container (x-editable compatible)
+    const container = document.createElement("span")
+    container.className = "editable-inline"
+    
+    // Create form
+    const form = document.createElement("div")
+    form.className = "editable-input"
+    
     // Create input element
     const input = document.createElement("input")
     input.type = this.typeValue === "number" ? "number" : "text"
     input.value = value
-    input.className = "form-control form-control-sm d-inline-block"
+    input.name = `${this.element.closest('tr')?.id.split('_')[0] || 'estimation'}_item_${this.nameValue}`
+    input.className = "form-control input-sm"
     input.style.width = this.typeValue === "number" ? "100px" : "200px"
     
+    form.appendChild(input)
+    container.appendChild(form)
+    
     // Create buttons container
-    const buttons = document.createElement("span")
-    buttons.className = "ms-1"
+    const buttons = document.createElement("div")
+    buttons.className = "editable-buttons"
     buttons.innerHTML = `
-      <button type="button" class="btn btn-sm btn-success" data-action="editable#save">
+      <button type="button" class="btn btn-sm btn-success editable-submit" data-action="editable#save">
         <i class="fa fa-check"></i>
       </button>
-      <button type="button" class="btn btn-sm btn-secondary" data-action="editable#cancel">
+      <button type="button" class="btn btn-sm btn-default editable-cancel" data-action="editable#cancel">
         <i class="fa fa-times"></i>
       </button>
     `
+    container.appendChild(buttons)
     
-    // Replace display with input
+    // Replace display with container
     this.displayTarget.style.display = "none"
-    this.displayTarget.insertAdjacentElement("afterend", input)
-    this.displayTarget.insertAdjacentElement("afterend", buttons)
+    this.displayTarget.insertAdjacentElement("afterend", container)
     
     this.inputElement = input
-    this.buttonsElement = buttons
+    this.containerElement = container
     input.focus()
     input.select()
     
-    // Handle Enter key
+    // Handle Enter and Escape keys
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault()
@@ -102,14 +114,11 @@ export default class extends Controller {
   }
 
   cleanup() {
-    if (this.inputElement) {
-      this.inputElement.remove()
-      this.inputElement = null
+    if (this.containerElement) {
+      this.containerElement.remove()
+      this.containerElement = null
     }
-    if (this.buttonsElement) {
-      this.buttonsElement.remove()
-      this.buttonsElement = null
-    }
+    this.inputElement = null
     this.displayTarget.style.display = ""
     this.editing = false
   }
