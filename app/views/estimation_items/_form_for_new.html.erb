@@ -1,10 +1,10 @@
 <%= form_with model: [@estimation, EstimationItem.new],
              html: { class: 'form-inline' } do |f| %>
   <div class="input-group">
-    <%= f.number_field :value, class: 'form-control value', placeholder: 'Value', autofocus: true %>
+    <%= f.number_field :value, id: 'estimation_item_value', class: 'form-control value', placeholder: 'Value', autofocus: true %>
   </div>
   <div class="input-group">
-    <%= f.text_field :title, class: 'form-control title', placeholder: 'Item title (optional)' %>
+    <%= f.text_field :title, id: 'estimation_item_title', class: 'form-control title', placeholder: 'Item title (optional)' %>
 
     <div class="input-group-append">
       <%= f.button class: 'btn btn-success', value: 'Add estimation item', type: :submit do %>

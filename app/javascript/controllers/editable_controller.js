@@ -44,14 +44,29 @@ export default class extends Controller {
     // Create buttons container
     const buttons = document.createElement("div");
     buttons.className = "editable-buttons";
-    buttons.innerHTML = `
-      <button type="button" class="btn btn-sm btn-success editable-submit" data-action="editable#save">
-        <i class="fa fa-check"></i>
-      </button>
-      <button type="button" class="btn btn-sm btn-default editable-cancel" data-action="editable#cancel">
-        <i class="fa fa-times"></i>
-      </button>
-    `;
+
+    // Create save button
+    const saveButton = document.createElement("button");
+    saveButton.type = "button";
+    saveButton.className = "btn btn-sm btn-success editable-submit";
+    saveButton.innerHTML = '<i class="fa fa-check"></i>';
+    saveButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      this.save();
+    });
+
+    // Create cancel button
+    const cancelButton = document.createElement("button");
+    cancelButton.type = "button";
+    cancelButton.className = "btn btn-sm btn-default editable-cancel";
+    cancelButton.innerHTML = '<i class="fa fa-times"></i>';
+    cancelButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      this.cancel();
+    });
+
+    buttons.appendChild(saveButton);
+    buttons.appendChild(cancelButton);
     container.appendChild(buttons);
 
     // Replace display with container

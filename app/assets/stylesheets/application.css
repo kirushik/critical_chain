@@ -1,50 +1,50 @@
 /* Custom application styles */
 
 .form-inline .form-control.value {
-  width: 6em;
+    width: 6em;
 }
 
 #results-table {
-  margin-top: 15px;
+    margin-top: 15px;
 }
 
 #results-table td {
-  padding-right: 6px;
+    padding-right: 6px;
 }
 
 .list-group-item .removal-button {
-  margin-top: -1px;
-  margin-right: -4px;
-  margin-left: 10px;
+    margin-top: -1px;
+    margin-right: -4px;
+    margin-left: 10px;
 }
 
 .toggle-fixed {
-  margin-left: -12px;
+    margin-left: -12px;
 }
 
 .toggle-tracking {
-  margin-left: -11px;
-  margin-top: -1px;
+    margin-left: -11px;
+    margin-top: -1px;
 }
 
-.copies>i.fa-copy {
-  margin-top: 10px;
+.copies > i.fa-copy {
+    margin-top: 10px;
 }
 
 .multiplier {
-  margin-left: 0.7em;
+    margin-left: 0.7em;
 }
 
 .turbo-progress-bar {
-  height: 5px;
-  background-color: blue;
+    height: 5px;
+    background-color: blue;
 }
 
 #estimations-index {
-  margin-top: 1.2em;
-  margin-bottom: 0.6em;
+    margin-top: 1.2em;
+    margin-bottom: 0.6em;
 }
 
 .estimation-items-index {
-  margin-top: 1.2em;
+    margin-top: 1.2em;
 }
