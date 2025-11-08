@@ -7,6 +7,27 @@ if (typeof window !== 'undefined') {
   // Store the original fetch
   const originalFetch = window.fetch;
 
+  // Helper to wrap response methods that consume the body
+  function wrapResponse(response) {
+    const bodyMethods = ['json', 'text', 'blob', 'arrayBuffer', 'formData'];
+
+    bodyMethods.forEach(method => {
+      const original = response[method];
+      if (original) {
+        response[method] = function(...args) {
+          const promise = original.apply(this, args);
+          // Keep counter incremented until body is consumed
+          window.pendingFetchCount++;
+          return promise.finally(() => {
+            window.pendingFetchCount--;
+          });
+        };
+      }
+    });
+
+    return response;
+  }
+
   // Override fetch to track pending requests
   window.fetch = function(...args) {
     window.pendingFetchCount++;
@@ -14,7 +35,7 @@ if (typeof window !== 'undefined') {
     return originalFetch.apply(this, args)
       .then((response) => {
         window.pendingFetchCount--;
-        return response;
+        return wrapResponse(response);
       })
       .catch((error) => {
         window.pendingFetchCount--;
