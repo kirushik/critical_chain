@@ -1,48 +1,49 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
 // Stimulus controller for inline editing (x-editable compatible)
 export default class extends Controller {
-  static targets = ["field", "display"]
+  static targets = ["field", "display"];
   static values = {
     url: String,
     name: String,
     type: { type: String, default: "text" },
-    pk: Number
-  }
+    pk: Number,
+    model: String,
+  };
 
   connect() {
-    this.editing = false
+    this.editing = false;
   }
 
   edit(event) {
-    event.preventDefault()
-    if (this.editing) return
+    event.preventDefault();
+    if (this.editing) return;
 
-    this.editing = true
-    const value = this.displayTarget.textContent.trim()
-    
+    this.editing = true;
+    const value = this.displayTarget.textContent.trim();
+
     // Create editable-inline container (x-editable compatible)
-    const container = document.createElement("span")
-    container.className = "editable-inline"
-    
+    const container = document.createElement("span");
+    container.className = "editable-inline";
+
     // Create form
-    const form = document.createElement("div")
-    form.className = "editable-input"
-    
+    const form = document.createElement("div");
+    form.className = "editable-input";
+
     // Create input element
-    const input = document.createElement("input")
-    input.type = this.typeValue === "number" ? "number" : "text"
-    input.value = value
-    input.name = `${this.element.closest('tr')?.id.split('_')[0] || 'estimation'}_item_${this.nameValue}`
-    input.className = "form-control input-sm"
-    input.style.width = this.typeValue === "number" ? "100px" : "200px"
-    
-    form.appendChild(input)
-    container.appendChild(form)
-    
+    const input = document.createElement("input");
+    input.type = this.typeValue === "number" ? "number" : "text";
+    input.value = value;
+    input.name = `${this.element.closest("tr")?.id.split("_")[0] || "estimation"}_item_${this.nameValue}`;
+    input.className = "form-control input-sm";
+    input.style.width = this.typeValue === "number" ? "100px" : "200px";
+
+    form.appendChild(input);
+    container.appendChild(form);
+
     // Create buttons container
-    const buttons = document.createElement("div")
-    buttons.className = "editable-buttons"
+    const buttons = document.createElement("div");
+    buttons.className = "editable-buttons";
     buttons.innerHTML = `
       <button type="button" class="btn btn-sm btn-success editable-submit" data-action="editable#save">
         <i class="fa fa-check"></i>
@@ -50,106 +51,110 @@ export default class extends Controller {
       <button type="button" class="btn btn-sm btn-default editable-cancel" data-action="editable#cancel">
         <i class="fa fa-times"></i>
       </button>
-    `
-    container.appendChild(buttons)
-    
+    `;
+    container.appendChild(buttons);
+
     // Replace display with container
-    this.displayTarget.style.display = "none"
-    this.displayTarget.insertAdjacentElement("afterend", container)
-    
-    this.inputElement = input
-    this.containerElement = container
-    input.focus()
-    input.select()
-    
+    this.displayTarget.style.display = "none";
+    this.displayTarget.insertAdjacentElement("afterend", container);
+
+    this.inputElement = input;
+    this.containerElement = container;
+    input.focus();
+    input.select();
+
     // Handle Enter and Escape keys
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
-        e.preventDefault()
-        this.save()
+        e.preventDefault();
+        this.save();
       } else if (e.key === "Escape") {
-        e.preventDefault()
-        this.cancel()
+        e.preventDefault();
+        this.cancel();
       }
-    })
+    });
   }
 
   async save() {
-    if (!this.editing) return
-    
-    const newValue = this.inputElement.value
-    const data = {}
-    data[this.nameValue] = newValue
-    
+    if (!this.editing) return;
+
+    const newValue = this.inputElement.value;
+    // Wrap data in model namespace for Rails strong params
+    const data = { [this.modelValue]: {} };
+    data[this.modelValue][this.nameValue] = newValue;
+
     try {
       const response = await fetch(this.urlValue, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           "X-CSRF-Token": this.csrfToken(),
-          "Accept": "application/json"
+          "X-Requested-With": "XMLHttpRequest",
+          Accept: "application/json",
         },
-        body: JSON.stringify(data)
-      })
-      
-      const result = await response.json()
-      
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
       if (response.ok && result.success !== false) {
-        this.displayTarget.textContent = newValue
-        this.updateAdditionalValues(result.additionalValues)
-        this.cleanup()
+        this.displayTarget.textContent = newValue;
+        this.updateAdditionalValues(result.additionalValues);
+        this.cleanup();
       } else {
-        alert(result.msg || "Update failed")
-        this.cancel()
+        alert(result.msg || "Update failed");
+        this.cancel();
       }
     } catch (error) {
-      console.error("Update error:", error)
-      alert("Update failed")
-      this.cancel()
+      console.error("Update error:", error);
+      alert("Update failed");
+      this.cancel();
     }
   }
 
   cancel() {
-    this.cleanup()
+    this.cleanup();
   }
 
   cleanup() {
     if (this.containerElement) {
-      this.containerElement.remove()
-      this.containerElement = null
+      this.containerElement.remove();
+      this.containerElement = null;
     }
-    this.inputElement = null
-    this.displayTarget.style.display = ""
-    this.editing = false
+    this.inputElement = null;
+    this.displayTarget.style.display = "";
+    this.editing = false;
   }
 
   updateAdditionalValues(vals) {
-    if (!vals) return
-    
+    if (!vals) return;
+
     const updateElement = (id, value) => {
-      const el = document.getElementById(id)
-      if (el) el.textContent = value
-    }
-    
-    if (vals.total) updateElement("total", vals.total)
-    if (vals.sum) updateElement("sum", vals.sum)
-    if (vals.buffer) updateElement("buffer", vals.buffer)
-    if (vals.actual_sum) updateElement("actual_sum", vals.actual_sum)
-    if (vals.buffer_health) updateElement("buffer_health", vals.buffer_health)
-    
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    };
+
+    if (vals.total) updateElement("total", vals.total);
+    if (vals.sum) updateElement("sum", vals.sum);
+    if (vals.buffer) updateElement("buffer", vals.buffer);
+    if (vals.actual_sum) updateElement("actual_sum", vals.actual_sum);
+    if (vals.buffer_health) updateElement("buffer_health", vals.buffer_health);
+
     if (vals.buffer_health_class) {
-      const el = document.getElementById("buffer_health")
-      if (el) el.className = vals.buffer_health_class
+      const el = document.getElementById("buffer_health");
+      if (el) el.className = vals.buffer_health_class;
     }
-    
+
     if (vals.update_item_total) {
-      const itemEl = document.querySelector(vals.update_item_total.item + " .total_value")
-      if (itemEl) itemEl.textContent = vals.update_item_total.total
+      const itemEl = document.querySelector(
+        vals.update_item_total.item + " .total_value",
+      );
+      if (itemEl) itemEl.textContent = vals.update_item_total.total;
     }
   }
 
   csrfToken() {
-    const meta = document.querySelector('meta[name="csrf-token"]')
-    return meta ? meta.content : ""
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    return meta ? meta.content : "";
   }
 }
