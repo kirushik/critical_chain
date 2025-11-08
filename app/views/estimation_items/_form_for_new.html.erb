@@ -1,4 +1,6 @@
-<%= form_for [@estimation, EstimationItem.new], html: { class: 'form-inline' }, remote: true do |f| %>
+<%= form_with model: [@estimation, EstimationItem.new], 
+             html: { class: 'form-inline' },
+             data: { turbo_frame: "_top" } do |f| %>
   <div class="input-group">
     <%= f.number_field :value, class: 'form-control value', placeholder: 'Value', autofocus: true %>
   </div>
