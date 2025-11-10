@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.3.6'
+ruby '3.3.7'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 7.2.3'
@@ -76,8 +76,8 @@ end
 group :test do
   gem 'capybara'
 
-  # Since https://github.com/twalpole/apparition/pull/79 is not released to Rubygems
-  gem 'apparition', github: 'twalpole/apparition'
+  # Playwright for reliable e2e testing
+  gem 'playwright-ruby-client'
 
   gem 'database_cleaner'
 

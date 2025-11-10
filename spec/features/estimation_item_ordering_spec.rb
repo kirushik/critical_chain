@@ -8,9 +8,8 @@ feature "EstimationItemOrdering", :type => :feature do
     login_as user
   end
 
-  # Note: This test is pending due to Capybara drag_to incompatibility with jQuery UI Sortable
-  # The drag-and-drop functionality has been manually verified to work correctly
-  scenario 'EstimationItems can be reordered via drag and drop and order persists after refresh', :js, :pending do
+  # Playwright enables drag-and-drop testing that was previously incompatible with Capybara
+  scenario 'EstimationItems can be reordered via drag and drop and order persists after refresh', :playwright do
     # Create estimation items with specific orders
     item1 = FactoryBot.create(:estimation_item, estimation: estimation, title: 'First Item', value: 10, order: 1.0)
     item2 = FactoryBot.create(:estimation_item, estimation: estimation, title: 'Second Item', value: 20, order: 2.0)
@@ -19,72 +18,72 @@ feature "EstimationItemOrdering", :type => :feature do
     visit estimation_path(estimation)
 
     # Verify initial order
-    items = page.all('.estimation-items-index tbody tr')
-    expect(items[0]).to have_text('First Item')
-    expect(items[1]).to have_text('Second Item')
-    expect(items[2]).to have_text('Third Item')
+    expect(page.locator('.estimation-items-index tbody tr').nth(0).inner_text).to include('First Item')
+    expect(page.locator('.estimation-items-index tbody tr').nth(1).inner_text).to include('Second Item')
+    expect(page.locator('.estimation-items-index tbody tr').nth(2).inner_text).to include('Third Item')
 
     # Check that drag handles are present
-    expect(page).to have_css('.drag-handle', count: 3)
+    expect(page.locator('.drag-handle').count).to eq(3)
 
-    # Drag the third item to between first and second (or after first)
-    # When using drag_to, the item is placed after the target
-    third_item = page.find('tr', text: 'Third Item')
-    first_item = page.find('tr', text: 'First Item')
-    third_item.drag_to(first_item)
+    # Drag the third item to the first item's position using jQuery UI Sortable
+    # For jQuery UI Sortable, we need to drag to a position between items
+    third_item_drag_handle = page.locator("tr:has-text('Third Item') .drag-handle")
+    second_item = page.locator("tr:has-text('Second Item')")
 
-    wait_for_ajax
+    # Drag third item to second item's position (will move third between first and second)
+    third_item_drag_handle.drag_to(second_item)
 
-    # After dragging third to first, the order should be: First, Third, Second
-    # (because drag_to places the element after the target)
-    items = page.all('.estimation-items-index tbody tr')
-    expect(items[0]).to have_text('First Item')
-    expect(items[1]).to have_text('Third Item')
-    expect(items[2]).to have_text('Second Item')
+    # Wait for AJAX to complete
+    page.wait_for_timeout(1000)
+
+    # After dragging third to second's position, the order should be: First, Third, Second
+    # (because jQuery UI Sortable places the element before the target)
+    expect(page.locator('.estimation-items-index tbody tr').nth(0).inner_text).to include('First Item')
+    expect(page.locator('.estimation-items-index tbody tr').nth(1).inner_text).to include('Third Item')
+    expect(page.locator('.estimation-items-index tbody tr').nth(2).inner_text).to include('Second Item')
 
     # Refresh the page to verify order persists
     visit estimation_path(estimation)
 
     # Verify the order is still the same after refresh
-    items = page.all('.estimation-items-index tbody tr')
-    expect(items[0]).to have_text('First Item')
-    expect(items[1]).to have_text('Third Item')
-    expect(items[2]).to have_text('Second Item')
+    expect(page.locator('.estimation-items-index tbody tr').nth(0).inner_text).to include('First Item')
+    expect(page.locator('.estimation-items-index tbody tr').nth(1).inner_text).to include('Third Item')
+    expect(page.locator('.estimation-items-index tbody tr').nth(2).inner_text).to include('Second Item')
   end
 
-  scenario 'Creating items via UI maintains correct order after refresh', :js do
+  scenario 'Creating items via UI maintains correct order after refresh', :playwright do
     visit estimation_path(estimation)
 
     # Add first item
-    fill_in 'estimation_item_value', with: 10
-    fill_in 'estimation_item_title', with: 'First Created Item'
-    click_button 'Add estimation item'
+    page.locator('#estimation_item_value').fill('10')
+    page.locator('#estimation_item_title').fill('First Created Item')
+    page.locator('#estimation_item_title').press('Enter')
 
-    wait_for_ajax
+    # Wait for first item to appear in the list
+    page.locator("tr:has-text('First Created Item')").wait_for(state: 'visible', timeout: 5000)
 
     # Add second item
-    fill_in 'estimation_item_value', with: 20
-    fill_in 'estimation_item_title', with: 'Second Created Item'
-    click_button 'Add estimation item'
+    page.locator('#estimation_item_value').fill('20')
+    page.locator('#estimation_item_title').fill('Second Created Item')
+    page.locator('#estimation_item_title').press('Enter')
 
-    wait_for_ajax
+    # Wait for second item to appear in the list
+    page.locator("tr:has-text('Second Created Item')").wait_for(state: 'visible', timeout: 5000)
 
     # Verify both items are present
-    expect(page).to have_text('First Created Item')
-    expect(page).to have_text('Second Created Item')
+    expect(page.get_by_text('First Created Item')).to be_visible
+    expect(page.get_by_text('Second Created Item')).to be_visible
 
     # Check order in UI
-    items = page.all('.estimation-items-index tbody tr')
-    expect(items[0]).to have_text('First Created Item')
-    expect(items[1]).to have_text('Second Created Item')
+    expect(page.locator('.estimation-items-index tbody tr').nth(0).inner_text).to include('First Created Item')
+    expect(page.locator('.estimation-items-index tbody tr').nth(1).inner_text).to include('Second Created Item')
 
     # Refresh the page
     visit estimation_path(estimation)
 
     # Verify items are still present and in correct order
-    items = page.all('.estimation-items-index tbody tr')
-    expect(items.length).to eq(2)
-    expect(items[0]).to have_text('First Created Item')
-    expect(items[1]).to have_text('Second Created Item')
+    expect(page.locator('.estimation-items-index tbody tr').count).to eq(2)
+    expect(page.locator('.estimation-items-index tbody tr').nth(0).inner_text).to include('First Created Item')
+    expect(page.locator('.estimation-items-index tbody tr').nth(1).inner_text).to include('Second Created Item')
   end
 end
