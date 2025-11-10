@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.3.6'
+ruby '3.3.7'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 7.2.3'
@@ -13,8 +13,10 @@ gem 'puma'
 
 gem 'page_title_helper'
 
-# Turbo makes following links in your web application faster. Read more: https://turbo.hotwired.dev
+# Hotwire's SPA-like page accelerator and form submissions
 gem 'turbo-rails'
+# Hotwire's modest JavaScript framework
+gem 'stimulus-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -74,8 +76,8 @@ end
 group :test do
   gem 'capybara'
 
-  # Since https://github.com/twalpole/apparition/pull/79 is not released to Rubygems
-  gem 'apparition', github: 'twalpole/apparition'
+  # Playwright for reliable e2e testing
+  gem 'playwright-ruby-client'
 
   gem 'database_cleaner'
 

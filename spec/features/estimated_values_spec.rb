@@ -18,21 +18,25 @@ feature "Estimated values", :type => :feature do
     expect(page).to have_text(2.83)
   end
 
-  scenario 'should be recalculated with AJAX', :js do
+  scenario 'should be recalculated with AJAX', :playwright do
     visit estimation_path(estimation)
 
-    expect(page).to have_text(0)
+    expect(page.locator('#total').inner_text.to_f).to eq(0)
 
-    fill_in 'estimation_item_value', with: 1
-    click_button 'Add estimation item'
+    page.locator('#estimation_item_value').fill('1')
+    page.locator('#estimation_item_value').press('Enter')
 
-    fill_in 'estimation_item_value', with: 7
-    click_button 'Add estimation item'
+    # Wait for first item to be added
+    page.wait_for_timeout(500)
 
-    wait_for_ajax
+    page.locator('#estimation_item_value').fill('7')
+    page.locator('#estimation_item_value').press('Enter')
 
-    expect(page).to have_text(8)
-    expect(page).to have_text(5.66)
-    expect(page).to have_text(13.7)
+    # Wait for second item to be added and calculations to update
+    page.locator("#total:has-text('13.7')").wait_for(state: 'visible', timeout: 5000)
+
+    expect(page.locator("#sum:has-text('8')").first).to be_visible
+    expect(page.locator("#buffer:has-text('5.66')").first).to be_visible
+    expect(page.locator("#total:has-text('13.7')").first).to be_visible
   end
 end

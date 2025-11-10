@@ -1,25 +1,22 @@
-require "simplecov"
-if ENV["CIRCLE_ARTIFACTS"]
-  dir = File.join(ENV["CIRCLE_ARTIFACTS"], "coverage")
+require 'simplecov'
+if ENV['CIRCLE_ARTIFACTS']
+  dir = File.join(ENV['CIRCLE_ARTIFACTS'], 'coverage')
   SimpleCov.coverage_dir(dir)
 end
 
-unless SimpleCov.running
-  SimpleCov.start "rails"
-end
+SimpleCov.start 'rails' unless SimpleCov.running
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV["RAILS_ENV"] ||= "test"
-require "spec_helper"
-require File.expand_path("../../config/environment", __FILE__)
-require "rspec/rails"
+ENV['RAILS_ENV'] ||= 'test'
+require 'spec_helper'
+require File.expand_path('../config/environment', __dir__)
+require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
-require "capybara/rspec"
-require "capybara/rails"
-require "capybara/apparition"
+require 'capybara/rspec'
+require 'capybara/rails'
 
-require "support/database_cleaner"
-require "support/wait_for_ajax"
+require 'support/database_cleaner'
+require 'support/playwright'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -66,16 +63,11 @@ RSpec.configure do |config|
 
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Warden::Test::Helpers, type: :feature
-  config.include WaitForAjax, type: :feature
   config.include ActionView::RecordIdentifier, type: :feature
 
   config.include FactoryBot::Syntax::Methods
 end
 
-Capybara.register_driver :apparition do |app|
-  Capybara::Apparition::Driver.new(app, headless: true, js_errors: false)
-end
 Capybara.configure do |config|
   config.default_normalize_ws = true
 end
-Capybara.javascript_driver = :apparition

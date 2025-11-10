@@ -1,12 +1,12 @@
-require File.expand_path("../boot", __FILE__)
+require File.expand_path('boot', __dir__)
 
 # Pick the frameworks you want:
-require "active_model/railtie"
-require "active_job/railtie"
-require "active_record/railtie"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "action_view/railtie"
+require 'active_model/railtie'
+require 'active_job/railtie'
+require 'active_record/railtie'
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
+require 'action_view/railtie'
 # require "sprockets/railtie"  # Removed - using Propshaft instead
 # require "rails/test_unit/railtie"
 
@@ -27,5 +27,8 @@ module CriticalChain
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+
+    # Configure Propshaft to load assets from app/javascript in addition to app/assets
+    config.assets.paths << Rails.root.join('app/javascript')
   end
 end

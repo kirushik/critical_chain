@@ -24,6 +24,7 @@
 /config/application.yml
 
 .idea
+/node_modules
 
 /coverage
 

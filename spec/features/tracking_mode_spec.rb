@@ -10,26 +10,32 @@ feature "Tracking mode", :type => :feature do
     login_as user
   end
 
-  scenario 'I can enter tracking mode', :js do
+  scenario 'I can enter tracking mode', :playwright do
     visit estimation_path(estimation)
 
-    expect(page).to have_css('.toggle-tracking .fa-toggle-off')
-    expect(page).to have_no_css('.toggle-tracking .fa-toggle-on')
+    expect(page.locator('.toggle-tracking .fa-toggle-off')).to be_visible
+    expect(page.locator('.toggle-tracking .fa-toggle-on').count).to eq(0)
 
-    find('.toggle-tracking').click
+    page.locator('.toggle-tracking').click
 
-    expect(page).to have_css('.toggle-tracking .fa-toggle-on')
-    expect(page).to have_no_css('.toggle-tracking .fa-toggle-off')
+    # Wait for the toggle to switch
+    page.locator('.toggle-tracking .fa-toggle-on').wait_for(state: 'visible', timeout: 5000)
+
+    expect(page.locator('.toggle-tracking .fa-toggle-on')).to be_visible
+    expect(page.locator('.toggle-tracking .fa-toggle-off').count).to eq(0)
   end
 
-  scenario 'I can enter value for an item of tracking-mode estimation', :js do
+  scenario 'I can enter value for an item of tracking-mode estimation', :playwright do
     visit estimation_path(tracking_mode_estimation)
 
-    page.first('span.editable.actual_value').click
-    page.find('.editable-inline .editable-input input').set 11179
-    page.find('.editable-inline .editable-submit').click
+    page.locator('span.editable.actual_value').first.click
+    page.locator('.editable-inline .editable-input input').fill('11179')
+    page.locator('.editable-inline .editable-submit').click
 
-    expect(page).to have_text "11179 out of #{estimation.decorate.total}"
+    # Wait for the editor to close after save
+    page.locator('.editable-inline').wait_for(state: 'hidden', timeout: 5000)
+
+    expect(page.get_by_text("11179 out of #{estimation.decorate.total}")).to be_visible
   end
 
   scenario 'I can see buffer consumption in tracking mode' do
@@ -38,16 +44,19 @@ feature "Tracking mode", :type => :feature do
     expect(page).to have_text("50%")
   end
 
-  scenario 'Buffer consumption in tracking mode is recalculated via AJAX', :js do
+  scenario 'Buffer consumption in tracking mode is recalculated via AJAX', :playwright do
     visit estimation_path(tracking_mode_estimation)
 
-    expect(page).to have_no_text("50%")
+    expect(page.get_by_text("50%").count).to eq(0)
 
-    page.find('span.editable.actual_value').click
-    page.find('.editable-inline .editable-input input').set 1.9*first_estimation_item.value
-    page.find('.editable-inline .editable-submit').click
+    page.locator('span.editable.actual_value').click
+    page.locator('.editable-inline .editable-input input').fill((1.9*first_estimation_item.value).to_s)
+    page.locator('.editable-inline .editable-submit').click
 
-    expect(page).to have_text("90%")
-    expect(page).to have_css('#buffer_health.bg-warning')
+    # Wait for the editor to close and buffer to update
+    page.locator('.editable-inline').wait_for(state: 'hidden', timeout: 5000)
+
+    expect(page.get_by_text("90%")).to be_visible
+    expect(page.locator('#buffer_health.bg-warning')).to be_visible
   end
 end
