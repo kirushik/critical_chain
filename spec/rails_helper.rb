@@ -18,6 +18,7 @@ require 'capybara/apparition'
 
 require 'support/database_cleaner'
 require 'support/wait_for_ajax'
+require 'support/playwright'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are

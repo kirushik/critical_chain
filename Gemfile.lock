@@ -242,6 +242,10 @@ GEM
     marcel (1.1.0)
     matrix (0.4.3)
     method_source (1.1.0)
+    mime-types (3.7.0)
+      logger
+      mime-types-data (~> 3.2025, >= 3.2025.0507)
+    mime-types-data (3.2025.0924)
     mini_mime (1.1.5)
     minitest (5.26.1)
     multi_json (1.17.0)
@@ -298,6 +302,9 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.6.2-x86_64-linux)
+    playwright-ruby-client (1.56.0)
+      concurrent-ruby (>= 1.1.6)
+      mime-types (>= 3.0)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -515,6 +522,7 @@ DEPENDENCIES
   omniauth-rails_csrf_protection
   page_title_helper
   pg
+  playwright-ruby-client
   propshaft
   pry-rails
   puma

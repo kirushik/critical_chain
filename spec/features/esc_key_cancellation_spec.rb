@@ -13,118 +13,128 @@ feature "EscKeyCancellation", :type => :feature do
     visit estimation_path(estimation)
   end
 
-  scenario "I can cancel editing estimation title with ESC key", :js do
+  scenario "I can cancel editing estimation title with ESC key", :playwright do
     original_title = estimation.title
-    expect(page).to have_text original_title
+    expect(page.get_by_text(original_title)).to be_visible
 
     # Click to open editor
-    page.find("h1 span.editable.title", text: original_title).click
-    expect(page).to have_css(".editable-inline")
+    page.locator("h1 span.editable.title:has-text('#{original_title}')").click
+    expect(page.locator(".editable-inline")).to be_visible
 
     # Change the value
-    page.find(".editable-inline .editable-input input").set new_title
+    page.locator(".editable-inline .editable-input input").fill(new_title)
 
     # Press ESC to cancel
-    page.find(".editable-inline .editable-input input").send_keys(:escape)
+    page.locator(".editable-inline .editable-input input").press('Escape')
+
+    # Wait for editor to close
+    page.locator(".editable-inline").wait_for(state: 'hidden', timeout: 5000)
 
     # Verify the original title is still displayed
-    expect(page).to have_text original_title
-    expect(page).to have_no_text new_title
-    expect(page).to have_no_css(".editable-inline")
+    expect(page.get_by_text(original_title)).to be_visible
+    expect(page.get_by_text(new_title).count).to eq(0)
+    expect(page.locator(".editable-inline").count).to eq(0)
 
     # Refresh and verify the change was not saved
-    visit current_path
-    expect(page).to have_text original_title
-    expect(page).to have_no_text new_title
+    visit estimation_path(estimation)
+    expect(page.get_by_text(original_title)).to be_visible
+    expect(page.get_by_text(new_title).count).to eq(0)
   end
 
-  scenario "I can cancel editing estimation item title with ESC key", :js do
+  scenario "I can cancel editing estimation item title with ESC key", :playwright do
     original_title = estimation_item.title
-    expect(page).to have_text original_title
+    expect(page.get_by_text(original_title)).to be_visible
 
     # Click to open editor
-    page.find("span.editable.title", text: original_title).click
-    expect(page).to have_css(".editable-inline")
+    page.locator("span.editable.title:has-text('#{original_title}')").click
+    expect(page.locator(".editable-inline")).to be_visible
 
     # Change the value
-    page.find(".editable-inline .editable-input input").set new_title
+    page.locator(".editable-inline .editable-input input").fill(new_title)
 
     # Press ESC to cancel
-    page.find(".editable-inline .editable-input input").send_keys(:escape)
+    page.locator(".editable-inline .editable-input input").press('Escape')
+
+    # Wait for editor to close
+    page.locator(".editable-inline").wait_for(state: 'hidden', timeout: 5000)
 
     # Verify the original title is still displayed
-    expect(page).to have_text original_title
-    expect(page).to have_no_text new_title
-    expect(page).to have_no_css(".editable-inline")
+    expect(page.get_by_text(original_title)).to be_visible
+    expect(page.get_by_text(new_title).count).to eq(0)
+    expect(page.locator(".editable-inline").count).to eq(0)
 
     # Refresh and verify the change was not saved
-    visit current_path
-    expect(page).to have_text original_title
-    expect(page).to have_no_text new_title
+    visit estimation_path(estimation)
+    expect(page.get_by_text(original_title)).to be_visible
+    expect(page.get_by_text(new_title).count).to eq(0)
   end
 
-  scenario "I can cancel editing estimation item value with ESC key", :js do
+  scenario "I can cancel editing estimation item value with ESC key", :playwright do
     original_value = estimation_item.value
-    expect(page).to have_text original_value
+    expect(page.locator("span.editable.value:has-text('#{original_value}')").first).to be_visible
 
     # Click to open editor
-    page.find("span.editable.value", text: original_value).click
-    expect(page).to have_css(".editable-inline")
+    page.locator("span.editable.value:has-text('#{original_value}')").click
+    expect(page.locator(".editable-inline")).to be_visible
 
     # Change the value
-    page.find(".editable-inline .editable-input input").set new_value
+    page.locator(".editable-inline .editable-input input").fill(new_value.to_s)
 
     # Press ESC to cancel
-    page.find(".editable-inline .editable-input input").send_keys(:escape)
+    page.locator(".editable-inline .editable-input input").press('Escape')
+
+    # Wait for editor to close
+    page.locator(".editable-inline").wait_for(state: 'hidden', timeout: 5000)
 
     # Verify the original value is still displayed
-    expect(page).to have_text original_value
-    expect(page).to have_no_text new_value
-    expect(page).to have_no_css(".editable-inline")
+    expect(page.locator("span.editable.value:has-text('#{original_value}')").first).to be_visible
+    expect(page.get_by_text(new_value.to_s).count).to eq(0)
+    expect(page.locator(".editable-inline").count).to eq(0)
 
     # Refresh and verify the change was not saved
-    visit current_path
-    expect(page).to have_text original_value
-    expect(page).to have_no_text new_value
+    visit estimation_path(estimation)
+    expect(page.locator("span.editable.value:has-text('#{original_value}')").first).to be_visible
+    expect(page.get_by_text(new_value.to_s).count).to eq(0)
   end
 
-  scenario "I can cancel editing estimation item quantity with ESC key", :js do
+  scenario "I can cancel editing estimation item quantity with ESC key", :playwright do
     original_quantity = estimation_item.quantity
     original_value = estimation_item.value
     new_quantity = 42
 
     # Get initial calculation values using CSS selectors (more reliable)
-    initial_sum = page.find("#sum").text.to_i
-    initial_buffer = page.find("#buffer").text.to_i
-    initial_total = page.find("#total").text.to_i
+    initial_sum = page.locator("#sum").inner_text.to_i
+    initial_buffer = page.locator("#buffer").inner_text.to_i
+    initial_total = page.locator("#total").inner_text.to_i
 
     # Verify initial values match expected calculation
     expected_sum = original_quantity * original_value
     expect(initial_sum).to eq(expected_sum)
 
     # Click to open editor
-    page.find("span.editable.quantity").click
-    expect(page).to have_css(".editable-inline")
+    page.locator("span.editable.quantity").click
+    expect(page.locator(".editable-inline")).to be_visible
 
     # Change the value
-    input = page.find(".editable-inline .editable-input input")
-    input.set new_quantity
+    input = page.locator(".editable-inline .editable-input input")
+    input.fill(new_quantity.to_s)
 
     # Press ESC to cancel
-    input.send_keys(:escape)
+    input.press('Escape')
 
     # Verify the editor is closed
-    expect(page).to have_no_css(".editable-inline")
+    page.locator(".editable-inline").wait_for(state: 'hidden', timeout: 5000)
+    expect(page.locator(".editable-inline").count).to eq(0)
 
     # Verify the calculation values haven't changed (quantity was not changed)
-    expect(page.find("#sum").text.to_i).to eq(initial_sum)
-    expect(page.find("#buffer").text.to_i).to eq(initial_buffer)
-    expect(page.find("#total").text.to_i).to eq(initial_total)
+    expect(page.locator("#sum").inner_text.to_i).to eq(initial_sum)
+    expect(page.locator("#buffer").inner_text.to_i).to eq(initial_buffer)
+    expect(page.locator("#total").inner_text.to_i).to eq(initial_total)
 
     # Refresh and verify the change was not saved
-    visit current_path
-    expect(page.find("#sum").text.to_i).to eq(initial_sum)
-    expect(page.find("#buffer").text.to_i).to eq(initial_buffer)
-    expect(page.find("#total").text.to_i).to eq(initial_total)
+    visit estimation_path(estimation)
+    expect(page.locator("#sum").inner_text.to_i).to eq(initial_sum)
+    expect(page.locator("#buffer").inner_text.to_i).to eq(initial_buffer)
+    expect(page.locator("#total").inner_text.to_i).to eq(initial_total)
   end
 end

@@ -22,6 +22,19 @@ jobs:
 
       - restore_cache:
           keys:
+            - playwright-browsers-{{ checksum "Gemfile.lock" }}
+
+      - run:
+          name: Install Playwright browsers
+          command: npx playwright install chromium --with-deps
+
+      - save_cache:
+          key: playwright-browsers-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ~/.cache/ms-playwright
+
+      - restore_cache:
+          keys:
             - criticalchain-bundle-{{ .Environment.CACHE_VERSION }}-{{ checksum "Gemfile.lock" }}
       - run:
           name: Bundle Install
@@ -47,6 +60,10 @@ jobs:
       - store_test_results:
           path: test_results
 
+      - store_artifacts:
+          path: tmp/screenshots
+          destination: playwright-screenshots
+
       - run:
           name: Security - Brakeman
           command: bundle exec brakeman -q -z --no-pager
@@ -54,7 +71,6 @@ jobs:
       - run:
           name: Security - Bundle Audit
           command: bundle exec bundle-audit check --update
-
 
 workflows:
   version: 2

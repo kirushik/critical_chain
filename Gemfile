@@ -79,6 +79,9 @@ group :test do
   # Since https://github.com/twalpole/apparition/pull/79 is not released to Rubygems
   gem 'apparition', github: 'twalpole/apparition'
 
+  # Playwright for reliable e2e testing
+  gem 'playwright-ruby-client'
+
   gem 'database_cleaner'
 
   gem 'guard-rspec'
