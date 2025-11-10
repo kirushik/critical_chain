@@ -14,6 +14,7 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'capybara/rspec'
 require 'capybara/rails'
+require 'capybara/apparition'
 
 require 'support/database_cleaner'
 require 'support/wait_for_ajax'
@@ -67,23 +68,13 @@ RSpec.configure do |config|
   config.include ActionView::RecordIdentifier, type: :feature
 
   config.include FactoryBot::Syntax::Methods
+end
 
-  # Auto-wait for Stimulus to load in JavaScript feature tests
-  config.prepend_before(:each, type: :feature, js: true) do
-    # Override visit to automatically wait for Stimulus after page load
-    def visit(*args, **kwargs)
-      super(*args, **kwargs)
-      begin
-        wait_for_stimulus if respond_to?(:wait_for_stimulus)
-      rescue Timeout::Error, StandardError
-        # Stimulus might not be on this page, continue anyway
-      end
-    end
-  end
+Capybara.register_driver :apparition do |app|
+  Capybara::Apparition::Driver.new(app, headless: true, js_errors: true)
 end
 
 Capybara.configure do |config|
   config.default_normalize_ws = true
 end
-
-Capybara.javascript_driver = :selenium_chrome_headless
+Capybara.javascript_driver = :apparition

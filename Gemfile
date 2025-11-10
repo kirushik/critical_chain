@@ -75,7 +75,9 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'selenium-webdriver'
+
+  # Since https://github.com/twalpole/apparition/pull/79 is not released to Rubygems
+  gem 'apparition', github: 'twalpole/apparition'
 
   gem 'database_cleaner'
 
