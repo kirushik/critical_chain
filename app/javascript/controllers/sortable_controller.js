@@ -3,12 +3,9 @@ import { Controller } from "@hotwired/stimulus"
 // Stimulus controller for drag-and-drop sorting
 export default class extends Controller {
   static targets = ["item"]
-  static values = {
-  }
 
   connect() {
     this.draggedItem = null
-    this.placeholder = null
   }
 
   dragStart(event) {
@@ -21,10 +18,6 @@ export default class extends Controller {
   dragEnd(event) {
     if (this.draggedItem) {
       this.draggedItem.classList.remove("dragging")
-    }
-    if (this.placeholder) {
-      this.placeholder.remove()
-      this.placeholder = null
     }
     
     // Update order on server
