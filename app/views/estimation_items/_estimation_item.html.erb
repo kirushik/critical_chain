@@ -36,7 +36,7 @@
   <td>
     <%= button_to [estimation_item.estimation, estimation_item],
                   method: :delete,
-                  form: { data: { turbo_confirm: 'Are you sure?' } },
+                  data: { turbo_confirm: 'Are you sure?' },
                   class: 'close pull-right' do %>
       <span>&times;</span>
     <% end %>

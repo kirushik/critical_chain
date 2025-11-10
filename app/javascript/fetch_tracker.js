@@ -53,13 +53,15 @@ function setupFetchTracking() {
   };
 }
 
-// Setup when DOM is ready
+// Setup after page is fully loaded (including all scripts and modules)
 if (typeof document !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupFetchTracking);
-  } else {
-    // DOM is already loaded
+  // Wait for page to fully load, including ES6 modules (like Stimulus controllers)
+  if (document.readyState === 'complete') {
+    // Already loaded
     setupFetchTracking();
+  } else {
+    // Wait for everything to load
+    window.addEventListener('load', setupFetchTracking);
   }
 }
 

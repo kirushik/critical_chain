@@ -10,6 +10,23 @@ module WaitForAjax
     sleep 0.05
   end
 
+  def wait_for_stimulus
+    # Ensure Stimulus is loaded and controllers are registered
+    Timeout.timeout(Capybara.default_max_wait_time) do
+      loop do
+        stimulus_ready = page.evaluate_script(<<~JS)
+          typeof window.Stimulus !== 'undefined' &&
+          window.Stimulus.router &&
+          Object.keys(window.Stimulus.router.modulesByIdentifier || {}).length > 0
+        JS
+        break if stimulus_ready
+        sleep 0.01
+      end
+    end
+    # Give controllers a moment to connect
+    sleep 0.05
+  end
+
   def finished?
     # Checks for:
     # 1. Turbo Drive, Turbo Frames, and Turbo Streams

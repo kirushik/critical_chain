@@ -68,6 +68,19 @@ RSpec.configure do |config|
   config.include ActionView::RecordIdentifier, type: :feature
 
   config.include FactoryBot::Syntax::Methods
+
+  # Auto-wait for Stimulus to load in JavaScript feature tests
+  config.prepend_before(:each, type: :feature, js: true) do
+    # Override visit to automatically wait for Stimulus after page load
+    def visit(*args, **kwargs)
+      super(*args, **kwargs)
+      begin
+        wait_for_stimulus if respond_to?(:wait_for_stimulus)
+      rescue Timeout::Error, StandardError
+        # Stimulus might not be on this page, continue anyway
+      end
+    end
+  end
 end
 
 Capybara.register_driver :apparition do |app|
