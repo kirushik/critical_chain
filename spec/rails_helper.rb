@@ -14,7 +14,6 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'capybara/rspec'
 require 'capybara/rails'
-require 'capybara/apparition'
 
 require 'support/database_cleaner'
 require 'support/wait_for_ajax'
@@ -83,10 +82,8 @@ RSpec.configure do |config|
   end
 end
 
-Capybara.register_driver :apparition do |app|
-  Capybara::Apparition::Driver.new(app, headless: true, js_errors: true)
-end
 Capybara.configure do |config|
   config.default_normalize_ws = true
 end
-Capybara.javascript_driver = :apparition
+
+Capybara.javascript_driver = :selenium_chrome_headless
