@@ -11,7 +11,7 @@
   <%= csrf_meta_tags %>
   <%= javascript_importmap_tags %>
 </head>
-<body>
+<body data-env="<%= Rails.env %>">
   <div class="navbar navbar-dark bg-dark">
     <a href="/" class="navbar-brand">Buffer estimator</a>
 

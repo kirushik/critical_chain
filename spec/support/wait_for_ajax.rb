@@ -1,7 +1,10 @@
 module WaitForAjax
   def wait_for_ajax
     Timeout.timeout(Capybara.default_max_wait_time) do
-      loop until finished?
+      loop do
+        break if finished?
+        sleep 0.01 # Avoid busy-wait CPU spinning
+      end
     end
     # Small delay to ensure DOM updates complete after async operations
     sleep 0.05

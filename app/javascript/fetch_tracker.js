@@ -1,7 +1,16 @@
 // Track pending fetch requests for testing purposes
 // This allows the test helper wait_for_ajax to detect ongoing fetch requests
+// Only enabled in test environment to avoid production overhead
 
-if (typeof window !== 'undefined') {
+function setupFetchTracking() {
+  if (typeof window === 'undefined') return;
+
+  // Check if we're in test environment
+  const isTest = document.body?.dataset.env === 'test' ||
+                 document.documentElement?.dataset.env === 'test';
+
+  if (!isTest) return;
+
   window.pendingFetchCount = 0;
 
   // Store the original fetch
@@ -42,6 +51,16 @@ if (typeof window !== 'undefined') {
         throw error;
       });
   };
+}
+
+// Setup when DOM is ready
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupFetchTracking);
+  } else {
+    // DOM is already loaded
+    setupFetchTracking();
+  }
 }
 
 export {};
