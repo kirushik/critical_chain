@@ -151,10 +151,21 @@ RSpec.configure do |config|
 
     Playwright.create(playwright_cli_executable_path: 'npx playwright') do |playwright|
       playwright.chromium.launch(headless: true, args: ['--disable-dev-shm-usage', '--no-sandbox']) do |browser|
+        # Prepare directories for artifacts
+        FileUtils.mkdir_p('tmp/screenshots')
+        FileUtils.mkdir_p('tmp/traces')
+
+        # Create safe filename from test description
+        safe_name = example.full_description.gsub(/[^0-9A-Za-z]/, '_')
+
         context = browser.new_context(
           viewport: { width: 1400, height: 1400 },
           ignoreHTTPSErrors: true
         )
+
+        # Start tracing
+        context.tracing.start(screenshots: true, snapshots: true, sources: true)
+
         @playwright_page = context.new_page
         @playwright_context = context
         @playwright_browser = browser
@@ -170,12 +181,15 @@ RSpec.configure do |config|
           example.run
         rescue => e
           # Take screenshot on failure
-          screenshot_path = "tmp/screenshots/#{example.full_description.gsub(/[^0-9A-Za-z]/, '_')}.png"
-          FileUtils.mkdir_p('tmp/screenshots')
+          screenshot_path = "tmp/screenshots/#{safe_name}.png"
           @playwright_page.screenshot(path: screenshot_path) if @playwright_page
           puts "Screenshot saved to: #{screenshot_path}"
           raise e
         ensure
+          # Stop tracing and save
+          trace_path = "tmp/traces/#{safe_name}.zip"
+          context.tracing.stop(path: trace_path)
+
           context.close
         end
       end

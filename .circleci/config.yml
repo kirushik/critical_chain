@@ -1,13 +1,10 @@
 version: 2.1
 
-orbs:
-  browser-tools: circleci/browser-tools@2.3.2
-
 jobs:
   build:
     parallelism: 2
     docker:
-      - image: cimg/ruby:3.3.7-browsers
+      - image: cimg/ruby:3.3.7-node
         environment:
           BUNDLE_JOBS: 3
           BUNDLE_RETRY: 3
@@ -17,19 +14,29 @@ jobs:
     steps:
       - checkout
 
-      - browser-tools/install_chrome
-      - browser-tools/install_chromedriver
+      - restore_cache:
+          keys:
+            - node-deps-{{ checksum "package.json" }}
+
+      - run:
+          name: Install Node dependencies
+          command: npm ci
+
+      - save_cache:
+          key: node-deps-{{ checksum "package.json" }}
+          paths:
+            - node_modules
 
       - restore_cache:
           keys:
-            - playwright-browsers-{{ checksum "Gemfile.lock" }}
+            - playwright-browsers-v1-{{ checksum "package.json" }}
 
       - run:
           name: Install Playwright browsers
           command: npx playwright install chromium --with-deps
 
       - save_cache:
-          key: playwright-browsers-{{ checksum "Gemfile.lock" }}
+          key: playwright-browsers-v1-{{ checksum "package.json" }}
           paths:
             - ~/.cache/ms-playwright
 
@@ -63,6 +70,10 @@ jobs:
       - store_artifacts:
           path: tmp/screenshots
           destination: playwright-screenshots
+
+      - store_artifacts:
+          path: tmp/traces
+          destination: playwright-traces
 
       - run:
           name: Security - Brakeman

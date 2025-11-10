@@ -14,10 +14,8 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'capybara/rspec'
 require 'capybara/rails'
-require 'capybara/apparition'
 
 require 'support/database_cleaner'
-require 'support/wait_for_ajax'
 require 'support/playwright'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -65,17 +63,11 @@ RSpec.configure do |config|
 
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Warden::Test::Helpers, type: :feature
-  config.include WaitForAjax, type: :feature
   config.include ActionView::RecordIdentifier, type: :feature
 
   config.include FactoryBot::Syntax::Methods
 end
 
-Capybara.register_driver :apparition do |app|
-  Capybara::Apparition::Driver.new(app, headless: true, js_errors: true)
-end
-
 Capybara.configure do |config|
   config.default_normalize_ws = true
 end
-Capybara.javascript_driver = :apparition
