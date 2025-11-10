@@ -501,12 +501,7 @@ GEM
     zeitwerk (2.7.3)
 
 PLATFORMS
-  aarch64-linux
-  arm-linux
-  arm64-darwin
-  x86-linux
-  x86_64-darwin
-  x86_64-linux
+  x86_64-linux-gnu
 
 DEPENDENCIES
   annotate
@@ -556,7 +551,7 @@ DEPENDENCIES
   turbo-rails
 
 RUBY VERSION
-   ruby 3.3.6p108
+   ruby 3.3.7p123
 
 BUNDLED WITH
    2.5.3
