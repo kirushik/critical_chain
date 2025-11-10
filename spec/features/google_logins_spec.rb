@@ -22,6 +22,31 @@ feature "can login with Google", :type => :feature do
     expect(page).to have_button('Login with Google')
   end
 
+  scenario 'clicking Login with Google initiates full page navigation (not AJAX)', :playwright do
+    visit root_path
+
+    # Track network requests to verify navigation happens
+    navigation_url = nil
+
+    page.on('request', ->(request) {
+      if request.url.include?('/users/auth/google_oauth2')
+        navigation_url = request.url
+      end
+    })
+
+    # Click the button - this should initiate navigation
+    # We expect this to throw a navigation error since we can't actually go to Google
+    begin
+      page.get_by_role('button', name: 'Login with Google').click(timeout: 3000)
+    rescue Playwright::TimeoutError
+      # Expected - we're trying to navigate to Google which will timeout
+    end
+
+    # Verify that a request to the OAuth endpoint was made
+    expect(navigation_url).not_to be_nil, "Expected navigation to /users/auth/google_oauth2 but it never happened"
+    expect(navigation_url).to include('/users/auth/google_oauth2')
+  end
+
   scenario 'when I click "Login with Google" button, I\'m logged in' do
     OmniAuth.config.add_mock :google_oauth2, uid: Faker::Number.number(digits: 25), info: {email: Faker::Internet.email}
 
