@@ -4,7 +4,10 @@
 
 <div class="row">
   <div class="col-md-6">
-    <table id="<%= dom_id @estimation %>" class="table table-hover estimation-items-index">
+    <table id="<%= dom_id @estimation %>" 
+           class="table table-hover estimation-items-index"
+           data-controller="sortable"
+           data-sortable-update-url="<%= estimation_estimation_items_path(@estimation) %>">
       <tbody>
         <%= render partial: @estimation.items_partial_name, collection: @estimation.estimation_items, as: :estimation_item %>
       </tbody>

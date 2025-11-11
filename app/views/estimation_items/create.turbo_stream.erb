@@ -1,0 +1,29 @@
+<%# Append the new estimation item %>
+<%= turbo_stream.append dom_id(@estimation) do %>
+  <%= render @estimation_item %>
+<% end %>
+
+<%# Update the totals %>
+<%= turbo_stream.update "total" do %><%= @estimation.total %><% end %>
+<%= turbo_stream.update "sum" do %><%= @estimation.sum %><% end %>
+<%= turbo_stream.update "buffer" do %><%= @estimation.buffer %><% end %>
+
+<%# Clear the form fields and highlight the new item %>
+<turbo-stream action="append" target="<%= dom_id(@estimation) %>">
+  <template>
+    <script>
+      // Clear form fields
+      const valueField = document.getElementById('estimation_item_value');
+      const titleField = document.getElementById('estimation_item_title');
+      if (valueField) valueField.value = '';
+      if (titleField) titleField.value = '';
+
+      // Highlight the new item
+      const newItem = document.getElementById('<%= dom_id(@estimation_item) %>');
+      if (newItem) {
+        newItem.classList.add('highlight-flash');
+        setTimeout(() => newItem.classList.remove('highlight-flash'), 1000);
+      }
+    </script>
+  </template>
+</turbo-stream>

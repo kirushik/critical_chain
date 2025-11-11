@@ -1,4 +1,8 @@
-<tr id="<%= dom_id estimation_item %>" data-order="<%= estimation_item.order %>">
+<tr id="<%= dom_id estimation_item %>" 
+    data-order="<%= estimation_item.order %>"
+    data-sortable-target="item"
+    draggable="true"
+    data-action="dragstart->sortable#dragStart dragend->sortable#dragEnd dragover->sortable#dragOver">
   <td class="text-right">
     <span class="lead">
     <% if estimation_item.quantity > 1 %>

@@ -33,6 +33,6 @@ Development is managed with [Waffle.io board](https://waffle.io/kirushik/critica
 
 ## Deploy your own
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+This project can be deployed to any Rails-compatible hosting platform (Railway, Render, Fly.io, etc.).
 
-**Please note** This project expects `google_oauth2_app_id` and `google_oauth2_app_secret` environment variables to be set. You can do that with `heroku config:set` command or from Heroku GUI.
+**Please note** This project expects `google_oauth2_app_id` and `google_oauth2_app_secret` environment variables to be set. Configure these through your hosting platform's environment variable settings.

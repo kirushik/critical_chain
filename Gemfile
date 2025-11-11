@@ -1,42 +1,41 @@
 source 'https://rubygems.org'
 
-ruby '3.3.0'
+ruby '3.3.7'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 7.2.3'
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 6.0'
+
+# Modern asset pipeline
+gem 'propshaft'
+gem 'importmap-rails'
 
 gem 'puma'
 
-gem 'bootstrap', '~>4.6.2'
-gem 'autoprefixer-rails'
-gem 'font-awesome-sass', '~> 6.7'
-
 gem 'page_title_helper'
 
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier'
-# Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails'
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
-
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
-
-# In-place editing for Bootstrap and Rails
-gem 'x-editable-rails'
-
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+# Hotwire's SPA-like page accelerator and form submissions
+gem 'turbo-rails'
+# Hotwire's modest JavaScript framework
+gem 'stimulus-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 2.6.5', group: :doc
 
 gem 'annotate', group: :development
+
+# Security scanning tools
+gem 'brakeman', group: :development, require: false
+gem 'bundler-audit', group: :development, require: false
+
+# Code quality tools
+gem 'rubocop', group: :development, require: false
+gem 'rubocop-rails', group: :development, require: false
+gem 'rubocop-rspec', group: :development, require: false
+gem 'rubocop-performance', group: :development, require: false
+
+# Performance monitoring
+gem 'bullet', group: :development
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -48,14 +47,10 @@ gem 'annotate', group: :development
 # gem 'capistrano-rails', group: :development
 group :production do
   gem 'pg'
-  gem 'rack-ssl', require: 'rack/ssl'
   gem 'thin'
 end
 
 group :development, :test do
-  gem 'spring'
-  gem 'spring-commands-rspec'
-
   gem 'pry-rails'
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -81,8 +76,8 @@ end
 group :test do
   gem 'capybara'
 
-  # Since https://github.com/twalpole/apparition/pull/79 is not released to Rubygems
-  gem 'apparition', github: 'twalpole/apparition'
+  # Playwright for reliable e2e testing
+  gem 'playwright-ruby-client'
 
   gem 'database_cleaner'
 
@@ -111,7 +106,7 @@ gem 'omniauth', '~>2.1.2'
 # To enable privilege separation
 gem 'pundit'
 
-# Heroku-friendly configuration management
+# Environment variable configuration management
 gem 'figaro'
 
 gem 'draper'

@@ -1,4 +1,8 @@
-<tr id="<%= dom_id estimation_item %>" data-order="<%= estimation_item.order %>">
+<tr id="<%= dom_id estimation_item %>"
+    data-order="<%= estimation_item.order %>"
+    data-sortable-target="item"
+    draggable="true"
+    data-action="dragstart->sortable#dragStart dragend->sortable#dragEnd dragover->sortable#dragOver">
   <td class="drag-handle" style="cursor: move; width: 30px;">
     <span class="fa-solid fa-grip-vertical text-muted" style="opacity: 0.5;"></span>
   </td>
@@ -19,8 +23,9 @@
     </span>
   </td>
   <td>
-    <%= form_for [estimation_item.estimation, estimation_item], method: :patch, remote: true do |f| %>
-      <%= f.hidden_field :fixed, :value => !estimation_item.fixed? %>
+    <%= form_with model: [estimation_item.estimation, estimation_item],
+                  method: :patch do |f| %>
+      <%= f.hidden_field :fixed, value: !estimation_item.fixed? %>
       <span class="fa fa-dot-circle-o"></span>
       <%= f.button type: :submit, class: 'btn btn-link toggle-fixed' do %>
         <span class="fa <%= estimation_item.fixed? ? 'fa-toggle-on' : 'fa-toggle-off' %>"></span>
@@ -29,7 +34,10 @@
   </td>
   <td><%= estimation_item.decorate.editable :title %></td>
   <td>
-    <%= button_to [estimation_item.estimation, estimation_item], method: :delete, remote: true, class: 'close pull-right' do %>
+    <%= button_to [estimation_item.estimation, estimation_item],
+                  method: :delete,
+                  data: { turbo_confirm: 'Are you sure?' },
+                  class: 'close pull-right' do %>
       <span>&times;</span>
     <% end %>
   </td>

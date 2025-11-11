@@ -19,20 +19,21 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     expect(page.title).to start_with('Azaza zuzu')
   end
 
-  scenario 'I can add estimation items on the corresponding page', :js do
+  scenario 'I can add estimation items on the corresponding page', :playwright do
     visit estimation_path(estimation)
 
-    expect(page).not_to have_text(new_title)
+    expect(page.get_by_text(new_title).count).to eq(0)
 
-    fill_in 'estimation_item_value', with: 7
-    fill_in 'estimation_item_title', with: new_title
-    click_button 'Add estimation item'
+    page.locator('#estimation_item_value').fill('7')
+    page.locator('#estimation_item_title').fill(new_title)
+    page.locator('#estimation_item_title').press('Enter')
 
-    wait_for_ajax
+    # Wait for the new item to appear in the table
+    page.locator("tr:has-text('#{new_title}')").wait_for(state: 'visible', timeout: 5000)
 
-    expect(find_field('estimation_item_value').value).not_to eq('7')
-    expect(find_field('estimation_item_title').value).not_to eq(new_title)
+    expect(page.locator('#estimation_item_value').input_value).not_to eq('7')
+    expect(page.locator('#estimation_item_title').input_value).not_to eq(new_title)
 
-    expect(page).to have_text(new_title)
+    expect(page.get_by_text(new_title)).to be_visible
   end
 end

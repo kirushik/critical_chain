@@ -1,0 +1,7 @@
+{
+  "name": "critical_chain",
+  "private": true,
+  "dependencies": {
+    "playwright": "^1.56.0"
+  }
+}

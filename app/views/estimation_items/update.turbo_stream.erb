@@ -1,0 +1,23 @@
+<%# Replace the updated estimation item %>
+<%= turbo_stream.replace dom_id(@estimation_item) do %>
+  <%= render @estimation_item %>
+<% end %>
+
+<%# Update the totals %>
+<%= turbo_stream.update "total" do %><%= @estimation.total %><% end %>
+<%= turbo_stream.update "sum" do %><%= @estimation.sum %><% end %>
+<%= turbo_stream.update "buffer" do %><%= @estimation.buffer %><% end %>
+
+<%# Highlight the updated item %>
+<turbo-stream action="append" target="<%= dom_id(@estimation) %>">
+  <template>
+    <script>
+      // Highlight the updated item
+      const updatedItem = document.getElementById('<%= dom_id(@estimation_item) %>');
+      if (updatedItem) {
+        updatedItem.classList.add('highlight-flash');
+        setTimeout(() => updatedItem.classList.remove('highlight-flash'), 1000);
+      }
+    </script>
+  </template>
+</turbo-stream>
