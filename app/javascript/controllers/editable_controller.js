@@ -39,7 +39,11 @@ export default class extends Controller {
     input.value = this.originalValue;
     input.name = `${this.element.closest("tr")?.id.split("_")[0] || "estimation"}_item_${this.nameValue}`;
     input.className = "form-control input-sm";
-    input.style.width = this.typeValue === "number" ? "100px" : "200px";
+    
+    // Match the width of the original display element to prevent layout shift
+    const displayWidth = this.displayTarget.offsetWidth;
+    const minWidth = this.typeValue === "number" ? 80 : 150;
+    input.style.width = `${Math.max(displayWidth, minWidth)}px`;
 
     form.appendChild(input);
     container.appendChild(form);
@@ -98,8 +102,12 @@ export default class extends Controller {
     input.addEventListener("blur", (e) => {
       // Use setTimeout to allow button clicks to register first
       setTimeout(() => {
-        if (this.editing && this.inputElement && this.inputElement.value === this.originalValue) {
-          this.cancel();
+        // Check if we're still editing and the input still exists
+        if (this.editing && this.inputElement && this.containerElement) {
+          // Only cancel if value hasn't changed
+          if (this.inputElement.value === this.originalValue) {
+            this.cancel();
+          }
         }
       }, 200);
     });

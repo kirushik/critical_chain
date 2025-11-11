@@ -47,37 +47,6 @@
 
 .estimation-items-index {
     margin-top: 1.2em;
-    table-layout: fixed;
-}
-
-.estimation-items-index td {
-    overflow: visible;
-    white-space: nowrap;
-}
-
-/* Specific column widths to prevent jumping */
-.estimation-items-index .drag-handle {
-    width: 30px;
-}
-
-.estimation-items-index .copies {
-    width: 100px;
-}
-
-.estimation-items-index td:nth-child(3) {
-    width: 200px;
-}
-
-.estimation-items-index td:nth-child(4) {
-    width: 80px;
-}
-
-.estimation-items-index td:nth-child(5) {
-    min-width: 200px;
-}
-
-.estimation-items-index td:nth-child(6) {
-    width: 50px;
 }
 
 /* Inline editing styles */
