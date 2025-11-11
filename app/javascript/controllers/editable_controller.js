@@ -13,11 +13,12 @@ export default class extends Controller {
 
   connect() {
     this.editing = false;
+    this.waitingForTurbo = false;
   }
 
   edit(event) {
     event.preventDefault();
-    if (this.editing) return;
+    if (this.editing || this.waitingForTurbo) return;
 
     this.editing = true;
     this.originalValue = this.displayTarget.textContent.trim();
@@ -139,15 +140,13 @@ export default class extends Controller {
       });
 
       if (response.ok) {
-        // Don't cleanup the DOM here - let Turbo handle replacing the element
-        // The turbo-stream response will replace the entire row/element
-        // which automatically removes the inline editor
-        // Just mark as not editing and clear references
+        // Mark that we're waiting for Turbo to replace the element
+        // This prevents edit() from opening a new editor
+        this.waitingForTurbo = true;
         this.editing = false;
-        this.inputElement = null;
-        this.containerElement = null;
-        // Note: We don't remove the editing class or touch the DOM
-        // Turbo will replace the entire element which removes everything
+        // Don't clear references yet - we might need to cleanup if user clicks cancel
+        // before Turbo replaces the element
+        // Note: Turbo will replace the entire element which removes everything
       } else {
         const text = await response.text();
         alert(text || "Update failed");
@@ -173,6 +172,7 @@ export default class extends Controller {
     this.displayTarget.style.display = "";
     this.element.classList.remove("editing");
     this.editing = false;
+    this.waitingForTurbo = false;
   }
 
   csrfToken() {
