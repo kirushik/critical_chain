@@ -21,7 +21,14 @@ Rails.application.configure do
   # NGINX, varnish or squid.
   # config.action_dispatch.rack_cache = true
 
-  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
+  # Enable serving of static files from the `public/` folder
+  # This is required for platforms like Railway, Heroku, etc. that don't use a separate web server
+  config.public_file_server.enabled = ENV.fetch("RAILS_SERVE_STATIC_FILES") { true }
+  
+  # Set cache headers for static files to improve performance
+  config.public_file_server.headers = {
+    'Cache-Control' => 'public, max-age=31536000'
+  }
 
   # Propshaft handles asset serving - no configuration needed
 
