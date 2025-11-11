@@ -47,6 +47,37 @@
 
 .estimation-items-index {
     margin-top: 1.2em;
+    table-layout: fixed;
+}
+
+.estimation-items-index td {
+    overflow: visible;
+    white-space: nowrap;
+}
+
+/* Specific column widths to prevent jumping */
+.estimation-items-index .drag-handle {
+    width: 30px;
+}
+
+.estimation-items-index .copies {
+    width: 100px;
+}
+
+.estimation-items-index td:nth-child(3) {
+    width: 200px;
+}
+
+.estimation-items-index td:nth-child(4) {
+    width: 80px;
+}
+
+.estimation-items-index td:nth-child(5) {
+    min-width: 200px;
+}
+
+.estimation-items-index td:nth-child(6) {
+    width: 50px;
 }
 
 /* Inline editing styles */
@@ -55,6 +86,11 @@
     border-bottom: 1px dashed #999;
     cursor: pointer;
     transition: border-color 0.2s;
+}
+
+/* Hide dashed line when editing */
+.editable.editing {
+    border-bottom: none;
 }
 
 .editable:hover {
@@ -69,6 +105,11 @@
     font-size: 12px;
     color: #666;
     opacity: 0.6;
+}
+
+/* Don't show pencil when editing */
+.editable.editing:hover::after {
+    content: none;
 }
 
 .editable-inline {
@@ -91,6 +132,18 @@
     padding: 4px 8px;
     font-size: 12px;
     line-height: 1.5;
+}
+
+/* Make cancel button look like a button */
+.editable-inline .editable-buttons .btn-default {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+}
+
+.editable-inline .editable-buttons .btn-default:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
 }
 
 /* Highlight animation for updated items */

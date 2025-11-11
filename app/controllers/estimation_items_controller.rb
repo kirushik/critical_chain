@@ -53,7 +53,6 @@ class EstimationItemsController < ApplicationController
     @estimation.reload
 
     respond_to do |format|
-      format.turbo_stream
       format.json do
         render json: { success: result,
                  msg: @estimation_item.errors.full_messages.first,
@@ -70,6 +69,7 @@ class EstimationItemsController < ApplicationController
             },
           } }
       end
+      format.turbo_stream
       format.html { redirect_to estimation_path(@estimation) }
     end
   end

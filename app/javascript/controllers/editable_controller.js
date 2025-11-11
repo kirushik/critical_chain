@@ -22,6 +22,9 @@ export default class extends Controller {
     this.editing = true;
     this.originalValue = this.displayTarget.textContent.trim();
 
+    // Add editing class to hide dashed underline
+    this.element.classList.add("editing");
+
     // Create editable-inline container
     const container = document.createElement("span");
     container.className = "editable-inline";
@@ -52,6 +55,7 @@ export default class extends Controller {
     saveButton.innerHTML = '<i class="fa fa-check"></i>';
     saveButton.addEventListener("click", (e) => {
       e.preventDefault();
+      e.stopPropagation();
       this.save();
     });
 
@@ -62,6 +66,7 @@ export default class extends Controller {
     cancelButton.innerHTML = '<i class="fa fa-times"></i>';
     cancelButton.addEventListener("click", (e) => {
       e.preventDefault();
+      e.stopPropagation();
       this.cancel();
     });
 
@@ -93,7 +98,7 @@ export default class extends Controller {
     input.addEventListener("blur", (e) => {
       // Use setTimeout to allow button clicks to register first
       setTimeout(() => {
-        if (this.editing && this.inputElement.value === this.originalValue) {
+        if (this.editing && this.inputElement && this.inputElement.value === this.originalValue) {
           this.cancel();
         }
       }, 200);
@@ -152,6 +157,7 @@ export default class extends Controller {
     }
     this.inputElement = null;
     this.displayTarget.style.display = "";
+    this.element.classList.remove("editing");
     this.editing = false;
   }
 
