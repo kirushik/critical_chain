@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Stimulus controller for inline editing (x-editable compatible)
+// Stimulus controller for inline editing with Turbo Streams
 export default class extends Controller {
   static targets = ["field", "display"];
   static values = {
@@ -20,9 +20,9 @@ export default class extends Controller {
     if (this.editing) return;
 
     this.editing = true;
-    const value = this.displayTarget.textContent.trim();
+    this.originalValue = this.displayTarget.textContent.trim();
 
-    // Create editable-inline container (x-editable compatible)
+    // Create editable-inline container
     const container = document.createElement("span");
     container.className = "editable-inline";
 
@@ -33,7 +33,7 @@ export default class extends Controller {
     // Create input element
     const input = document.createElement("input");
     input.type = this.typeValue === "number" ? "number" : "text";
-    input.value = value;
+    input.value = this.originalValue;
     input.name = `${this.element.closest("tr")?.id.split("_")[0] || "estimation"}_item_${this.nameValue}`;
     input.className = "form-control input-sm";
     input.style.width = this.typeValue === "number" ? "100px" : "200px";
@@ -88,36 +88,50 @@ export default class extends Controller {
         this.cancel();
       }
     });
+
+    // Handle blur (focus away) - cancel if value unchanged
+    input.addEventListener("blur", (e) => {
+      // Use setTimeout to allow button clicks to register first
+      setTimeout(() => {
+        if (this.editing && this.inputElement.value === this.originalValue) {
+          this.cancel();
+        }
+      }, 200);
+    });
   }
 
   async save() {
     if (!this.editing) return;
 
     const newValue = this.inputElement.value;
-    // Wrap data in model namespace for Rails strong params
-    const data = { [this.modelValue]: {} };
-    data[this.modelValue][this.nameValue] = newValue;
+    
+    // If value hasn't changed, just cancel
+    if (newValue === this.originalValue) {
+      this.cancel();
+      return;
+    }
+
+    // Create form data for Rails strong params
+    const formData = new FormData();
+    formData.append(`${this.modelValue}[${this.nameValue}]`, newValue);
 
     try {
       const response = await fetch(this.urlValue, {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json",
           "X-CSRF-Token": this.csrfToken(),
-          "X-Requested-With": "XMLHttpRequest",
-          Accept: "application/json",
+          "Accept": "text/vnd.turbo-stream.html",
         },
-        body: JSON.stringify(data),
+        body: formData,
       });
 
-      const result = await response.json();
-
-      if (response.ok && result.success !== false) {
-        this.displayTarget.textContent = newValue;
-        this.updateAdditionalValues(result.additionalValues);
+      if (response.ok) {
+        // Turbo will handle the response automatically
+        // Just clean up the inline editor
         this.cleanup();
       } else {
-        alert(result.msg || "Update failed");
+        const text = await response.text();
+        alert(text || "Update failed");
         this.cancel();
       }
     } catch (error) {
@@ -139,33 +153,6 @@ export default class extends Controller {
     this.inputElement = null;
     this.displayTarget.style.display = "";
     this.editing = false;
-  }
-
-  updateAdditionalValues(vals) {
-    if (!vals) return;
-
-    const updateElement = (id, value) => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = value;
-    };
-
-    if (vals.total) updateElement("total", vals.total);
-    if (vals.sum) updateElement("sum", vals.sum);
-    if (vals.buffer) updateElement("buffer", vals.buffer);
-    if (vals.actual_sum) updateElement("actual_sum", vals.actual_sum);
-    if (vals.buffer_health) updateElement("buffer_health", vals.buffer_health);
-
-    if (vals.buffer_health_class) {
-      const el = document.getElementById("buffer_health");
-      if (el) el.className = vals.buffer_health_class;
-    }
-
-    if (vals.update_item_total) {
-      const itemEl = document.querySelector(
-        vals.update_item_total.item + " .total_value",
-      );
-      if (itemEl) itemEl.textContent = vals.update_item_total.total;
-    }
   }
 
   csrfToken() {

@@ -52,30 +52,25 @@ class EstimationItemsController < ApplicationController
 
     @estimation.reload
 
-    if request.xhr?
-      # return render plain: @estimation_item.errors.first, status: :bad_request unless result
-
-      respond_to do |format|
-        format.json do
-          render json: { success: result,
-                   msg: @estimation_item.errors.full_messages.first,
-                   additionalValues: {
-              sum: @estimation.sum,
-              buffer: @estimation.buffer,
-              total: @estimation.total,
-              actual_sum: @estimation.actual_sum,
-              buffer_health: @estimation.buffer_health,
-              buffer_health_class: @estimation.buffer_health_class,
-              update_item_total: {
-                item: "#" + dom_id(@estimation_item),
-                total: @estimation_item.total,
-              },
-            } }
-        end
-        format.js
+    respond_to do |format|
+      format.turbo_stream
+      format.json do
+        render json: { success: result,
+                 msg: @estimation_item.errors.full_messages.first,
+                 additionalValues: {
+            sum: @estimation.sum,
+            buffer: @estimation.buffer,
+            total: @estimation.total,
+            actual_sum: @estimation.actual_sum,
+            buffer_health: @estimation.buffer_health,
+            buffer_health_class: @estimation.buffer_health_class,
+            update_item_total: {
+              item: "#" + dom_id(@estimation_item),
+              total: @estimation_item.total,
+            },
+          } }
       end
-    else
-      redirect_to estimation_path(@estimation)
+      format.html { redirect_to estimation_path(@estimation) }
     end
   end
 

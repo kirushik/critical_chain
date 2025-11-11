@@ -42,20 +42,18 @@ class EstimationsController < ApplicationController
   end
 
   def update
-    @estimation = Estimation.find(params[:id])
+    @estimation = Estimation.find(params[:id]).decorate
     authorize @estimation, :update?
     result = @estimation.update(estimation_params)
 
-    if request.xhr?
-      respond_to do |format|
-        format.json do
-          response_data = { success: result }
-          response_data[:msg] = @estimation.errors.full_messages.first unless result
-          render json: response_data
-        end
+    respond_to do |format|
+      format.turbo_stream
+      format.json do
+        response_data = { success: result }
+        response_data[:msg] = @estimation.errors.full_messages.first unless result
+        render json: response_data
       end
-    else
-      redirect_to estimation_path(@estimation)
+      format.html { redirect_to estimation_path(@estimation) }
     end
   end
 

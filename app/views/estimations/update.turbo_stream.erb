@@ -1,0 +1,4 @@
+<%# Update the estimation title in the h1 %>
+<%= turbo_stream.update "editable_estimation_#{@estimation.id}_title" do %>
+  <%= @estimation.decorate.editable :title %>
+<% end %>

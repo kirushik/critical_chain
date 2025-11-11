@@ -48,3 +48,58 @@
 .estimation-items-index {
     margin-top: 1.2em;
 }
+
+/* Inline editing styles */
+.editable {
+    position: relative;
+    border-bottom: 1px dashed #999;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.editable:hover {
+    border-bottom-color: #333;
+}
+
+.editable:hover::after {
+    content: '\270E'; /* pencil icon */
+    position: absolute;
+    right: -18px;
+    top: -2px;
+    font-size: 12px;
+    color: #666;
+    opacity: 0.6;
+}
+
+.editable-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.editable-inline .editable-input {
+    display: inline-block;
+}
+
+.editable-inline .editable-buttons {
+    display: inline-flex;
+    gap: 2px;
+    margin-left: 5px;
+}
+
+.editable-inline .editable-buttons .btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* Highlight animation for updated items */
+@keyframes highlight-flash {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: #ffffcc; }
+}
+
+.highlight-flash {
+    animation: highlight-flash 1s ease-in-out;
+}
+
