@@ -139,9 +139,15 @@ export default class extends Controller {
       });
 
       if (response.ok) {
-        // Turbo will handle the response automatically
-        // Just clean up the inline editor
-        this.cleanup();
+        // Don't cleanup the DOM here - let Turbo handle replacing the element
+        // The turbo-stream response will replace the entire row/element
+        // which automatically removes the inline editor
+        // Just mark as not editing and clear references
+        this.editing = false;
+        this.inputElement = null;
+        this.containerElement = null;
+        // Note: We don't remove the editing class or touch the DOM
+        // Turbo will replace the entire element which removes everything
       } else {
         const text = await response.text();
         alert(text || "Update failed");
