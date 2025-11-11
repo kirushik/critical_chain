@@ -21,7 +21,10 @@ module EditableHelper
                   editable_model_value: object.class.name.underscore,
                   editable_target: 'field'
                 }) do
-      content_tag(:span, value, data: { editable_target: 'display' }, style: 'cursor: pointer;')
+      content_tag(:span, value, 
+                  class: 'editable-display',
+                  data: { editable_target: 'display' }, 
+                  style: 'cursor: pointer;')
     end
   end
 end

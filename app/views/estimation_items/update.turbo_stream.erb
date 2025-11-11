@@ -8,6 +8,14 @@
 <%= turbo_stream.update "sum" do %><%= @estimation.sum %><% end %>
 <%= turbo_stream.update "buffer" do %><%= @estimation.buffer %><% end %>
 
+<%# Update actual_sum if tracking mode %>
+<%= turbo_stream.update "actual_sum" do %><%= @estimation.actual_sum %><% end %>
+
+<%# Update buffer_health with both text and class %>
+<%= turbo_stream.replace "buffer_health" do %>
+  <span class="<%= @estimation.buffer_health_class %>" id="buffer_health"><%= @estimation.buffer_health %></span>
+<% end %>
+
 <%# Highlight the updated item %>
 <turbo-stream action="append" target="<%= dom_id(@estimation) %>">
   <template>

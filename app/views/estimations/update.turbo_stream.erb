@@ -1,0 +1,6 @@
+<%# Replace the title section %>
+<%= turbo_stream.replace "estimation_title" do %>
+  <div id="estimation_title">
+    <h1><%= @estimation.decorate.editable :title %></h1>
+  </div>
+<% end %>

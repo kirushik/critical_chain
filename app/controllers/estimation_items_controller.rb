@@ -56,6 +56,17 @@ class EstimationItemsController < ApplicationController
       # return render plain: @estimation_item.errors.first, status: :bad_request unless result
 
       respond_to do |format|
+        format.turbo_stream do
+          if result
+            # Render the turbo stream template
+            render :update
+          else
+            render turbo_stream: turbo_stream.append(
+              dom_id(@estimation),
+              content_tag(:script, "alert('#{@estimation_item.errors.full_messages.first}');")
+            ), status: :unprocessable_entity
+          end
+        end
         format.json do
           render json: { success: result,
                    msg: @estimation_item.errors.full_messages.first,
