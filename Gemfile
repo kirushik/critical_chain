@@ -47,7 +47,6 @@ gem 'bullet', group: :development
 # gem 'capistrano-rails', group: :development
 group :production do
   gem 'pg'
-  gem 'thin'
 end
 
 group :development, :test do
