@@ -47,4 +47,4 @@ This project can be deployed to any Rails-compatible hosting platform (Railway, 
 
 ### Asset Compilation
 
-The project includes `railway.toml` and `nixpacks.toml` configuration files that ensure assets are properly precompiled during deployment on Railway. If deploying to other platforms, ensure that `bundle exec rails assets:precompile` is run during the build phase.
+The project includes a `railway.toml` configuration file that ensures assets are properly precompiled during deployment on Railway using Railpack. If deploying to other platforms, ensure that `bundle exec rails assets:precompile` is run during the build phase.

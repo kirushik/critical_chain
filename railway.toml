@@ -1,8 +1,9 @@
-# Railway deployment configuration
+# Railway deployment configuration using Railpack
 # This ensures assets are precompiled during the build phase
 
 [build]
-builder = "NIXPACKS"
+builder = "RAILPACK"
+buildCommand = "bundle exec rails assets:precompile"
 
 [deploy]
 startCommand = "bundle exec puma -C config/puma.rb"
