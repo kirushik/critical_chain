@@ -1,0 +1,9 @@
+# Railway deployment configuration
+# This ensures assets are precompiled during the build phase
+
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "bundle exec puma -C config/puma.rb"
+# Railway will automatically set RAILS_ENV=production

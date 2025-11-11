@@ -35,4 +35,16 @@ Development is managed with [Waffle.io board](https://waffle.io/kirushik/critica
 
 This project can be deployed to any Rails-compatible hosting platform (Railway, Render, Fly.io, etc.).
 
-**Please note** This project expects `google_oauth2_app_id` and `google_oauth2_app_secret` environment variables to be set. Configure these through your hosting platform's environment variable settings.
+### Required Environment Variables
+
+**Please note** This project expects the following environment variables to be set:
+- `google_oauth2_app_id` - Your Google OAuth2 application ID
+- `google_oauth2_app_secret` - Your Google OAuth2 application secret
+
+### Optional Environment Variables
+
+- `RAILS_SERVE_STATIC_FILES` - Set to `false` if you're using a separate web server (like Nginx) to serve static files. By default, Rails will serve static files directly, which is appropriate for platforms like Railway and Heroku.
+
+### Asset Compilation
+
+The project includes `railway.toml` and `nixpacks.toml` configuration files that ensure assets are properly precompiled during deployment on Railway. If deploying to other platforms, ensure that `bundle exec rails assets:precompile` is run during the build phase.
