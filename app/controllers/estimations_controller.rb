@@ -46,26 +46,25 @@ class EstimationsController < ApplicationController
     authorize @estimation, :update?
     result = @estimation.update(estimation_params)
 
-    if request.xhr?
-      respond_to do |format|
-        format.turbo_stream do
-          if result
-            render :update
-          else
-            render turbo_stream: turbo_stream.append(
-              "estimation_title",
-              content_tag(:script, "alert('#{@estimation.errors.full_messages.first}');")
-            ), status: :unprocessable_entity
-          end
-        end
-        format.json do
-          response_data = { success: result }
-          response_data[:msg] = @estimation.errors.full_messages.first unless result
-          render json: response_data
+    respond_to do |format|
+      format.turbo_stream do
+        if result
+          render :update
+        else
+          render turbo_stream: turbo_stream.append(
+            "estimation_title",
+            content_tag(:script, "alert('#{@estimation.errors.full_messages.first}');")
+          ), status: :unprocessable_entity
         end
       end
-    else
-      redirect_to estimation_path(@estimation)
+      format.json do
+        response_data = { success: result }
+        response_data[:msg] = @estimation.errors.full_messages.first unless result
+        render json: response_data
+      end
+      format.html do
+        redirect_to estimation_path(@estimation)
+      end
     end
   end
 

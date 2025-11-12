@@ -127,7 +127,7 @@ RSpec.describe EstimationsController, :type => :controller do
 
     it "allows changing of Estimation#title via AJAX" do
       new_title = "New Project Title"
-      patch :update, params: { id: estimation.id, estimation: { title: new_title } }, xhr: true
+      patch :update, params: { id: estimation.id, estimation: { title: new_title } }, format: :json
 
       expect(estimation.reload.title).to eq(new_title)
       expect(response.content_type).to match(%r{application/json})
@@ -137,11 +137,11 @@ RSpec.describe EstimationsController, :type => :controller do
 
     it "returns error message when title update fails via AJAX" do
       # Create an estimation with a validation error by setting title to be too long
-      patch :update, params: { id: estimation.id, estimation: { title: "a" * 300 } }, xhr: true
+      patch :update, params: { id: estimation.id, estimation: { title: "a" * 300 } }, format: :json
 
       expect(response.content_type).to match(%r{application/json})
       json_response = JSON.parse(response.body)
-      
+
       # The test should check if validation failed (though the model may not have length validation)
       # This is more of a placeholder to show how errors would be handled if they existed
       if json_response["success"] == false

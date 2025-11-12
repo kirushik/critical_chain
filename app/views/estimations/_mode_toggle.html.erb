@@ -1,5 +1,5 @@
 <p>
-  <%= form_for @estimation, method: :patch do |f| %>
+  <%= form_for @estimation, method: :patch, data: { turbo: false } do |f| %>
     <span class="h4"><span class="small">Tracking mode</span></span>
     <%= f.hidden_field :tracking_mode, :value => !@estimation.tracking_mode? %>
     <%= f.button type: :submit, class: 'btn btn-link toggle-tracking' do %>

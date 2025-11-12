@@ -35,7 +35,10 @@ feature "Tracking mode", :type => :feature do
     # Wait for the editor to close after save
     page.locator('.editable-inline').wait_for(state: 'hidden', timeout: 5000)
 
-    expect(page.get_by_text("11179 out of #{estimation.decorate.total}")).to be_visible
+    # Check that actual_sum is updated (text is split across elements, so check the sum directly)
+    expect(page.locator('#actual_sum').text_content).to eq('11179.0')
+    expect(page.get_by_text('out of')).to be_visible
+    expect(page.locator('#total').text_content).to eq(tracking_mode_estimation.decorate.total.to_s)
   end
 
   scenario 'I can see buffer consumption in tracking mode' do

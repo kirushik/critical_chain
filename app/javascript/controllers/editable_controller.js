@@ -24,9 +24,10 @@ export default class extends Controller {
     const value = this.displayTarget.textContent.trim();
     this.originalValue = value;
 
-    // Create editable-inline container
+    // Create editable-inline container with unique ID
     const container = document.createElement("span");
     container.className = "editable-inline";
+    container.id = `editable_inline_${this.modelValue}_${this.pkValue}_${this.nameValue}`;
 
     // Create HTML form for Turbo
     const form = document.createElement("form");
@@ -34,6 +35,7 @@ export default class extends Controller {
     form.action = this.urlValue;
     form.setAttribute("data-turbo", "true");
     form.setAttribute("data-turbo-stream", "true");
+    form.setAttribute("accept-charset", "UTF-8");
 
     // Add hidden method field for PATCH
     const methodField = document.createElement("input");
@@ -73,6 +75,45 @@ export default class extends Controller {
     saveButton.type = "submit";
     saveButton.className = "btn btn-sm btn-success editable-submit";
     saveButton.innerHTML = '<i class="fa fa-check"></i>';
+
+    // Intercept form submission to ensure we request turbo_stream format
+    saveButton.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(form.action, {
+          method: "PATCH",
+          headers: {
+            "Accept": "text/vnd.turbo-stream.html",
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRF-Token": this.csrfToken()
+          },
+          body: formData
+        });
+
+        if (response.ok) {
+          const text = await response.text();
+          // Let Turbo process the response - this will replace the DOM elements
+          // including the inline editor, so no manual cleanup is needed
+          Turbo.renderStreamMessage(text);
+          // Reset state (but don't manipulate DOM since Turbo will replace it)
+          this.editing = false;
+          this.originalValue = null;
+          this.inputElement = null;
+          this.formElement = null;
+          this.containerElement = null;
+        } else {
+          alert("Update failed");
+          this.cleanup();
+        }
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        alert("Update failed");
+        this.cleanup();
+      }
+    });
 
     // Create cancel button
     const cancelButton = document.createElement("button");
@@ -117,13 +158,6 @@ export default class extends Controller {
           this.cancel();
         }
       }, 200);
-    });
-
-    // Listen for turbo:submit-end to close the editor after successful submission
-    form.addEventListener("turbo:submit-end", (e) => {
-      if (e.detail.success) {
-        this.cleanup();
-      }
     });
   }
 
