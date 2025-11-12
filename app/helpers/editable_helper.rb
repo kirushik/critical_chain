@@ -33,7 +33,8 @@ module EditableHelper
                           class: 'editable-form',
                           data: {
                             turbo_stream: true,
-                            editable_target: 'form'
+                            editable_target: 'form',
+                            action: 'submit->editable#handleSubmit'
                           }) do
         # Use Bootstrap 4 input-group to attach buttons inline
         content_tag(:div, class: 'input-group input-group-sm') do
@@ -45,7 +46,7 @@ module EditableHelper
             id: input_id,
             class: 'form-control',
             data: {
-              action: 'keydown->editable#handleKeydown',
+              action: 'keydown->editable#handleKeydown blur->editable#handleBlur',
               editable_target: 'input'
             }
           }
