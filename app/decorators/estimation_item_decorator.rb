@@ -11,6 +11,6 @@ class EstimationItemDecorator < Draper::Decorator
   #   end
 
   def editable field, type: :text
-    helpers.editable object, field, url: helpers.estimation_estimation_item_path(object.estimation, object), mode: :inline, type: type, class: field
+    helpers.editable object, field, url: helpers.estimation_estimation_item_path(object.estimation, object), type: type, class: field
   end
 end

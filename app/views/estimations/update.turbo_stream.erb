@@ -1,0 +1,11 @@
+<%# Replace the title section %>
+<%= turbo_stream.replace "estimation_title" do %>
+  <h1><%= @estimation.decorate.editable :title %></h1>
+<% end %>
+
+<%# Replace the mode toggle (handles tracking_mode updates) %>
+<%= turbo_stream.replace "mode_toggle" do %>
+  <div id="mode_toggle">
+    <%= render 'mode_toggle' %>
+  </div>
+<% end %>

@@ -1,6 +1,8 @@
 <% page_title! @estimation.title %>
 
-<h1><%= @estimation.editable :title %></h1>
+<div id="estimation_title">
+  <h1><%= @estimation.editable :title %></h1>
+</div>
 
 <div class="row">
   <div class="col-md-6">
@@ -15,7 +17,9 @@
   </div>
 
   <div class="col-md-5 offset-md-1">
-    <%= render 'mode_toggle' %>
+    <div id="mode_toggle">
+      <%= render 'mode_toggle' %>
+    </div>
     <%= render 'estimation_items/form_for_new' unless @estimation.tracking_mode? %>
     <%= render 'results' %>
     <%= render 'buffer_consumption' if @estimation.tracking_mode? %>

@@ -112,6 +112,7 @@ RSpec.describe EstimationsController, :type => :controller do
   end
 
   describe "PATCH update" do
+    render_views
     let(:user) { FactoryBot.create(:user_with_estimations) }
     let(:estimation) { user.estimations.first }
 
@@ -125,28 +126,29 @@ RSpec.describe EstimationsController, :type => :controller do
       expect(estimation.reload.tracking_mode?).to be_truthy
     end
 
-    it "allows changing of Estimation#title via AJAX" do
+    it "allows changing of Estimation#title via Turbo Stream" do
       new_title = "New Project Title"
-      patch :update, params: { id: estimation.id, estimation: { title: new_title } }, xhr: true
+      patch :update, params: { id: estimation.id, estimation: { title: new_title } }, format: :turbo_stream
 
       expect(estimation.reload.title).to eq(new_title)
-      expect(response.content_type).to match(%r{application/json})
-      json_response = JSON.parse(response.body)
-      expect(json_response["success"]).to be_truthy
+      expect(response.content_type).to match(%r{text/vnd.turbo-stream})
+      expect(response.body).to include('turbo-stream')
+      expect(response.body).to include(new_title)
     end
 
-    it "returns error message when title update fails via AJAX" do
-      # Create an estimation with a validation error by setting title to be too long
-      patch :update, params: { id: estimation.id, estimation: { title: "a" * 300 } }, xhr: true
+    it "returns error message when title update fails via Turbo Stream" do
+      # Stub validation to fail for testing error handling
+      allow_any_instance_of(Estimation).to receive(:update).and_return(false)
+      allow_any_instance_of(Estimation).to receive(:errors).and_return(
+        double(full_messages: double(first: "Title is invalid"))
+      )
 
-      expect(response.content_type).to match(%r{application/json})
-      json_response = JSON.parse(response.body)
-      
-      # The test should check if validation failed (though the model may not have length validation)
-      # This is more of a placeholder to show how errors would be handled if they existed
-      if json_response["success"] == false
-        expect(json_response["msg"]).to be_present
-      end
+      patch :update, params: { id: estimation.id, estimation: { title: "Bad Title" } }, format: :turbo_stream
+
+      expect(response.content_type).to match(%r{text/vnd.turbo-stream})
+      expect(response.status).to eq(422)
+      expect(response.body).to include('turbo-stream')
+      expect(response.body).to include('alert')
     end
 
     it "redirects to the estimation if no XHR happened" do

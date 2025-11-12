@@ -48,3 +48,52 @@
 .estimation-items-index {
     margin-top: 1.2em;
 }
+
+/* Editable field container */
+.editable-field {
+    display: inline-block;
+}
+
+/* Display state (default - visible) */
+.editable-field .editable-display {
+    border-bottom: 1px dashed #999;
+    position: relative;
+    display: inline-block;
+}
+
+.editable-field .editable-display:hover::after {
+    content: '\270E'; /* Pencil icon */
+    margin-left: 0.3em;
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Edit form (default - hidden) */
+.editable-field .editable-form {
+    display: none;
+}
+
+/* When editing: hide display, show form */
+.editable-field.editing .editable-display {
+    display: none;
+}
+
+.editable-field.editing .editable-form {
+    display: inline-block;
+}
+
+/* Bootstrap input-group styling for inline forms */
+.editable-form .input-group {
+    width: auto;
+}
+
+/* Highlight flash animation */
+@keyframes highlight-flash {
+    0% { background-color: #fff3cd; }
+    100% { background-color: transparent; }
+}
+
+.highlight-flash {
+    animation: highlight-flash 1s ease-out;
+}
+

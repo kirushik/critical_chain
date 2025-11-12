@@ -28,14 +28,23 @@ feature "Tracking mode", :type => :feature do
   scenario 'I can enter value for an item of tracking-mode estimation', :playwright do
     visit estimation_path(tracking_mode_estimation)
 
-    page.locator('span.editable.actual_value').first.click
-    page.locator('.editable-inline .editable-input input').fill('11179')
-    page.locator('.editable-inline .editable-submit').click
+    # Click on the first actual_value field in the table (not the title)
+    page.locator("table [title='Click to edit']").first.click
 
-    # Wait for the editor to close after save
-    page.locator('.editable-inline').wait_for(state: 'hidden', timeout: 5000)
+    # Wait for editing state to activate
+    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
 
-    expect(page.get_by_text("11179 out of #{estimation.decorate.total}")).to be_visible
+    # Fill the number input
+    page.locator(".editing input[type='number']").fill('11179')
+    page.get_by_role('button', name: 'Save').click
+
+    # Wait for the display to return - wait for the .editing class to disappear
+    page.locator(".editing").wait_for(state: 'hidden', timeout: 5000)
+
+    # Check that actual_sum is updated (text is split across elements, so check the sum directly)
+    expect(page.locator('#actual_sum').text_content).to eq('11179.0')
+    expect(page.get_by_text('out of')).to be_visible
+    expect(page.locator('#total').text_content).to eq(tracking_mode_estimation.decorate.total.to_s)
   end
 
   scenario 'I can see buffer consumption in tracking mode' do
@@ -49,12 +58,17 @@ feature "Tracking mode", :type => :feature do
 
     expect(page.get_by_text("50%").count).to eq(0)
 
-    page.locator('span.editable.actual_value').click
-    page.locator('.editable-inline .editable-input input').fill((1.9*first_estimation_item.value).to_s)
-    page.locator('.editable-inline .editable-submit').click
+    # Click on the first actual_value field in the table
+    page.locator("table [title='Click to edit']").first.click
 
-    # Wait for the editor to close and buffer to update
-    page.locator('.editable-inline').wait_for(state: 'hidden', timeout: 5000)
+    # Wait for editing state to activate
+    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
+
+    page.locator(".editing input[type='number']").fill((1.9*first_estimation_item.value).to_s)
+    page.get_by_role('button', name: 'Save').click
+
+    # Wait for the display to return - wait for the .editing class to disappear
+    page.locator(".editing").wait_for(state: 'hidden', timeout: 5000)
 
     expect(page.get_by_text("90%")).to be_visible
     expect(page.locator('#buffer_health.bg-warning')).to be_visible
