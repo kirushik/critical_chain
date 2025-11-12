@@ -112,6 +112,7 @@ RSpec.describe EstimationsController, :type => :controller do
   end
 
   describe "PATCH update" do
+    render_views
     let(:user) { FactoryBot.create(:user_with_estimations) }
     let(:estimation) { user.estimations.first }
 

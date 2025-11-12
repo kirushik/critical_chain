@@ -81,6 +81,7 @@ RSpec.describe EstimationItemsController, :type => :controller do
   end
 
   describe "PATCH update" do
+    render_views
     let(:estimation_item) { FactoryBot.create :estimation_item, estimation: estimation }
 
     it "denies to update quantity to negative numbers" do
@@ -97,9 +98,9 @@ RSpec.describe EstimationItemsController, :type => :controller do
       expect(response.content_type).to match(%r{text/vnd.turbo-stream})
       expect(response.body).to include('turbo-stream')
       # Check that the response includes updates for totals
-      expect(response.body).to include('id="total"')
-      expect(response.body).to include('id="sum"')
-      expect(response.body).to include('id="buffer"')
+      expect(response.body).to include('target="total"')
+      expect(response.body).to include('target="sum"')
+      expect(response.body).to include('target="buffer"')
     end
 
     it "updates the order of an estimation item" do
