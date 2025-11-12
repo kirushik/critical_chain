@@ -19,6 +19,7 @@ feature "EscKeyCancellation", :type => :feature do
 
     # Click to open editor
     page.get_by_title('Click to edit').filter(hasText: original_title).click
+    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
     expect(page.get_by_role('button', name: 'Cancel')).to be_visible
 
     # Change the value
@@ -47,6 +48,7 @@ feature "EscKeyCancellation", :type => :feature do
 
     # Click to open editor
     page.get_by_title('Click to edit').filter(hasText: original_title).click
+    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
     expect(page.get_by_role('button', name: 'Cancel')).to be_visible
 
     # Change the value
@@ -75,6 +77,7 @@ feature "EscKeyCancellation", :type => :feature do
 
     # Click to open editor
     page.get_by_title('Click to edit').filter(hasText: original_value.to_s).click
+    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
     expect(page.get_by_role('button', name: 'Cancel')).to be_visible
 
     # Change the value
@@ -113,10 +116,10 @@ feature "EscKeyCancellation", :type => :feature do
 
     # Click to open editor - find quantity field in the copies column
     page.locator(".copies [title='Click to edit']").filter(hasText: /^1$/).click
+    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
     expect(page.get_by_role('button', name: 'Cancel')).to be_visible
 
-    # Wait for editing state and change the value
-    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
+    # Change the value
     input = page.locator(".editing input[name*='[quantity]']")
     input.fill(new_quantity.to_s)
 
