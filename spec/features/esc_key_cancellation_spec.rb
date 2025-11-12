@@ -18,22 +18,22 @@ feature "EscKeyCancellation", :type => :feature do
     expect(page.get_by_text(original_title)).to be_visible
 
     # Click to open editor
-    page.locator("h1 span.editable.title:has-text('#{original_title}')").click
-    expect(page.locator(".editable-inline")).to be_visible
+    page.get_by_title('Click to edit').filter(hasText: original_title).click
+    expect(page.get_by_role('button', name: 'Cancel')).to be_visible
 
     # Change the value
-    page.locator(".editable-inline .editable-input input").fill(new_title)
+    page.locator("h1 input[type='text']").fill(new_title)
 
     # Press ESC to cancel
-    page.locator(".editable-inline .editable-input input").press('Escape')
+    page.locator("h1 input[type='text']").press('Escape')
 
-    # Wait for editor to close
-    page.locator(".editable-inline").wait_for(state: 'hidden', timeout: 5000)
+    # Wait for display to become visible again
+    page.get_by_title('Click to edit').filter(hasText: original_title).wait_for(state: 'visible', timeout: 5000)
 
     # Verify the original title is still displayed
     expect(page.get_by_text(original_title)).to be_visible
     expect(page.get_by_text(new_title).count).to eq(0)
-    expect(page.locator(".editable-inline").count).to eq(0)
+    expect(page.get_by_role('button', name: 'Cancel').count).to eq(0)
 
     # Refresh and verify the change was not saved
     visit estimation_path(estimation)
@@ -46,22 +46,22 @@ feature "EscKeyCancellation", :type => :feature do
     expect(page.get_by_text(original_title)).to be_visible
 
     # Click to open editor
-    page.locator("span.editable.title:has-text('#{original_title}')").click
-    expect(page.locator(".editable-inline")).to be_visible
+    page.get_by_title('Click to edit').filter(hasText: original_title).click
+    expect(page.get_by_role('button', name: 'Cancel')).to be_visible
 
     # Change the value
-    page.locator(".editable-inline .editable-input input").fill(new_title)
+    page.locator(".editing input[type='text'][name*='[title]']").fill(new_title)
 
     # Press ESC to cancel
-    page.locator(".editable-inline .editable-input input").press('Escape')
+    page.locator(".editing input[type='text'][name*='[title]']").press('Escape')
 
-    # Wait for editor to close
-    page.locator(".editable-inline").wait_for(state: 'hidden', timeout: 5000)
+    # Wait for display to become visible again
+    page.get_by_title('Click to edit').filter(hasText: original_title).wait_for(state: 'visible', timeout: 5000)
 
     # Verify the original title is still displayed
     expect(page.get_by_text(original_title)).to be_visible
     expect(page.get_by_text(new_title).count).to eq(0)
-    expect(page.locator(".editable-inline").count).to eq(0)
+    expect(page.get_by_role('button', name: 'Cancel').count).to eq(0)
 
     # Refresh and verify the change was not saved
     visit estimation_path(estimation)
@@ -71,29 +71,29 @@ feature "EscKeyCancellation", :type => :feature do
 
   scenario "I can cancel editing estimation item value with ESC key", :playwright do
     original_value = estimation_item.value
-    expect(page.locator("span.editable.value:has-text('#{original_value}')").first).to be_visible
+    expect(page.get_by_title('Click to edit').filter(hasText: original_value.to_s).first).to be_visible
 
     # Click to open editor
-    page.locator("span.editable.value:has-text('#{original_value}')").click
-    expect(page.locator(".editable-inline")).to be_visible
+    page.get_by_title('Click to edit').filter(hasText: original_value.to_s).click
+    expect(page.get_by_role('button', name: 'Cancel')).to be_visible
 
     # Change the value
-    page.locator(".editable-inline .editable-input input").fill(new_value.to_s)
+    page.locator(".editing input[type='number'][name*='[value]']").fill(new_value.to_s)
 
     # Press ESC to cancel
-    page.locator(".editable-inline .editable-input input").press('Escape')
+    page.locator(".editing input[type='number'][name*='[value]']").press('Escape')
 
-    # Wait for editor to close
-    page.locator(".editable-inline").wait_for(state: 'hidden', timeout: 5000)
+    # Wait for display to become visible again
+    page.get_by_title('Click to edit').filter(hasText: original_value.to_s).wait_for(state: 'visible', timeout: 5000)
 
     # Verify the original value is still displayed
-    expect(page.locator("span.editable.value:has-text('#{original_value}')").first).to be_visible
+    expect(page.get_by_title('Click to edit').filter(hasText: original_value.to_s).first).to be_visible
     expect(page.get_by_text(new_value.to_s).count).to eq(0)
-    expect(page.locator(".editable-inline").count).to eq(0)
+    expect(page.get_by_role('button', name: 'Cancel').count).to eq(0)
 
     # Refresh and verify the change was not saved
     visit estimation_path(estimation)
-    expect(page.locator("span.editable.value:has-text('#{original_value}')").first).to be_visible
+    expect(page.get_by_title('Click to edit').filter(hasText: original_value.to_s).first).to be_visible
     expect(page.get_by_text(new_value.to_s).count).to eq(0)
   end
 
@@ -111,20 +111,21 @@ feature "EscKeyCancellation", :type => :feature do
     expected_sum = original_quantity * original_value
     expect(initial_sum).to eq(expected_sum)
 
-    # Click to open editor
-    page.locator("span.editable.quantity").click
-    expect(page.locator(".editable-inline")).to be_visible
+    # Click to open editor - find quantity field in the copies column
+    page.locator(".copies [title='Click to edit']").filter(hasText: /^1$/).click
+    expect(page.get_by_role('button', name: 'Cancel')).to be_visible
 
-    # Change the value
-    input = page.locator(".editable-inline .editable-input input")
+    # Wait for editing state and change the value
+    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
+    input = page.locator(".editing input[name*='[quantity]']")
     input.fill(new_quantity.to_s)
 
     # Press ESC to cancel
     input.press('Escape')
 
-    # Verify the editor is closed
-    page.locator(".editable-inline").wait_for(state: 'hidden', timeout: 5000)
-    expect(page.locator(".editable-inline").count).to eq(0)
+    # Verify the display is visible again - wait for editing state to disappear
+    page.locator(".editing").wait_for(state: 'hidden', timeout: 5000)
+    expect(page.get_by_role('button', name: 'Cancel').count).to eq(0)
 
     # Verify the calculation values haven't changed (quantity was not changed)
     expect(page.locator("#sum").inner_text.to_i).to eq(initial_sum)

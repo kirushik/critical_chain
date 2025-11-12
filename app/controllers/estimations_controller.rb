@@ -53,14 +53,9 @@ class EstimationsController < ApplicationController
         else
           render turbo_stream: turbo_stream.append(
             "estimation_title",
-            content_tag(:script, "alert('#{@estimation.errors.full_messages.first}');")
+            ActionController::Base.helpers.content_tag(:script, "alert('#{@estimation.errors.full_messages.first}');")
           ), status: :unprocessable_entity
         end
-      end
-      format.json do
-        response_data = { success: result }
-        response_data[:msg] = @estimation.errors.full_messages.first unless result
-        render json: response_data
       end
       format.html do
         redirect_to estimation_path(@estimation)

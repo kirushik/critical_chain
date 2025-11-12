@@ -60,25 +60,9 @@ class EstimationItemsController < ApplicationController
         else
           render turbo_stream: turbo_stream.append(
             dom_id(@estimation),
-            content_tag(:script, "alert('#{@estimation_item.errors.full_messages.first}');")
+            ActionController::Base.helpers.content_tag(:script, "alert('#{@estimation_item.errors.full_messages.first}');")
           ), status: :unprocessable_entity
         end
-      end
-      format.json do
-        render json: { success: result,
-                 msg: @estimation_item.errors.full_messages.first,
-                 additionalValues: {
-            sum: @estimation.sum,
-            buffer: @estimation.buffer,
-            total: @estimation.total,
-            actual_sum: @estimation.actual_sum,
-            buffer_health: @estimation.buffer_health,
-            buffer_health_class: @estimation.buffer_health_class,
-            update_item_total: {
-              item: "#" + dom_id(@estimation_item),
-              total: @estimation_item.total,
-            },
-          } }
       end
       format.js
       format.html do

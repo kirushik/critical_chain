@@ -84,29 +84,22 @@ RSpec.describe EstimationItemsController, :type => :controller do
     let(:estimation_item) { FactoryBot.create :estimation_item, estimation: estimation }
 
     it "denies to update quantity to negative numbers" do
-      patch :update, params: { id: estimation_item.id, estimation_id: estimation.id, estimation_item: { quantity: -1 }, format: :json }, xhr: true
+      patch :update, params: { id: estimation_item.id, estimation_id: estimation.id, estimation_item: { quantity: -1 }, format: :turbo_stream }
 
-      expect(JSON.parse(response.body)["success"]).to be_falsey
+      expect(response.status).to eq(422)
+      expect(response.body).to include('alert')
     end
 
-    it "returns expected set of additional values" do
-      patch :update, params: { id: estimation_item.id, estimation_id: estimation.id, estimation_item: { a: 1 }, format: :json }, xhr: true
+    it "returns Turbo Stream with updated values" do
+      patch :update, params: { id: estimation_item.id, estimation_id: estimation.id, estimation_item: { value: 10 }, format: :turbo_stream }
       decorated_estimation = estimation.decorate
 
-      expect(JSON.parse(response.body)["additionalValues"]).to eq(
-        {
-          "buffer" => decorated_estimation.buffer,
-          "sum" => decorated_estimation.sum,
-          "total" => decorated_estimation.total,
-          "actual_sum" => decorated_estimation.actual_sum,
-          "buffer_health" => decorated_estimation.buffer_health,
-          "buffer_health_class" => decorated_estimation.buffer_health_class,
-          "update_item_total" => {
-            "item" => "#estimation_item_1",
-            "total" => decorated_estimation.estimation_items.first.total,
-          },
-        }
-      )
+      expect(response.content_type).to match(%r{text/vnd.turbo-stream})
+      expect(response.body).to include('turbo-stream')
+      # Check that the response includes updates for totals
+      expect(response.body).to include('id="total"')
+      expect(response.body).to include('id="sum"')
+      expect(response.body).to include('id="buffer"')
     end
 
     it "updates the order of an estimation item" do
@@ -116,9 +109,9 @@ RSpec.describe EstimationItemsController, :type => :controller do
 
       # Move item3 between item1 and item2
       new_order = 1.5
-      patch :update, params: { id: item3.id, estimation_id: estimation.id, estimation_item: { order: new_order }, format: :json }, xhr: true
+      patch :update, params: { id: item3.id, estimation_id: estimation.id, estimation_item: { order: new_order } }
 
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(:redirect)
       expect(item3.reload.order).to eq(new_order)
     end
 
@@ -128,11 +121,11 @@ RSpec.describe EstimationItemsController, :type => :controller do
 
       # Move item2 to first position (order should be 0.5)
       new_order = 0.5
-      patch :update, params: { id: item2.id, estimation_id: estimation.id, estimation_item: { order: new_order }, format: :json }, xhr: true
+      patch :update, params: { id: item2.id, estimation_id: estimation.id, estimation_item: { order: new_order } }
 
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(:redirect)
       expect(item2.reload.order).to eq(new_order)
-      
+
       # Verify items are in correct order
       items = estimation.reload.estimation_items.to_a
       expect(items[0]).to eq(item2)

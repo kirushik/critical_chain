@@ -17,14 +17,18 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
   scenario "I can modify the estimation item title", :playwright do
     expect(page.get_by_text(new_estimation_title).count).to eq(0)
 
-    page.locator("span.editable.title:has-text('#{estimation.estimation_items.first.title}')").click
-    page.locator(".editable-inline").wait_for(state: 'visible')
+    # Click on the title to edit
+    page.get_by_title('Click to edit').filter(hasText: estimation.estimation_items.first.title).click
 
-    page.locator(".editable-inline .editable-input input").fill(new_estimation_title)
-    page.locator(".editable-inline .editable-submit").click
+    # Form should be visible - check for Save button
+    expect(page.get_by_role('button', name: 'Save')).to be_visible
 
-    # Wait for the AJAX request to complete and the inline editor to disappear
-    page.locator(".editable-inline").wait_for(state: 'hidden')
+    # Fill in new title - scope to the .editing field
+    page.locator(".editing input[type='text'][name*='[title]']").fill(new_estimation_title)
+    page.get_by_role('button', name: 'Save').click
+
+    # Wait for the display to return with new title
+    page.get_by_title('Click to edit').filter(hasText: new_estimation_title).wait_for(state: 'visible', timeout: 5000)
 
     expect(page.get_by_text(new_estimation_title)).to be_visible
 
@@ -35,14 +39,19 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
   scenario "I can modify estimation item value", :playwright do
     expect(page.get_by_text(new_estimation_value.to_s, exact: true).count).to eq(0)
 
-    page.locator("span.editable.value:has-text('#{estimation.estimation_items.first.value}')").click
-    page.locator(".editable-inline .editable-input input").fill(new_estimation_value.to_s)
-    page.locator(".editable-inline .editable-submit").click
+    # Click on the value to edit
+    page.get_by_title('Click to edit').filter(hasText: estimation.estimation_items.first.value.to_s).click
 
-    # Wait for the AJAX request to complete
-    page.locator(".editable-inline").wait_for(state: 'hidden')
+    # Wait for the editing state to be active and form to be visible
+    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
 
-    expect(page.locator("span.editable.value:has-text('#{new_estimation_value}')").first).to be_visible
+    # Fill in new value - the input exists with correct type,selector without type is more reliable
+    page.locator(".editing input[name*='[value]']").fill(new_estimation_value.to_s)
+    page.get_by_role('button', name: 'Save').click
+
+    # Wait for the display to return with new value
+    page.get_by_title('Click to edit').filter(hasText: new_estimation_value.to_s).wait_for(state: 'visible', timeout: 5000)
+
     expect(page.get_by_text("7 + 7 = 14")).to be_visible
   end
 
@@ -54,18 +63,17 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     # Submit the form - press Enter or find submit button
     page.locator("#estimation_item_title").press("Enter")
 
-    # Wait for the new item to be added via AJAX by checking the count increased
-    page.locator("table.estimation-items-index span.editable.value").nth(initial_count).wait_for(state: 'visible', timeout: 5000)
+    # Wait for the new item to be added via AJAX - check for new editable field
+    page.get_by_title('Click to edit').filter(hasText: new_estimation_title).wait_for(state: 'visible', timeout: 5000)
 
-    # Verify all editable elements are present
-    expect(page.locator("table.estimation-items-index span.editable.value").count).to eq(estimation.estimation_items.count)
-    expect(page.locator("table.estimation-items-index span.editable.title").count).to eq(estimation.estimation_items.count)
-    expect(page.locator("table.estimation-items-index span.editable.quantity").count).to eq(estimation.estimation_items.count)
+    # Verify all editable fields are present (each has "Click to edit" title)
+    expect(page.locator("table.estimation-items-index [title='Click to edit']").count).to eq(estimation.estimation_items.count * 3) # title, value, quantity
 
-    # Click on the last item's value
-    page.locator("span.editable:has-text('#{estimation.estimation_items.last.value}')").click
+    # Click on the last item's value to verify it's editable
+    page.get_by_title('Click to edit').filter(hasText: estimation.estimation_items.last.value.to_s).click
 
-    page.locator(".editable-inline").wait_for(state: 'visible')
+    # Verify form is visible
+    expect(page.get_by_role('button', name: 'Save')).to be_visible
   end
 
   scenario "I can mark estimation item as fixed", :playwright do
@@ -78,27 +86,38 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
   end
 
   scenario "I can set the number for a batch", :playwright do
-    page.locator("span.editable.quantity").click
-    page.locator(".editable-inline .editable-input input").fill("4")
-    page.locator(".editable-inline .editable-submit").click
+    # Click on quantity to edit (should be "1" initially)
+    page.get_by_title('Click to edit').filter(hasText: /^1$/).click
 
-    page.locator(".editable-inline").wait_for(state: 'hidden')
+    # Wait for editing state to activate
+    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
+
+    # Fill in new quantity - scope to the .editing field
+    page.locator(".editing input[name*='[quantity]']").fill("4")
+    page.get_by_role('button', name: 'Save').click
+
+    # Wait for display to return
+    page.get_by_title('Click to edit').filter(hasText: '4').wait_for(state: 'visible', timeout: 5000)
 
     expect(page.get_by_text("#{4 * old_estimation_value} + #{2 * old_estimation_value} = #{6 * old_estimation_value}")).to be_visible
   end
 
   scenario "I can see updated total when estimation or count has been changed", :playwright do
-    page.locator("span.editable.quantity").click
-    page.locator(".editable-inline .editable-input input").fill("20")
-    page.locator(".editable-inline .editable-submit").click
+    # Click on quantity to edit
+    page.get_by_title('Click to edit').filter(hasText: /^1$/).click
+    page.locator(".editing input[name*='[quantity]']").fill("20")
+    page.get_by_role('button', name: 'Save').click
 
-    page.locator(".editable-inline").wait_for(state: 'hidden')
+    # Wait for display to return
+    page.get_by_title('Click to edit').filter(hasText: '20').wait_for(state: 'visible', timeout: 5000)
 
-    page.locator("span.editable.value").click
-    page.locator(".editable-inline .editable-input input").fill("17")
-    page.locator(".editable-inline .editable-submit").click
+    # Now edit the value
+    page.get_by_title('Click to edit').filter(hasText: old_estimation_value.to_s).click
+    page.locator(".editing input[name*='[value]']").fill("17")
+    page.get_by_role('button', name: 'Save').click
 
-    page.locator(".editable-inline").wait_for(state: 'hidden')
+    # Wait for display to return
+    page.get_by_title('Click to edit').filter(hasText: '17').wait_for(state: 'visible', timeout: 5000)
 
     expect(page.get_by_text("= 340")).to be_visible
   end
