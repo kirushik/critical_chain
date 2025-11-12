@@ -18,7 +18,7 @@ module EditableHelper
                 }) do
       # Display state (visible by default)
       display = content_tag(:span,
-                           display_value,
+                           h(display_value),
                            class: 'editable-display',
                            data: {
                              action: 'click->editable#edit',

@@ -60,7 +60,7 @@ class EstimationItemsController < ApplicationController
         else
           render turbo_stream: turbo_stream.append(
             dom_id(@estimation),
-            ActionController::Base.helpers.content_tag(:script, "alert('#{@estimation_item.errors.full_messages.first}');")
+            ActionController::Base.helpers.content_tag(:script, "alert('#{j(@estimation_item.errors.full_messages.first) || "Update failed"}');")
           ), status: :unprocessable_entity
         end
       end
