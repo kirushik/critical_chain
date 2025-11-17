@@ -4,17 +4,17 @@
     draggable="true"
     data-action="dragstart->sortable#dragStart dragend->sortable#dragEnd dragover->sortable#dragOver">
   <td class="has-text-right">
-    <span class="is-size-5 has-text-weight-semibold">
     <% if estimation_item.quantity > 1 %>
       <span class="is-size-7 has-text-grey"><%= "#{estimation_item.quantity}×#{estimation_item.value}=" %></span>
     <% end %>
+    <span class="has-text-weight-medium">
       <%= estimation_item.value * estimation_item.quantity %>
     </span>
   </td>
 
-  <td>
+  <td class="has-text-centered" style="width: 80px;">
     <% if estimation_item.fixed? %>
-      <span class="fa fa-dot-circle-o"></span>
+      <span class="fa fa-dot-circle-o has-text-grey-light"></span>
     <% end %>
   </td>
 

@@ -1,10 +1,10 @@
 <%= form_with model: [@estimation, EstimationItem.new] do |f| %>
-  <div class="field is-grouped">
-    <div class="control">
-      <%= f.number_field :value, id: 'estimation_item_value', class: 'input value', placeholder: 'Value', autofocus: true %>
+  <div class="field has-addons">
+    <div class="control" style="width: 8em;">
+      <%= f.number_field :value, id: 'estimation_item_value', class: 'input', placeholder: 'Value', autofocus: true %>
     </div>
     <div class="control is-expanded">
-      <%= f.text_field :title, id: 'estimation_item_title', class: 'input title', placeholder: 'Item title (optional)' %>
+      <%= f.text_field :title, id: 'estimation_item_title', class: 'input', placeholder: 'Item title (optional)' %>
     </div>
     <div class="control">
       <%= f.button class: 'button is-success', value: 'Add estimation item', type: :submit do %>

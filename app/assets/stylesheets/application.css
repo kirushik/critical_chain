@@ -1,9 +1,6 @@
 /* Custom application styles for Bulma */
 
-/* Form field sizing */
-.input.value {
-    width: 6em;
-}
+/* Form field sizing - removed, now using inline styles for better control */
 
 /* Results table styling */
 #results-table {
@@ -21,9 +18,13 @@
 
 /* Toggle button alignment */
 .toggle-fixed {
-    padding: 0;
+    padding: 0.25rem;
     border: none;
     background: none;
+}
+
+.toggle-fixed:hover {
+    background-color: transparent !important;
 }
 
 .toggle-tracking {
@@ -37,6 +38,11 @@
 
 /* Multiplier spacing */
 .multiplier {
+    margin-left: 0.5rem;
+    margin-right: 0.25rem;
+}
+
+.multiplier-total {
     margin-left: 0.5rem;
     margin-right: 0.25rem;
 }

@@ -2,20 +2,12 @@
   <td>
     <%= link_to estimation.title, estimation, class: 'has-text-dark has-text-weight-medium' %>
   </td>
-  <td class="has-text-right has-text-success has-text-weight-semibold">
-    <%= estimation.sum %>
-  </td>
-  <td class="has-text-centered has-text-grey-light">
-    <small>+</small>
-  </td>
-  <td class="has-text-right has-text-info has-text-weight-semibold">
-    <%= estimation.buffer %>
-  </td>
-  <td class="has-text-centered has-text-grey-light">
-    <small>=</small>
-  </td>
-  <td class="has-text-right has-text-warning has-text-weight-semibold">
-    <%= estimation.total %>
+  <td class="has-text-right">
+    <span class="has-text-success has-text-weight-semibold"><%= estimation.sum %></span>
+    <span class="has-text-grey-light"> + </span>
+    <span class="has-text-info has-text-weight-semibold"><%= estimation.buffer %></span>
+    <span class="has-text-grey-light"> = </span>
+    <span class="has-text-warning has-text-weight-semibold"><%= estimation.total %></span>
   </td>
   <td class="has-text-centered">
     <%= button_to estimation,
