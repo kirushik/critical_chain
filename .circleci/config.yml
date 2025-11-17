@@ -4,7 +4,7 @@ jobs:
   build:
     parallelism: 2
     docker:
-      - image: cimg/ruby:3.3.7-node
+      - image: cimg/ruby:3.3.8-node
         environment:
           BUNDLE_JOBS: 3
           BUNDLE_RETRY: 3
