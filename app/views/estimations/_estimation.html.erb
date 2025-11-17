@@ -1,18 +1,28 @@
-<div class='list-group-item estimation-item' id="<%= dom_id(estimation) %>">
-  <%= link_to estimation.title, estimation %>
-  <div class="removal-button pull-right">
+<div class='box estimation-item' id="<%= dom_id(estimation) %>">
+  <div class="removal-button">
     <%= button_to estimation,
                   method: :delete,
                   data: { turbo_confirm: 'Are you sure you want to delete this estimation?' },
-                  class: 'close' do %>
-      <span>&times;</span>
+                  class: 'delete is-medium' do %>
     <% end %>
   </div>
-  <%= link_to estimation, class: 'text-muted pull-right' do %>
-    <span class="text-success"><strong><%= estimation.sum %></strong></span>
-    +
-    <span class="text-info"><strong><%= estimation.buffer %></strong></span>
-    =
-    <span class="text-warning"><strong><%= estimation.total %></strong></span>
-  <% end %>
+
+  <div class="level is-mobile">
+    <div class="level-left">
+      <div class="level-item">
+        <%= link_to estimation.title, estimation, class: 'has-text-dark' %>
+      </div>
+    </div>
+    <div class="level-right">
+      <div class="level-item">
+        <%= link_to estimation, class: 'has-text-grey' do %>
+          <span class="has-text-success"><strong><%= estimation.sum %></strong></span>
+          +
+          <span class="has-text-info"><strong><%= estimation.buffer %></strong></span>
+          =
+          <span class="has-text-warning"><strong><%= estimation.total %></strong></span>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,52 +1,52 @@
-/* Custom application styles */
+/* Custom application styles for Bulma */
 
-.form-inline .form-control.value {
+/* Form field sizing */
+.input.value {
     width: 6em;
 }
 
+/* Results table styling */
 #results-table {
-    margin-top: 15px;
+    margin-top: 1rem;
 }
 
 #results-table td {
-    padding-right: 6px;
+    padding-right: 0.5rem;
 }
 
-.list-group-item .removal-button {
-    margin-top: -1px;
-    margin-right: -4px;
-    margin-left: 10px;
+/* Removal button positioning */
+.box .removal-button {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
 }
 
+/* Toggle button alignment */
 .toggle-fixed {
-    margin-left: -12px;
+    padding: 0;
+    border: none;
+    background: none;
 }
 
 .toggle-tracking {
-    margin-left: -11px;
-    margin-top: -1px;
+    padding: 0;
 }
 
+/* Copies icon spacing */
 .copies > i.fa-copy {
-    margin-top: 10px;
+    margin-right: 0.3rem;
 }
 
+/* Multiplier spacing */
 .multiplier {
-    margin-left: 0.7em;
+    margin-left: 0.5rem;
+    margin-right: 0.25rem;
 }
 
+/* Turbo progress bar styling */
 .turbo-progress-bar {
     height: 5px;
-    background-color: blue;
-}
-
-#estimations-index {
-    margin-top: 1.2em;
-    margin-bottom: 0.6em;
-}
-
-.estimation-items-index {
-    margin-top: 1.2em;
+    background-color: hsl(204, 86%, 53%); /* Bulma's $blue */
 }
 
 /* Editable field container */
@@ -56,7 +56,7 @@
 
 /* Display state (default - visible) */
 .editable-field .editable-display {
-    border-bottom: 1px dashed #999;
+    border-bottom: 1px dashed hsl(0, 0%, 48%); /* Bulma grey-dark */
     position: relative;
     display: inline-block;
 }
@@ -64,7 +64,7 @@
 .editable-field .editable-display:hover::after {
     content: '\270E'; /* Pencil icon */
     margin-left: 0.3em;
-    color: #666;
+    color: hsl(0, 0%, 40%); /* Bulma grey */
     font-size: 0.9em;
 }
 
@@ -82,15 +82,116 @@
     display: inline-block;
 }
 
-/* Bootstrap input-group styling for inline forms */
-.editable-form .input-group {
+/* Bulma field styling for inline forms */
+.editable-form .field {
     width: auto;
+}
+
+.editable-form .field.has-addons {
+    display: inline-flex;
 }
 
 /* Highlight flash animation */
 @keyframes highlight-flash {
-    0% { background-color: #fff3cd; }
+    0% { background-color: hsl(48, 100%, 67%); /* Bulma warning light */ }
     100% { background-color: transparent; }
+}
+
+/* Additional Bulma customizations */
+.container {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Mobile-friendly drag handle */
+.drag-handle {
+    cursor: move;
+    width: 40px; /* Slightly larger for better touch targets */
+    padding: 0.5rem;
+}
+
+@media screen and (max-width: 768px) {
+    .drag-handle {
+        width: 50px; /* Even larger on mobile */
+    }
+}
+
+/* Better spacing for icons in forms */
+.icon {
+    pointer-events: none;
+}
+
+/* Ensure buttons in forms align properly */
+.field.has-addons .control:not(:last-child) {
+    margin-right: 0;
+}
+
+/* Box positioning context for absolute positioning */
+.box {
+    position: relative;
+}
+
+/* Estimation items spacing */
+.estimation-items-index {
+    margin-top: 1.5rem;
+}
+
+/* Estimation index spacing */
+#estimations-index {
+    margin-top: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Better mobile table responsiveness */
+@media screen and (max-width: 768px) {
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .field.is-grouped {
+        flex-wrap: wrap;
+    }
+
+    .field.is-grouped > .control {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Ensure small inputs in editable fields are appropriately sized */
+.field.is-small .input {
+    min-width: 4em;
+}
+
+/* Better notification spacing */
+.notification {
+    margin-bottom: 0;
+}
+
+/* Level component mobile improvements */
+.level.is-mobile {
+    flex-wrap: wrap;
+}
+
+@media screen and (max-width: 768px) {
+    .level-item {
+        margin-right: 0.75rem;
+    }
+}
+
+/* Title styling improvements */
+#estimation_title h1 {
+    margin-bottom: 1rem;
+}
+
+/* Smooth transitions for interactive elements */
+.button, .input, .box {
+    transition: all 0.2s ease;
+}
+
+/* Better hover states for boxes */
+.box:hover {
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
 }
 
 .highlight-flash {

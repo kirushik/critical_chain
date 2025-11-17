@@ -1,15 +1,18 @@
-<div class="col-lg-6 offest-lg-3 col-md-8 offset-md-2">
-  <div class="list-group" data-no-turbolink id="estimations-index">
-    <%= render @estimations %>
-  </div>
-
-  <%= form_for Estimation.new, html: {class: 'form-inline'} do |f| %>
-    <div class="input-group">
-      <%= f.text_field :title, class: 'form-control', placeholder: 'New list title' %>
-
-      <div class="input-group-append">
-        <%= f.submit 'Create estimation', class: 'btn btn-success' %>
-      </div>
+<div class="columns is-centered">
+  <div class="column is-8-desktop is-10-tablet">
+    <div id="estimations-index">
+      <%= render @estimations %>
     </div>
-  <% end %>
+
+    <%= form_for Estimation.new do |f| %>
+      <div class="field has-addons">
+        <div class="control is-expanded">
+          <%= f.text_field :title, class: 'input', placeholder: 'New list title' %>
+        </div>
+        <div class="control">
+          <%= f.submit 'Create estimation', class: 'button is-success' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>

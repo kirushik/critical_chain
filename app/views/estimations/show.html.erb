@@ -4,19 +4,21 @@
   <h1><%= @estimation.editable :title %></h1>
 </div>
 
-<div class="row">
-  <div class="col-md-6">
-    <table id="<%= dom_id @estimation %>" 
-           class="table table-hover estimation-items-index"
-           data-controller="sortable"
-           data-sortable-update-url="<%= estimation_estimation_items_path(@estimation) %>">
-      <tbody>
-        <%= render partial: @estimation.items_partial_name, collection: @estimation.estimation_items, as: :estimation_item %>
-      </tbody>
-    </table>
+<div class="columns">
+  <div class="column is-7">
+    <div class="table-container">
+      <table id="<%= dom_id @estimation %>"
+             class="table is-hoverable is-fullwidth estimation-items-index"
+             data-controller="sortable"
+             data-sortable-update-url="<%= estimation_estimation_items_path(@estimation) %>">
+        <tbody>
+          <%= render partial: @estimation.items_partial_name, collection: @estimation.estimation_items, as: :estimation_item %>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <div class="col-md-5 offset-md-1">
+  <div class="column is-5">
     <div id="mode_toggle">
       <%= render 'mode_toggle' %>
     </div>

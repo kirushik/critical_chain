@@ -1,22 +1,22 @@
 <% if @estimation.tracking_mode? %>
 
-  <h4>
-    <span class="text-success" id="actual_sum"><%= @estimation.actual_sum %></span>
+  <h4 class="title is-4">
+    <span class="has-text-success" id="actual_sum"><%= @estimation.actual_sum %></span>
     out of
-    <span id="total" class="text-warning"><%= @estimation.total %></span>
+    <span id="total" class="has-text-warning"><%= @estimation.total %></span>
   </h4>
 
 <% else %>
 
   <table id="results-table">
-    <tr class="lead">
-      <td class="text-success" id="sum"><%= @estimation.sum %></td>
-      <td class="text-muted"><small>+</small></td>
-      <td class="text-info" id="buffer"><%= @estimation.buffer %></td>
-      <td class="text-muted"><small>=</small></td>
-      <td class="text-warning" id="total"><%= @estimation.total %></td>
+    <tr class="is-size-5">
+      <td class="has-text-success" id="sum"><%= @estimation.sum %></td>
+      <td class="has-text-grey"><small>+</small></td>
+      <td class="has-text-info" id="buffer"><%= @estimation.buffer %></td>
+      <td class="has-text-grey"><small>=</small></td>
+      <td class="has-text-warning" id="total"><%= @estimation.total %></td>
     </tr>
-    <tr class="text-muted text-center">
+    <tr class="has-text-grey has-text-centered">
       <td><small>Sum</small></td>
       <td></td>
       <td><small>Buffer</small></td>

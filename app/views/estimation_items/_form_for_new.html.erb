@@ -1,14 +1,16 @@
-<%= form_with model: [@estimation, EstimationItem.new],
-             html: { class: 'form-inline' } do |f| %>
-  <div class="input-group">
-    <%= f.number_field :value, id: 'estimation_item_value', class: 'form-control value', placeholder: 'Value', autofocus: true %>
-  </div>
-  <div class="input-group">
-    <%= f.text_field :title, id: 'estimation_item_title', class: 'form-control title', placeholder: 'Item title (optional)' %>
-
-    <div class="input-group-append">
-      <%= f.button class: 'btn btn-success', value: 'Add estimation item', type: :submit do %>
-        <i class="fa-solid fa-circle-plus"></i>
+<%= form_with model: [@estimation, EstimationItem.new] do |f| %>
+  <div class="field is-grouped">
+    <div class="control">
+      <%= f.number_field :value, id: 'estimation_item_value', class: 'input value', placeholder: 'Value', autofocus: true %>
+    </div>
+    <div class="control is-expanded">
+      <%= f.text_field :title, id: 'estimation_item_title', class: 'input title', placeholder: 'Item title (optional)' %>
+    </div>
+    <div class="control">
+      <%= f.button class: 'button is-success', value: 'Add estimation item', type: :submit do %>
+        <span class="icon">
+          <i class="fa-solid fa-circle-plus"></i>
+        </span>
       <% end %>
     </div>
   </div>
