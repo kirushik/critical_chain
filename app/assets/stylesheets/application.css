@@ -14,11 +14,9 @@
     padding-right: 0.5rem;
 }
 
-/* Removal button positioning */
-.box .removal-button {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
+/* Table row hover enhancement */
+.estimation-item:hover {
+    background-color: hsl(0, 0%, 98%) !important;
 }
 
 /* Toggle button alignment */
@@ -126,10 +124,6 @@
     margin-right: 0;
 }
 
-/* Box positioning context for absolute positioning */
-.box {
-    position: relative;
-}
 
 /* Estimation items spacing */
 .estimation-items-index {
@@ -138,8 +132,16 @@
 
 /* Estimation index spacing */
 #estimations-index {
-    margin-top: 1.2rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
+}
+
+/* Make estimation title links more prominent */
+#estimations-index td a {
+    text-decoration: none;
+}
+
+#estimations-index td a:hover {
+    text-decoration: underline;
 }
 
 /* Better mobile table responsiveness */
@@ -168,16 +170,6 @@
     margin-bottom: 0;
 }
 
-/* Level component mobile improvements */
-.level.is-mobile {
-    flex-wrap: wrap;
-}
-
-@media screen and (max-width: 768px) {
-    .level-item {
-        margin-right: 0.75rem;
-    }
-}
 
 /* Title styling improvements */
 #estimation_title h1 {
@@ -185,13 +177,8 @@
 }
 
 /* Smooth transitions for interactive elements */
-.button, .input, .box {
+.button, .input {
     transition: all 0.2s ease;
-}
-
-/* Better hover states for boxes */
-.box:hover {
-    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
 }
 
 .highlight-flash {

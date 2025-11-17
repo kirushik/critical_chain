@@ -1,13 +1,32 @@
 <div class="columns is-centered">
-  <div class="column is-8-desktop is-10-tablet">
+  <div class="column is-10-desktop is-11-tablet">
     <div id="estimations-index">
-      <%= render @estimations %>
+      <% if @estimations.any? %>
+        <div class="table-container">
+          <table class="table is-hoverable is-fullwidth is-striped">
+            <thead>
+              <tr>
+                <th>Estimation</th>
+                <th class="has-text-right">Sum</th>
+                <th class="has-text-centered">+</th>
+                <th class="has-text-right">Buffer</th>
+                <th class="has-text-centered">=</th>
+                <th class="has-text-right">Total</th>
+                <th class="has-text-centered" style="width: 60px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= render @estimations %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
     </div>
 
     <%= form_for Estimation.new do |f| %>
-      <div class="field has-addons">
+      <div class="field has-addons mt-4">
         <div class="control is-expanded">
-          <%= f.text_field :title, class: 'input', placeholder: 'New list title' %>
+          <%= f.text_field :title, class: 'input', placeholder: 'New estimation title' %>
         </div>
         <div class="control">
           <%= f.submit 'Create estimation', class: 'button is-success' %>
