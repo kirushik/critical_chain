@@ -2,10 +2,16 @@
 // Run that command whenever you add a new controller or create them with
 // ./bin/rails generate stimulus controllerName
 
-import { application } from "controllers/application"
+import { application } from "./application"
 
-import EditableController from "controllers/editable_controller"
+import EditableController from "./editable_controller"
 application.register("editable", EditableController)
 
-import SortableController from "controllers/sortable_controller"
+import NavbarController from "./navbar_controller"
+application.register("navbar", NavbarController)
+
+import NotificationController from "./notification_controller"
+application.register("notification", NotificationController)
+
+import SortableController from "./sortable_controller"
 application.register("sortable", SortableController)

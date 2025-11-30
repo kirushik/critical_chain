@@ -1,6 +1,46 @@
 /* Custom application styles for Bulma */
 
 /* ==========================================================================
+   CSS CUSTOM PROPERTIES
+   ========================================================================== */
+
+:root {
+  /* Brand colors */
+  --color-primary: hsl(204, 86%, 53%);
+  --color-success: hsl(141, 53%, 31%);
+  --color-success-light: hsl(141, 53%, 41%);
+  --color-info: hsl(206, 70%, 41%);
+  --color-warning: hsl(44, 100%, 32%);
+  --color-danger: hsl(348, 86%, 61%);
+  --color-turbo: hsl(171, 100%, 41%);
+
+  /* Neutral grays */
+  --color-gray-lightest: hsl(0, 0%, 86%);
+  --color-gray-light: hsl(0, 0%, 80%);
+  --color-gray-medium: hsl(0, 0%, 71%);
+  --color-gray-dark: hsl(0, 0%, 48%);
+  --color-text: hsl(0, 0%, 21%);
+  --color-text-light: hsl(0, 0%, 29%);
+
+  /* Background colors */
+  --bg-highlight: hsl(48, 100%, 96%);
+  --bg-sum: hsl(141, 53%, 93%);
+  --bg-buffer: hsl(206, 70%, 93%);
+  --bg-total: hsl(44, 100%, 90%);
+  --bg-muted: hsl(0, 0%, 98%);
+  --bg-dragging: hsl(48, 100%, 96%);
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.3s ease;
+
+  /* Spacing (matching Bulma) */
+  --gap-small: 0.25rem;
+  --gap-medium: 0.5rem;
+  --gap-large: 0.75rem;
+}
+
+/* ==========================================================================
    ESTIMATION ITEMS TABLE - Layout Stability
    ========================================================================== */
 
@@ -47,18 +87,18 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: hsl(0, 0%, 71%);
-    transition: color 0.2s ease;
+    color: var(--color-gray-medium);
+    transition: color var(--transition-fast);
 }
 
 .drag-handle:hover {
-    color: hsl(0, 0%, 48%);
+    color: var(--color-gray-dark);
 }
 
 /* Dragging state */
 tr.dragging {
     opacity: 0.5;
-    background-color: hsl(48, 100%, 96%);
+    background-color: var(--bg-dragging);
 }
 
 /* ==========================================================================
@@ -68,13 +108,13 @@ tr.dragging {
 .calculation-group {
     display: inline-flex;
     align-items: baseline;
-    gap: 0.25rem;
+    gap: var(--gap-small);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
 }
 
 .calculation-group .quantity {
-    color: hsl(0, 0%, 48%);
+    color: var(--color-gray-dark);
     font-size: 0.875rem;
 }
 
@@ -87,13 +127,13 @@ tr.dragging {
 }
 
 .calculation-group .equals {
-    color: hsl(0, 0%, 71%);
+    color: var(--color-gray-medium);
     margin: 0 0.125rem;
 }
 
 .calculation-group .total {
     font-weight: 600;
-    color: hsl(0, 0%, 29%);
+    color: var(--color-text-light);
     min-width: 2em;
     text-align: right;
 }
@@ -105,12 +145,12 @@ tr.dragging {
 .col-title {
     font-size: 1.05rem;
     font-weight: 500;
-    color: hsl(0, 0%, 21%);
+    color: var(--color-text);
     letter-spacing: -0.01em;
 }
 
 .col-title .editable-field .editable-display {
-    border-bottom-color: hsl(0, 0%, 86%);
+    border-bottom-color: var(--color-gray-lightest);
 }
 
 /* ==========================================================================
@@ -121,28 +161,30 @@ tr.dragging {
     display: inline;
 }
 
-.fixed-button {
-    border: none !important;
-    background: transparent !important;
+button.fixed-button.button {
+    border: none;
+    background: transparent;
+    box-shadow: none;
     padding: 0.25rem;
     cursor: pointer;
     transition:
-        transform 0.2s ease,
-        color 0.2s ease;
+        transform var(--transition-fast),
+        color var(--transition-fast);
 }
 
-.fixed-button:hover {
+button.fixed-button.button:hover {
     transform: scale(1.2);
-    background: transparent !important;
+    background: transparent;
+    box-shadow: none;
 }
 
 .fixed-button.is-active,
 .fixed-button .fa-thumbtack {
-    color: hsl(204, 86%, 53%);
+    color: var(--color-primary);
 }
 
 .fixed-button .fa-circle {
-    color: hsl(0, 0%, 86%);
+    color: var(--color-gray-lightest);
 }
 
 /* ==========================================================================
@@ -152,16 +194,16 @@ tr.dragging {
 .tracking-toggle-container {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--gap-large);
     padding: 0.75rem 1rem;
-    background: hsl(0, 0%, 98%);
+    background: var(--bg-muted);
     border-radius: 6px;
     margin-bottom: 1rem;
 }
 
 .tracking-toggle-label {
     font-weight: 500;
-    color: hsl(0, 0%, 29%);
+    color: var(--color-text-light);
     user-select: none;
 }
 
@@ -169,11 +211,11 @@ tr.dragging {
     position: relative;
     width: 50px;
     height: 28px;
-    background: hsl(0, 0%, 86%);
+    background: var(--color-gray-lightest);
     border: none;
     border-radius: 14px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color var(--transition-medium);
     padding: 0;
 }
 
@@ -182,7 +224,7 @@ tr.dragging {
 }
 
 .tracking-toggle-button.is-active {
-    background: hsl(171, 100%, 41%);
+    background: var(--color-turbo);
 }
 
 .tracking-toggle-button.is-active:hover {
@@ -197,7 +239,7 @@ tr.dragging {
     height: 22px;
     background: white;
     border-radius: 50%;
-    transition: transform 0.3s ease;
+    transition: transform var(--transition-medium);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -217,7 +259,7 @@ tr.dragging {
 .estimation-summary .summary-row {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--gap-medium);
     flex-wrap: wrap;
 }
 
@@ -231,32 +273,32 @@ tr.dragging {
 }
 
 .estimation-summary .summary-item.is-sum {
-    background: hsl(141, 53%, 93%);
+    background: var(--bg-sum);
 }
 
 .estimation-summary .summary-item.is-sum .summary-value {
-    color: hsl(141, 53%, 31%);
+    color: var(--color-success);
 }
 
 .estimation-summary .summary-item.is-buffer {
-    background: hsl(206, 70%, 93%);
+    background: var(--bg-buffer);
 }
 
 .estimation-summary .summary-item.is-buffer .summary-value {
-    color: hsl(206, 70%, 41%);
+    color: var(--color-info);
 }
 
 .estimation-summary .summary-item.is-total {
-    background: hsl(44, 100%, 90%);
+    background: var(--bg-total);
 }
 
 .estimation-summary .summary-item.is-total .summary-value {
-    color: hsl(44, 100%, 32%);
+    color: var(--color-warning);
 }
 
 .estimation-summary .summary-label {
     font-size: 0.75rem;
-    color: hsl(0, 0%, 48%);
+    color: var(--color-gray-dark);
     text-transform: uppercase;
     letter-spacing: 0.025em;
 }
@@ -267,9 +309,9 @@ tr.dragging {
 }
 
 .estimation-summary .summary-operator {
-    color: hsl(0, 0%, 71%);
+    color: var(--color-gray-medium);
     font-size: 1.25rem;
-    padding: 0 0.25rem;
+    padding: 0 var(--gap-small);
 }
 
 /* Tracking mode results */
@@ -283,7 +325,7 @@ tr.dragging {
 }
 
 .tracking-results .tracking-progress .actual {
-    color: hsl(141, 53%, 41%);
+    color: var(--color-success-light);
 }
 
 .tracking-results .tracking-progress .total {
@@ -316,17 +358,17 @@ tr.dragging {
 
 /* Display state (default - visible) */
 .editable-field .editable-display {
-    border-bottom: 1px dashed hsl(0, 0%, 80%);
+    border-bottom: 1px dashed var(--color-gray-light);
     position: relative;
     display: inline-block;
     cursor: pointer;
     padding: 0.125rem 0.25rem;
     border-radius: 2px;
-    transition: background-color 0.2s ease;
+    transition: background-color var(--transition-fast);
 }
 
 .editable-field .editable-display:hover {
-    background-color: hsl(48, 100%, 96%);
+    background-color: var(--bg-highlight);
 }
 
 /* Pencil icon - tiny, top-right, overlaid */
@@ -338,7 +380,7 @@ tr.dragging {
     font-size: 0.65em;
     color: hsl(0, 0%, 70%);
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity var(--transition-fast);
     pointer-events: none;
     z-index: 10;
     text-shadow:
@@ -393,7 +435,7 @@ tr.dragging {
 
 .estimation-items-index .delete-button {
     opacity: 0.6;
-    transition: opacity 0.2s ease;
+    transition: opacity var(--transition-fast);
 }
 
 .estimation-items-index tr:hover .delete-button {
@@ -423,7 +465,7 @@ tr.dragging {
 
 .turbo-progress-bar {
     height: 3px;
-    background-color: hsl(171, 100%, 41%);
+    background-color: var(--color-turbo);
 }
 
 /* ==========================================================================
@@ -467,7 +509,7 @@ tr.dragging {
 /* Smooth transitions for interactive elements */
 .button,
 .input {
-    transition: all 0.2s ease;
+    transition: all var(--transition-fast);
 }
 
 /* ==========================================================================
@@ -551,11 +593,11 @@ tr.dragging {
 .estimation-title {
     font-size: 1.05rem;
     font-weight: 500;
-    color: hsl(0, 0%, 21%);
+    color: var(--color-text);
 }
 
 .estimation-row:hover .estimation-title {
-    color: hsl(204, 86%, 53%);
+    color: var(--color-primary);
     text-decoration: underline;
 }
 
@@ -574,36 +616,30 @@ tr.dragging {
     font-variant-numeric: tabular-nums;
 }
 
-.estimation-calculation-cell .calculation-group {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.3rem;
-}
-
 .estimation-calculation-cell .calculation-value {
     font-weight: 600;
 }
 
 /* Planning mode colors - match show view */
 .estimation-calculation-cell .calculation-value.is-sum {
-    color: hsl(141, 53%, 31%);
+    color: var(--color-success);
 }
 
 .estimation-calculation-cell .calculation-value.is-buffer {
-    color: hsl(206, 70%, 41%);
+    color: var(--color-info);
 }
 
 .estimation-calculation-cell .calculation-value.is-total {
-    color: hsl(44, 100%, 32%);
+    color: var(--color-warning);
 }
 
 /* Tracking mode colors */
 .estimation-calculation-cell .calculation-value.is-actual {
-    color: hsl(141, 53%, 41%);
+    color: var(--color-success-light);
 }
 
 .estimation-calculation-cell .calculation-operator {
-    color: hsl(0, 0%, 71%);
+    color: var(--color-gray-medium);
     font-size: 0.875rem;
 }
 
@@ -612,40 +648,41 @@ tr.dragging {
     display: inline-block;
     width: 1px;
     height: 1em;
-    background-color: hsl(0, 0%, 86%);
-    margin: 0 0.25rem;
+    background-color: var(--color-gray-lightest);
+    margin: 0 var(--gap-small);
     vertical-align: middle;
 }
 
 /* Actions cell - stable delete button */
 
-.delete-estimation-button {
+button.delete-estimation-button.button {
     opacity: 0.5;
     transition:
-        opacity 0.2s ease,
-        background-color 0.2s ease;
+        opacity var(--transition-fast),
+        background-color var(--transition-fast),
+        border-color var(--transition-fast);
     /* Prevent jumpiness: consistent border in all states */
-    border: 1px solid transparent !important;
+    border: 1px solid transparent;
 }
 
 .estimation-row:hover .delete-estimation-button {
     opacity: 1;
 }
 
-.delete-estimation-button:hover {
+button.delete-estimation-button.button:hover {
     opacity: 1;
-    border-color: hsl(348, 86%, 61%) !important;
+    border-color: var(--color-danger);
 }
 
 /* Empty state */
 .empty-state {
     padding: 3rem 1.5rem;
-    background-color: hsl(0, 0%, 98%);
+    background-color: var(--bg-muted);
     border-radius: 6px;
 }
 
 .empty-state p:first-child {
-    color: hsl(0, 0%, 29%);
+    color: var(--color-text-light);
 }
 
 /* ==========================================================================
@@ -655,13 +692,13 @@ tr.dragging {
 .buffer-consumption {
     margin-top: 1.5rem;
     padding: 1rem;
-    background: hsl(0, 0%, 98%);
+    background: var(--bg-muted);
     border-radius: 6px;
 }
 
 .buffer-consumption .buffer-label {
     font-size: 0.875rem;
-    color: hsl(0, 0%, 48%);
+    color: var(--color-gray-dark);
     margin-bottom: 0.5rem;
 }
 
@@ -761,7 +798,7 @@ tr.dragging {
 .button:focus,
 .input:focus,
 .editable-display:focus {
-    outline: 2px solid hsl(204, 86%, 53%);
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
 }
 
