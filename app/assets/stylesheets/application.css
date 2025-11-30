@@ -471,19 +471,181 @@ tr.dragging {
 }
 
 /* ==========================================================================
-   ESTIMATION INDEX TABLE
+   ESTIMATIONS INDEX PAGE
    ========================================================================== */
 
 #estimations-index {
     margin-bottom: 0;
 }
 
-#estimations-index td a {
+/* Table layout and column widths */
+.estimations-table {
+    table-layout: fixed;
+}
+
+.estimations-table .col-estimation-title {
+    width: auto;
+}
+
+.estimations-table .col-estimation-mode {
+    width: 110px;
+}
+
+.estimations-table .col-estimation-calculation {
+    width: 200px;
+}
+
+.estimations-table .col-estimation-actions {
+    width: 60px;
+}
+
+/* Row styling */
+.estimation-row {
+    position: relative;
+    transition: background-color 0.15s ease;
+}
+
+.estimation-row:hover {
+    background-color: hsl(0, 0%, 96%);
+}
+
+/* Remove padding from all cells - wrappers handle it */
+.estimation-row td {
+    padding: 0;
+}
+
+/* Consistent flex wrapper for cell content alignment */
+.estimation-row .cell-content {
+    display: flex;
+    align-items: center;
+    min-height: 3rem;
+    padding: 0.5em 0.75em;
+}
+
+.estimation-row .cell-content.has-text-centered {
+    justify-content: center;
+}
+
+.estimation-row .cell-content.has-text-right {
+    justify-content: flex-end;
+}
+
+/* Clickable row link - stretches across title cell */
+.estimation-title-cell {
+    position: relative;
+}
+
+.estimation-row-link {
+    display: flex;
+    align-items: center;
+    min-height: 3rem;
+    padding: 0.5em 0.75em;
+    text-decoration: none;
+    color: inherit;
+}
+
+.estimation-row-link:hover {
     text-decoration: none;
 }
 
-#estimations-index td a:hover {
+.estimation-title {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: hsl(0, 0%, 21%);
+}
+
+.estimation-row:hover .estimation-title {
+    color: hsl(204, 86%, 53%);
     text-decoration: underline;
+}
+
+/* Mode indicator cell */
+
+.estimation-mode-cell .tag {
+    font-size: 0.75rem;
+}
+
+.estimation-mode-cell .tag .icon {
+    margin-right: 0.25em;
+}
+
+/* Calculation cell */
+.estimation-calculation-cell {
+    font-variant-numeric: tabular-nums;
+}
+
+.estimation-calculation-cell .calculation-group {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3rem;
+}
+
+.estimation-calculation-cell .calculation-value {
+    font-weight: 600;
+}
+
+/* Planning mode colors - match show view */
+.estimation-calculation-cell .calculation-value.is-sum {
+    color: hsl(141, 53%, 31%);
+}
+
+.estimation-calculation-cell .calculation-value.is-buffer {
+    color: hsl(206, 70%, 41%);
+}
+
+.estimation-calculation-cell .calculation-value.is-total {
+    color: hsl(44, 100%, 32%);
+}
+
+/* Tracking mode colors */
+.estimation-calculation-cell .calculation-value.is-actual {
+    color: hsl(141, 53%, 41%);
+}
+
+.estimation-calculation-cell .calculation-operator {
+    color: hsl(0, 0%, 71%);
+    font-size: 0.875rem;
+}
+
+/* Separator between progress and buffer health */
+.estimation-calculation-cell .calculation-separator {
+    display: inline-block;
+    width: 1px;
+    height: 1em;
+    background-color: hsl(0, 0%, 86%);
+    margin: 0 0.25rem;
+    vertical-align: middle;
+}
+
+/* Actions cell - stable delete button */
+
+.delete-estimation-button {
+    opacity: 0.5;
+    transition:
+        opacity 0.2s ease,
+        background-color 0.2s ease;
+    /* Prevent jumpiness: consistent border in all states */
+    border: 1px solid transparent !important;
+}
+
+.estimation-row:hover .delete-estimation-button {
+    opacity: 1;
+}
+
+.delete-estimation-button:hover {
+    opacity: 1;
+    border-color: hsl(348, 86%, 61%) !important;
+}
+
+/* Empty state */
+.empty-state {
+    padding: 3rem 1.5rem;
+    background-color: hsl(0, 0%, 98%);
+    border-radius: 6px;
+}
+
+.empty-state p:first-child {
+    color: hsl(0, 0%, 29%);
 }
 
 /* ==========================================================================
@@ -559,6 +721,35 @@ tr.dragging {
 
     .estimation-summary .summary-operator {
         display: none;
+    }
+
+    /* Estimations index table responsive */
+    .estimations-table .col-estimation-mode {
+        width: 90px;
+    }
+
+    .estimations-table .col-estimation-calculation {
+        width: 170px;
+    }
+
+    .estimation-mode-cell .tag span:not(.icon) {
+        /* Hide text label, keep icon on mobile */
+        display: none;
+    }
+
+    .estimation-mode-cell .tag .icon {
+        margin-right: 0;
+    }
+
+    .estimation-title {
+        font-size: 1rem;
+    }
+
+    /* Larger touch target for delete button on mobile */
+    .delete-estimation-button {
+        opacity: 1;
+        min-width: 44px;
+        min-height: 44px;
     }
 }
 
