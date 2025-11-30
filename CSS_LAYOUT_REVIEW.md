@@ -455,11 +455,11 @@ disconnect() {
 
 ### Phase 4: Mobile Layout Fixes (45 minutes)
 
-- [ ] **4.1** Add mobile styles to hide drag column on small screens
-- [ ] **4.2** Adjust table column widths for mobile
-- [ ] **4.3** Fix summary row to keep equation visible on mobile
-- [ ] **4.4** Ensure delete buttons are always visible on mobile
-- [ ] **4.5** Add touch-friendly input sizing for tracking mode
+- [x] **4.1** Add mobile styles to hide drag column on small screens
+- [x] **4.2** Adjust table column widths for mobile
+- [x] **4.3** Fix summary row to keep equation visible on mobile
+- [x] **4.4** Ensure delete buttons are always visible on mobile
+- [x] **4.5** Add touch-friendly input sizing for tracking mode
 - [ ] **4.6** Test on actual mobile device or Chrome DevTools mobile emulation
 
 ### Phase 5: Code Cleanup (30 minutes)
@@ -470,8 +470,8 @@ disconnect() {
 
 ### Phase 6: Optional Improvements (30 minutes)
 
-- [ ] **6.1** Add auto-dismiss to notification controller
-- [ ] **6.2** Update layout to use auto-dismiss for success messages
+- [x] **6.1** Add auto-dismiss to notification controller
+- [x] **6.2** Update layout to use auto-dismiss for success messages
 - [ ] **6.3** Consider consolidating estimation item partials (evaluate complexity vs benefit)
 
 ### Phase 7: Final Testing

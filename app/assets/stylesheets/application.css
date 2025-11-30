@@ -712,6 +712,26 @@ button.delete-estimation-button.button:hover {
    ========================================================================== */
 
 @media screen and (max-width: 768px) {
+    /* Hide drag column on mobile - can't drag easily on touch devices */
+    .estimation-items-index {
+        table-layout: auto;
+    }
+
+    .estimation-items-index .col-drag,
+    .estimation-items-index td:first-child {
+        display: none;
+    }
+
+    /* Reduce fixed indicator column width */
+    .estimation-items-index .col-fixed {
+        width: 30px;
+    }
+
+    /* Let calculation column flow naturally */
+    .estimation-items-index .col-calculation {
+        width: auto;
+    }
+
     /* Larger touch targets on mobile */
     .drag-handle {
         width: 50px;
@@ -750,14 +770,24 @@ button.delete-estimation-button.button:hover {
         margin-bottom: 0.5rem;
     }
 
-    /* Summary stacks vertically on mobile */
+    /* Summary keeps equation visible on mobile */
     .estimation-summary .summary-row {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr auto 1fr;
+        gap: var(--gap-small);
+        align-items: center;
+    }
+
+    .estimation-summary .summary-item {
         flex-direction: column;
-        align-items: flex-start;
+        padding: 0.5rem;
+        text-align: center;
     }
 
     .estimation-summary .summary-operator {
-        display: none;
+        display: block;
+        font-size: 1rem;
+        padding: 0;
     }
 
     /* Estimations index table responsive */
@@ -787,6 +817,19 @@ button.delete-estimation-button.button:hover {
         opacity: 1;
         min-width: 44px;
         min-height: 44px;
+    }
+
+    /* Ensure delete buttons in estimation items table are always visible on mobile */
+    .estimation-items-index .delete-button {
+        opacity: 1;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    /* Touch-friendly input sizing for tracking mode */
+    .editable-form .input.is-small {
+        min-height: 44px;
+        font-size: 16px; /* Prevents iOS zoom on focus */
     }
 }
 
