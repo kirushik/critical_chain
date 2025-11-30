@@ -1,5 +1,6 @@
 <tr
   id="<%= dom_id estimation_item %>"
+  class="<%= 'highlight-flash' if local_assigns[:highlight] %>"
   data-order="<%= estimation_item.order %>"
   data-sortable-target="item"
   draggable="true"
@@ -49,7 +50,9 @@
   </td>
 
   <%# Title %>
-  <td class="col-title"><%= estimation_item.decorate.editable :title %></td>
+  <td class="col-title">
+    <%= estimation_item.decorate.editable :title, css_class: :item_title %>
+  </td>
 
   <%# Delete Action %>
   <td class="col-actions has-text-centered">

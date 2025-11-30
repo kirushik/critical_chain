@@ -1,16 +1,9 @@
 <tr
   id="<%= dom_id estimation_item %>"
-  data-order="<%= estimation_item.order %>"
-  data-sortable-target="item"
-  draggable="true"
-  data-action="dragstart->sortable#dragStart dragend->sortable#dragEnd dragover->sortable#dragOver"
+  class="<%= 'highlight-flash' if local_assigns[:highlight] %>"
 >
-  <%# Drag Handle %>
-  <td class="col-drag">
-    <span class="drag-handle">
-      <i class="fa-solid fa-grip-vertical"></i>
-    </span>
-  </td>
+  <%# Empty cell where drag handle would be in planning mode %>
+  <td class="col-drag"></td>
 
   <%# Estimated Value %>
   <td class="col-calculation has-text-right">
@@ -44,7 +37,7 @@
   <td class="col-title"><%= estimation_item.title %></td>
 
   <%# Actual Value (Editable in tracking mode) %>
-  <td class="col-actual has-text-right">
+  <td class="col-actions has-text-right">
     <%= estimation_item.decorate.editable :actual_value, type: :number %>
   </td>
 </tr>

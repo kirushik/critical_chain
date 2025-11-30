@@ -6,7 +6,7 @@ module EditableHelper
 
     url = options[:url]
     type = options[:type] || 'text'
-    css_class = options[:class] || field.to_s
+    css_class = options[:css_class] || field.to_s
     field_id = "editable_#{object.class.name.underscore}_#{object.id}_#{field}"
 
     content_tag(:div,

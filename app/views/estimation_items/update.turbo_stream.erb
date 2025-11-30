@@ -1,6 +1,6 @@
-<%# Replace the updated estimation item %>
+<%# Replace the updated estimation item with the correct partial based on mode %>
 <%= turbo_stream.replace dom_id(@estimation_item) do %>
-  <%= render @estimation_item %>
+  <%= render partial: @estimation.decorate.items_partial_name, locals: { estimation_item: @estimation_item, highlight: true } %>
 <% end %>
 
 <%# Update the totals %>
@@ -15,17 +15,3 @@
 <%= turbo_stream.replace "buffer_health" do %>
   <span class="<%= @estimation.buffer_health_class %>" id="buffer_health"><%= @estimation.buffer_health %></span>
 <% end %>
-
-<%# Highlight the updated item %>
-<turbo-stream action="append" target="<%= dom_id(@estimation) %>">
-  <template>
-    <script>
-      // Highlight the updated item
-      const updatedItem = document.getElementById('<%= dom_id(@estimation_item) %>');
-      if (updatedItem) {
-        updatedItem.classList.add('highlight-flash');
-        setTimeout(() => updatedItem.classList.remove('highlight-flash'), 1000);
-      }
-    </script>
-  </template>
-</turbo-stream>
