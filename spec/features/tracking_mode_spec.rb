@@ -13,16 +13,14 @@ feature "Tracking mode", :type => :feature do
   scenario 'I can enter tracking mode', :playwright do
     visit estimation_path(estimation)
 
-    expect(page.locator('.toggle-tracking .fa-toggle-off')).to be_visible
-    expect(page.locator('.toggle-tracking .fa-toggle-on').count).to eq(0)
+    expect(page.locator('.tracking-toggle-button:not(.is-active)')).to be_visible
 
-    page.locator('.toggle-tracking').click
+    page.locator('.tracking-toggle-button').click
 
-    # Wait for the toggle to switch
-    page.locator('.toggle-tracking .fa-toggle-on').wait_for(state: 'visible', timeout: 5000)
+    # Wait for the page to reload with tracking mode active
+    page.locator('.tracking-toggle-button.is-active').wait_for(state: 'visible', timeout: 5000)
 
-    expect(page.locator('.toggle-tracking .fa-toggle-on')).to be_visible
-    expect(page.locator('.toggle-tracking .fa-toggle-off').count).to eq(0)
+    expect(page.locator('.tracking-toggle-button.is-active')).to be_visible
   end
 
   scenario 'I can enter value for an item of tracking-mode estimation', :playwright do
@@ -43,7 +41,7 @@ feature "Tracking mode", :type => :feature do
 
     # Check that actual_sum is updated (text is split across elements, so check the sum directly)
     expect(page.locator('#actual_sum').text_content).to eq('11179.0')
-    expect(page.get_by_text('out of')).to be_visible
+    expect(page.get_by_text('completed out of total estimate')).to be_visible
     expect(page.locator('#total').text_content).to eq(tracking_mode_estimation.decorate.total.to_s)
   end
 
@@ -71,6 +69,6 @@ feature "Tracking mode", :type => :feature do
     page.locator(".editing").wait_for(state: 'hidden', timeout: 5000)
 
     expect(page.get_by_text("90%")).to be_visible
-    expect(page.locator('#buffer_health.bg-warning')).to be_visible
+    expect(page.locator('#buffer_health.has-text-warning')).to be_visible
   end
 end

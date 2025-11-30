@@ -1,29 +1,59 @@
-<h2>Sign up</h2>
+<div class="columns is-centered mt-6">
+  <div class="column is-half-desktop is-two-thirds-tablet">
+    <h2 class="title is-3">Sign up</h2>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= devise_error_messages! %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <%= devise_error_messages! %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+      <div class="field">
+        <%= f.label :email, class: 'label' %>
+
+        <div class="control has-icons-left">
+          <%= f.email_field :email, autofocus: true, class: 'input', placeholder: 'Email address' %>
+
+          <span class="icon is-small is-left">
+            <i class="fa-solid fa-envelope"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="field">
+        <%= f.label :password, class: 'label' %>
+
+        <% if @validatable %>
+          <p class="help">
+            (<%= @minimum_password_length %> characters minimum)
+          </p>
+        <% end %>
+
+        <div class="control has-icons-left">
+          <%= f.password_field :password, autocomplete: "off", class: 'input', placeholder: 'Password' %>
+
+          <span class="icon is-small is-left">
+            <i class="fa-solid fa-lock"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="field">
+        <%= f.label :password_confirmation, class: 'label' %>
+
+        <div class="control has-icons-left">
+          <%= f.password_field :password_confirmation, autocomplete: "off", class: 'input', placeholder: 'Confirm password' %>
+
+          <span class="icon is-small is-left">
+            <i class="fa-solid fa-lock"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="field mt-5">
+        <%= f.submit "Sign up", class: 'button is-success is-fullwidth' %>
+      </div>
+    <% end %>
+
+    <div class="has-text-centered mt-4">
+      <%= render "devise/shared/links" %>
+    </div>
   </div>
-
-  <div class="field">
-    <%= f.label :password %>
-    <% if @validatable %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "off" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

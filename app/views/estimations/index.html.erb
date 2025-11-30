@@ -1,15 +1,48 @@
-<div class="col-lg-6 offest-lg-3 col-md-8 offset-md-2">
-  <div class="list-group" data-no-turbolink id="estimations-index">
-    <%= render @estimations %>
-  </div>
+<div class="columns is-centered">
+  <div class="column is-10-desktop is-11-tablet">
+    <h1 class="title is-4 mb-4">My Estimations</h1>
 
-  <%= form_for Estimation.new, html: {class: 'form-inline'} do |f| %>
-    <div class="input-group">
-      <%= f.text_field :title, class: 'form-control', placeholder: 'New list title' %>
+    <div id="estimations-index">
+      <% if @estimations.any? %>
+        <div class="table-container">
+          <table class="table is-hoverable is-fullwidth estimations-table">
+            <thead>
+              <tr>
+                <th class="col-estimation-title">Estimation</th>
+                <th class="col-estimation-mode has-text-centered">Mode</th>
 
-      <div class="input-group-append">
-        <%= f.submit 'Create estimation', class: 'btn btn-success' %>
-      </div>
+                <th class="col-estimation-calculation has-text-right">
+                  Calculation
+                </th>
+
+                <th class="col-estimation-actions has-text-centered"></th>
+              </tr>
+            </thead>
+
+            <tbody><%= render @estimations %></tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="notification is-light has-text-centered empty-state">
+          <p class="is-size-5 mb-2">You don't have any estimations yet.</p>
+
+          <p class="has-text-grey">
+            Create your first estimation below to get started!
+          </p>
+        </div>
+      <% end %>
     </div>
-  <% end %>
+
+    <%= form_for Estimation.new do |f| %>
+      <div class="field has-addons mt-4">
+        <div class="control is-expanded">
+          <%= f.text_field :title, class: 'input', placeholder: 'New estimation title', aria: { label: 'New estimation title' } %>
+        </div>
+
+        <div class="control">
+          <%= f.submit 'Create estimation', class: 'button is-success' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>

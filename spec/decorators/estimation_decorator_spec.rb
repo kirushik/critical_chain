@@ -81,40 +81,40 @@ describe EstimationDecorator do
   describe '#buffer_health_class' do
     subject { FactoryBot.create(:estimation) }
 
-    it 'is :bg-success when health is less than 0.8' do
+    it 'is has-text-success when health is less than 0.8' do
       expect(subject).to receive(:buffer_health).and_return(0.0)
-      expect(subject.decorate.buffer_health_class).to eq 'bg-success'
+      expect(subject.decorate.buffer_health_class).to eq 'has-text-success'
 
       expect(subject).to receive(:buffer_health).and_return(0.1)
-      expect(subject.decorate.buffer_health_class).to eq 'bg-success'
+      expect(subject.decorate.buffer_health_class).to eq 'has-text-success'
 
       expect(subject).to receive(:buffer_health).and_return(0.7)
-      expect(subject.decorate.buffer_health_class).to eq 'bg-success'
+      expect(subject.decorate.buffer_health_class).to eq 'has-text-success'
 
       expect(subject).to receive(:buffer_health).and_return(0.8)
-      expect(subject.decorate.buffer_health_class).not_to eq 'bg-success'
+      expect(subject.decorate.buffer_health_class).not_to eq 'has-text-success'
     end
 
-    it 'is :bg-warning when health belongs to 0.8...10' do
+    it 'is has-text-warning when health belongs to 0.8...1.0' do
       expect(subject).to receive(:buffer_health).and_return(0.8)
-      expect(subject.decorate.buffer_health_class).to eq 'bg-warning'
+      expect(subject.decorate.buffer_health_class).to eq 'has-text-warning'
 
       expect(subject).to receive(:buffer_health).and_return(0.9)
-      expect(subject.decorate.buffer_health_class).to eq 'bg-warning'
+      expect(subject.decorate.buffer_health_class).to eq 'has-text-warning'
 
       expect(subject).to receive(:buffer_health).and_return(1.0)
-      expect(subject.decorate.buffer_health_class).not_to eq 'bg-warning'
+      expect(subject.decorate.buffer_health_class).not_to eq 'has-text-warning'
     end
 
-    it 'is :bg-danger when health is above 1.0' do
+    it 'is has-text-danger when health is above 1.0' do
       expect(subject).to receive(:buffer_health).and_return(1)
-      expect(subject.decorate.buffer_health_class).to eq 'bg-danger'
+      expect(subject.decorate.buffer_health_class).to eq 'has-text-danger'
 
       expect(subject).to receive(:buffer_health).and_return(2)
-      expect(subject.decorate.buffer_health_class).to eq 'bg-danger'
+      expect(subject.decorate.buffer_health_class).to eq 'has-text-danger'
 
       expect(subject).to receive(:buffer_health).and_return(100)
-      expect(subject.decorate.buffer_health_class).to eq 'bg-danger'
+      expect(subject.decorate.buffer_health_class).to eq 'has-text-danger'
     end
   end
 end

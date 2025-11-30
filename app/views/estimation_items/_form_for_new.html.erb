@@ -1,14 +1,32 @@
-<%= form_with model: [@estimation, EstimationItem.new],
-             html: { class: 'form-inline' } do |f| %>
-  <div class="input-group">
-    <%= f.number_field :value, id: 'estimation_item_value', class: 'form-control value', placeholder: 'Value', autofocus: true %>
-  </div>
-  <div class="input-group">
-    <%= f.text_field :title, id: 'estimation_item_title', class: 'form-control title', placeholder: 'Item title (optional)' %>
+<%= form_with model: [@estimation, EstimationItem.new], html: { class: 'new-item-form' } do |f| %>
+  <div class="field has-addons">
+    <div class="control">
+      <%= f.number_field :value,
+                         id: 'estimation_item_value',
+                         class: 'input input-value',
+                         placeholder: 'Value',
+                         autofocus: true,
+                         min: 0,
+                         step: 'any',
+                         aria: { label: 'Estimation value' } %>
+    </div>
 
-    <div class="input-group-append">
-      <%= f.button class: 'btn btn-success', value: 'Add estimation item', type: :submit do %>
-        <i class="fa-solid fa-circle-plus"></i>
+    <div class="control is-expanded">
+      <%= f.text_field :title,
+                       id: 'estimation_item_title',
+                       class: 'input',
+                       placeholder: 'Item title (optional)',
+                       aria: { label: 'Item title' } %>
+    </div>
+
+    <div class="control">
+      <%= f.button class: 'button is-success',
+                   type: :submit,
+                   title: 'Add estimation item',
+                   aria: { label: 'Add item' } do %>
+        <span class="icon">
+          <i class="fa-solid fa-plus"></i>
+        </span>
       <% end %>
     </div>
   </div>

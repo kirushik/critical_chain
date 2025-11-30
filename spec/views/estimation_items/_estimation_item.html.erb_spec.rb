@@ -1,16 +1,16 @@
 require "rails_helper"
 
 RSpec.describe "estimation_items/_estimation_item.html.erb", :type => :view do
-  it "should render fa-toggle-off icon for non-fixed items" do
+  it "should render circle icon for non-fixed items" do
     estimation_item = FactoryBot.create(:estimation_item, fixed: false)
     render partial: "estimation_items/estimation_item", locals: { estimation_item: estimation_item }
-    expect(rendered).to have_css(".fa-toggle-off")
+    expect(rendered).to have_css(".fa-circle")
   end
 
-  it "should render fa-toggle-on icon for fixed items" do
+  it "should render thumbtack icon for fixed items" do
     estimation_item = FactoryBot.create(:estimation_item, fixed: true)
     render partial: "estimation_items/estimation_item", locals: { estimation_item: estimation_item }
-    expect(rendered).to have_css(".fa-toggle-on")
+    expect(rendered).to have_css(".fa-thumbtack")
   end
 
   it "should render number editor for batch items" do
@@ -19,9 +19,20 @@ RSpec.describe "estimation_items/_estimation_item.html.erb", :type => :view do
 
     html = Nokogiri::HTML.parse(rendered)
 
-    expect(html.css(".fa-copy")).not_to be_empty
+    expect(html.css(".fa-clone")).not_to be_empty
     # Check for Stimulus controller data attributes instead of old x-editable data-value
-    expect(html.css(".quantity").first.attributes["data-editable-target"]).not_to be_nil
+    expect(html.css(".quantity .editable-field").first.attributes["data-controller"].value).to eq("editable")
+  end
+
+  it "should always show quantity editor, even for quantity=1" do
+    estimation_item = FactoryBot.create(:estimation_item, quantity: 1)
+    render partial: "estimation_items/estimation_item", locals: { estimation_item: estimation_item }
+
+    html = Nokogiri::HTML.parse(rendered)
+
+    # Quantity editor should be visible even when quantity is 1
+    expect(html.css(".quantity .editable-field")).not_to be_empty
+    expect(html.css(".fa-clone")).not_to be_empty
   end
 
   it "should multiply subitem estimate and quantity" do
@@ -30,6 +41,6 @@ RSpec.describe "estimation_items/_estimation_item.html.erb", :type => :view do
 
     html = Nokogiri::HTML.parse(rendered)
 
-    expect(html.css(".multiplier-total").text).to include("21")
+    expect(html.css(".total").text).to include("21")
   end
 end

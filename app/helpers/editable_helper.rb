@@ -6,7 +6,7 @@ module EditableHelper
 
     url = options[:url]
     type = options[:type] || 'text'
-    css_class = options[:class] || field.to_s
+    css_class = options[:css_class] || field.to_s
     field_id = "editable_#{object.class.name.underscore}_#{object.id}_#{field}"
 
     content_tag(:div,
@@ -27,7 +27,7 @@ module EditableHelper
                            style: 'cursor: pointer;',
                            title: 'Click to edit')
 
-      # Edit form (hidden by default) using Bootstrap 4 input-group
+      # Edit form (hidden by default) using Bulma field/control structure
       edit_form = form_tag(url,
                           method: :patch,
                           class: 'editable-form',
@@ -36,15 +36,15 @@ module EditableHelper
                             editable_target: 'form',
                             action: 'submit->editable#handleSubmit'
                           }) do
-        # Use Bootstrap 4 input-group to attach buttons inline
-        content_tag(:div, class: 'input-group input-group-sm') do
+        # Use Bulma field/control structure with has-addons for inline buttons
+        content_tag(:div, class: 'field has-addons is-small') do
           field_name = "#{object.class.name.underscore}[#{field}]"
           # Generate unique input ID to avoid collisions with "add new item" forms
           input_id = "#{object.class.name.underscore}_#{object.id}_#{field}"
 
           field_options = {
             id: input_id,
-            class: 'form-control',
+            class: 'input is-small',
             data: {
               action: 'keydown->editable#handleKeydown blur->editable#handleBlur',
               editable_target: 'input'
@@ -57,25 +57,31 @@ module EditableHelper
             text_field_tag(field_name, value, field_options)
           end
 
-          # Append buttons using input-group-append
+          # Wrap input and buttons in Bulma controls
           safe_join([
-            input_field,
-            content_tag(:div, class: 'input-group-append') do
-              safe_join([
-                button_tag(type: 'submit',
-                          class: 'btn btn-success editable-submit',
-                          title: 'Save changes',
-                          aria: { label: 'Save' }) do
+            content_tag(:div, class: 'control') do
+              input_field
+            end,
+            content_tag(:div, class: 'control') do
+              button_tag(type: 'submit',
+                        class: 'button is-success is-small editable-submit',
+                        title: 'Save changes',
+                        aria: { label: 'Save' }) do
+                content_tag(:span, class: 'icon is-small') do
                   content_tag(:i, '', class: 'fa fa-check')
-                end,
-                button_tag(type: 'button',
-                          class: 'btn btn-default editable-cancel',
-                          data: { action: 'click->editable#cancel' },
-                          title: 'Cancel editing',
-                          aria: { label: 'Cancel' }) do
+                end
+              end
+            end,
+            content_tag(:div, class: 'control') do
+              button_tag(type: 'button',
+                        class: 'button is-light is-small editable-cancel',
+                        data: { action: 'click->editable#cancel' },
+                        title: 'Cancel editing',
+                        aria: { label: 'Cancel' }) do
+                content_tag(:span, class: 'icon is-small') do
                   content_tag(:i, '', class: 'fa fa-times')
                 end
-              ])
+              end
             end
           ])
         end

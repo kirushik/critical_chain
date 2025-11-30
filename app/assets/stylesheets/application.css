@@ -1,71 +1,397 @@
-/* Custom application styles */
+/* Custom application styles for Bulma */
 
-.form-inline .form-control.value {
-    width: 6em;
+/* ==========================================================================
+   CSS CUSTOM PROPERTIES
+   ========================================================================== */
+
+:root {
+  /* Brand colors */
+  --color-primary: hsl(204, 86%, 53%);
+  --color-success: hsl(141, 53%, 31%);
+  --color-success-light: hsl(141, 53%, 41%);
+  --color-info: hsl(206, 70%, 41%);
+  --color-warning: hsl(44, 100%, 32%);
+  --color-danger: hsl(348, 86%, 61%);
+  --color-turbo: hsl(171, 100%, 41%);
+
+  /* Neutral grays */
+  --color-gray-lightest: hsl(0, 0%, 86%);
+  --color-gray-light: hsl(0, 0%, 80%);
+  --color-gray-medium: hsl(0, 0%, 71%);
+  --color-gray-dark: hsl(0, 0%, 48%);
+  --color-text: hsl(0, 0%, 21%);
+  --color-text-light: hsl(0, 0%, 29%);
+
+  /* Background colors */
+  --bg-highlight: hsl(48, 100%, 96%);
+  --bg-sum: hsl(141, 53%, 93%);
+  --bg-buffer: hsl(206, 70%, 93%);
+  --bg-total: hsl(44, 100%, 90%);
+  --bg-muted: hsl(0, 0%, 98%);
+  --bg-dragging: hsl(48, 100%, 96%);
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.3s ease;
+
+  /* Spacing (matching Bulma) */
+  --gap-small: 0.25rem;
+  --gap-medium: 0.5rem;
+  --gap-large: 0.75rem;
 }
 
-#results-table {
-    margin-top: 15px;
-}
-
-#results-table td {
-    padding-right: 6px;
-}
-
-.list-group-item .removal-button {
-    margin-top: -1px;
-    margin-right: -4px;
-    margin-left: 10px;
-}
-
-.toggle-fixed {
-    margin-left: -12px;
-}
-
-.toggle-tracking {
-    margin-left: -11px;
-    margin-top: -1px;
-}
-
-.copies > i.fa-copy {
-    margin-top: 10px;
-}
-
-.multiplier {
-    margin-left: 0.7em;
-}
-
-.turbo-progress-bar {
-    height: 5px;
-    background-color: blue;
-}
-
-#estimations-index {
-    margin-top: 1.2em;
-    margin-bottom: 0.6em;
-}
+/* ==========================================================================
+   ESTIMATION ITEMS TABLE - Layout Stability
+   ========================================================================== */
 
 .estimation-items-index {
-    margin-top: 1.2em;
+    table-layout: fixed;
+    margin-top: 1.5rem;
 }
 
-/* Editable field container */
+/* Column widths for stable layout */
+.estimation-items-index .col-drag {
+    width: 40px;
+}
+
+.estimation-items-index .col-calculation {
+    width: 180px;
+}
+
+.estimation-items-index .col-fixed {
+    width: 50px;
+}
+
+.estimation-items-index .col-title {
+    width: auto;
+}
+
+.estimation-items-index .col-actions {
+    width: 80px;
+}
+
+/* Ensure cells don't overflow and cause jumping */
+.estimation-items-index td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+/* ==========================================================================
+   DRAG HANDLE
+   ========================================================================== */
+
+.drag-handle {
+    cursor: move;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--color-gray-medium);
+    transition: color var(--transition-fast);
+}
+
+.drag-handle:hover {
+    color: var(--color-gray-dark);
+}
+
+/* Dragging state */
+tr.dragging {
+    opacity: 0.5;
+    background-color: var(--bg-dragging);
+}
+
+/* ==========================================================================
+   CALCULATION DISPLAY (Qty × Value = Total)
+   ========================================================================== */
+
+.calculation-group {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--gap-small);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.calculation-group .quantity {
+    color: var(--color-gray-dark);
+    font-size: 0.875rem;
+}
+
+.calculation-group .quantity .editable-field {
+    display: inline;
+}
+
+.calculation-group .value .editable-field {
+    display: inline;
+}
+
+.calculation-group .equals {
+    color: var(--color-gray-medium);
+    margin: 0 0.125rem;
+}
+
+.calculation-group .total {
+    font-weight: 600;
+    color: var(--color-text-light);
+    min-width: 2em;
+    text-align: right;
+}
+
+/* ==========================================================================
+   ITEM TITLE STYLING
+   ========================================================================== */
+
+.col-title {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+}
+
+.col-title .editable-field .editable-display {
+    border-bottom-color: var(--color-gray-lightest);
+}
+
+/* ==========================================================================
+   FIXED TOGGLE BUTTON
+   ========================================================================== */
+
+.fixed-toggle {
+    display: inline;
+}
+
+button.fixed-button.button {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    padding: 0.25rem;
+    cursor: pointer;
+    transition:
+        transform var(--transition-fast),
+        color var(--transition-fast);
+}
+
+button.fixed-button.button:hover {
+    transform: scale(1.2);
+    background: transparent;
+    box-shadow: none;
+}
+
+.fixed-button.is-active,
+.fixed-button .fa-thumbtack {
+    color: var(--color-primary);
+}
+
+.fixed-button .fa-circle {
+    color: var(--color-gray-lightest);
+}
+
+/* ==========================================================================
+   TRACKING MODE TOGGLE
+   ========================================================================== */
+
+.tracking-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-large);
+    padding: 0.75rem 1rem;
+    background: var(--bg-muted);
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.tracking-toggle-label {
+    font-weight: 500;
+    color: var(--color-text-light);
+    user-select: none;
+}
+
+.tracking-toggle-button {
+    position: relative;
+    width: 50px;
+    height: 28px;
+    background: var(--color-gray-lightest);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background-color var(--transition-medium);
+    padding: 0;
+}
+
+.tracking-toggle-button:hover {
+    background: hsl(0, 0%, 76%);
+}
+
+.tracking-toggle-button.is-active {
+    background: var(--color-turbo);
+}
+
+.tracking-toggle-button.is-active:hover {
+    background: hsl(171, 100%, 36%);
+}
+
+.tracking-toggle-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    background: white;
+    border-radius: 50%;
+    transition: transform var(--transition-medium);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tracking-toggle-button.is-active .tracking-toggle-thumb {
+    transform: translateX(22px);
+}
+
+/* ==========================================================================
+   RESULTS DISPLAY
+   ========================================================================== */
+
+.estimation-summary {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.estimation-summary .summary-row {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-medium);
+    flex-wrap: wrap;
+}
+
+.estimation-summary .summary-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-variant-numeric: tabular-nums;
+}
+
+.estimation-summary .summary-item.is-sum {
+    background: var(--bg-sum);
+}
+
+.estimation-summary .summary-item.is-sum .summary-value {
+    color: var(--color-success);
+}
+
+.estimation-summary .summary-item.is-buffer {
+    background: var(--bg-buffer);
+}
+
+.estimation-summary .summary-item.is-buffer .summary-value {
+    color: var(--color-info);
+}
+
+.estimation-summary .summary-item.is-total {
+    background: var(--bg-total);
+}
+
+.estimation-summary .summary-item.is-total .summary-value {
+    color: var(--color-warning);
+}
+
+.estimation-summary .summary-label {
+    font-size: 0.75rem;
+    color: var(--color-gray-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.estimation-summary .summary-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.estimation-summary .summary-operator {
+    color: var(--color-gray-medium);
+    font-size: 1.25rem;
+    padding: 0 var(--gap-small);
+}
+
+/* Tracking mode results */
+.tracking-results {
+    margin-top: 1rem;
+}
+
+.tracking-results .tracking-progress {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.tracking-results .tracking-progress .actual {
+    color: var(--color-success-light);
+}
+
+.tracking-results .tracking-progress .total {
+    color: hsl(44, 100%, 42%);
+}
+
+/* ==========================================================================
+   EDITABLE FIELDS
+   ========================================================================== */
+
 .editable-field {
     display: inline-block;
+    min-width: 2em;
+    position: relative;
+}
+
+/* Prevent layout shift when editing */
+.editable-field.quantity {
+    min-width: 1.5em;
+}
+
+.editable-field.value {
+    min-width: 2.5em;
+}
+
+.editable-field.title {
+    min-width: 4em;
+    max-width: 100%;
 }
 
 /* Display state (default - visible) */
 .editable-field .editable-display {
-    border-bottom: 1px dashed #999;
+    border-bottom: 1px dashed var(--color-gray-light);
     position: relative;
     display: inline-block;
+    cursor: pointer;
+    padding: 0.125rem 0.25rem;
+    border-radius: 2px;
+    transition: background-color var(--transition-fast);
+}
+
+.editable-field .editable-display:hover {
+    background-color: var(--bg-highlight);
+}
+
+/* Pencil icon - tiny, top-right, overlaid */
+.editable-field .editable-display::after {
+    content: "\270E";
+    position: absolute;
+    top: -0.4em;
+    right: -0.5em;
+    font-size: 0.65em;
+    color: hsl(0, 0%, 70%);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    pointer-events: none;
+    z-index: 10;
+    text-shadow:
+        -1px -1px 0 white,
+        1px -1px 0 white,
+        -1px 1px 0 white,
+        1px 1px 0 white;
 }
 
 .editable-field .editable-display:hover::after {
-    content: '\270E'; /* Pencil icon */
-    margin-left: 0.3em;
-    color: #666;
-    font-size: 0.9em;
+    opacity: 1;
 }
 
 /* Edit form (default - hidden) */
@@ -79,21 +405,447 @@
 }
 
 .editable-field.editing .editable-form {
-    display: inline-block;
+    display: inline-flex;
 }
 
-/* Bootstrap input-group styling for inline forms */
-.editable-form .input-group {
-    width: auto;
+/* Compact inline form styling */
+.editable-form .field.has-addons {
+    display: inline-flex;
+    margin-bottom: 0;
 }
 
-/* Highlight flash animation */
+.editable-form .input.is-small {
+    width: 4em;
+    padding: 0.25rem 0.5rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Wider input for title fields */
+.editable-field.title .editable-form .input.is-small {
+    width: 10em;
+}
+
+.editable-form .button.is-small {
+    padding: 0.25rem 0.4rem;
+}
+
+/* ==========================================================================
+   DELETE BUTTON
+   ========================================================================== */
+
+.estimation-items-index .delete-button {
+    opacity: 0.6;
+    transition: opacity var(--transition-fast);
+}
+
+.estimation-items-index tr:hover .delete-button {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   ADD NEW ITEM FORM
+   ========================================================================== */
+
+.new-item-form {
+    margin-bottom: 1.5rem;
+}
+
+.new-item-form .field.has-addons {
+    margin-bottom: 0;
+}
+
+.new-item-form .input-value {
+    width: 6rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   TURBO PROGRESS BAR
+   ========================================================================== */
+
+.turbo-progress-bar {
+    height: 3px;
+    background-color: var(--color-turbo);
+}
+
+/* ==========================================================================
+   FLASH NOTIFICATIONS
+   ========================================================================== */
+
+.notification {
+    margin-bottom: 0;
+}
+
+/* ==========================================================================
+   PAGE LAYOUT
+   ========================================================================== */
+
+.container {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+#estimation_title h1 {
+    margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   ANIMATIONS
+   ========================================================================== */
+
 @keyframes highlight-flash {
-    0% { background-color: #fff3cd; }
-    100% { background-color: transparent; }
+    0% {
+        background-color: hsl(48, 100%, 67%);
+    }
+    100% {
+        background-color: transparent;
+    }
 }
 
 .highlight-flash {
     animation: highlight-flash 1s ease-out;
 }
 
+/* Smooth transitions for interactive elements */
+.button,
+.input {
+    transition: all var(--transition-fast);
+}
+
+/* ==========================================================================
+   ESTIMATIONS INDEX PAGE
+   ========================================================================== */
+
+#estimations-index {
+    margin-bottom: 0;
+}
+
+/* Table layout and column widths */
+.estimations-table {
+    table-layout: fixed;
+}
+
+.estimations-table .col-estimation-title {
+    width: auto;
+}
+
+.estimations-table .col-estimation-mode {
+    width: 110px;
+}
+
+.estimations-table .col-estimation-calculation {
+    width: 200px;
+}
+
+.estimations-table .col-estimation-actions {
+    width: 60px;
+}
+
+/* Row styling */
+.estimation-row {
+    position: relative;
+    transition: background-color 0.15s ease;
+}
+
+.estimation-row:hover {
+    background-color: hsl(0, 0%, 96%);
+}
+
+/* Remove padding from all cells - wrappers handle it */
+.estimation-row td {
+    padding: 0;
+}
+
+/* Consistent flex wrapper for cell content alignment */
+.estimation-row .cell-content {
+    display: flex;
+    align-items: center;
+    min-height: 3rem;
+    padding: 0.5em 0.75em;
+}
+
+.estimation-row .cell-content.has-text-centered {
+    justify-content: center;
+}
+
+.estimation-row .cell-content.has-text-right {
+    justify-content: flex-end;
+}
+
+/* Clickable row link - stretches across title cell */
+.estimation-title-cell {
+    position: relative;
+}
+
+.estimation-row-link {
+    display: flex;
+    align-items: center;
+    min-height: 3rem;
+    padding: 0.5em 0.75em;
+    text-decoration: none;
+    color: inherit;
+}
+
+.estimation-row-link:hover {
+    text-decoration: none;
+}
+
+.estimation-title {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.estimation-row:hover .estimation-title {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+/* Mode indicator cell */
+
+.estimation-mode-cell .tag {
+    font-size: 0.75rem;
+}
+
+.estimation-mode-cell .tag .icon {
+    margin-right: 0.25em;
+}
+
+/* Calculation cell */
+.estimation-calculation-cell {
+    font-variant-numeric: tabular-nums;
+}
+
+.estimation-calculation-cell .calculation-value {
+    font-weight: 600;
+}
+
+/* Planning mode colors - match show view */
+.estimation-calculation-cell .calculation-value.is-sum {
+    color: var(--color-success);
+}
+
+.estimation-calculation-cell .calculation-value.is-buffer {
+    color: var(--color-info);
+}
+
+.estimation-calculation-cell .calculation-value.is-total {
+    color: var(--color-warning);
+}
+
+/* Tracking mode colors */
+.estimation-calculation-cell .calculation-value.is-actual {
+    color: var(--color-success-light);
+}
+
+.estimation-calculation-cell .calculation-operator {
+    color: var(--color-gray-medium);
+    font-size: 0.875rem;
+}
+
+/* Separator between progress and buffer health */
+.estimation-calculation-cell .calculation-separator {
+    display: inline-block;
+    width: 1px;
+    height: 1em;
+    background-color: var(--color-gray-lightest);
+    margin: 0 var(--gap-small);
+    vertical-align: middle;
+}
+
+/* Actions cell - stable delete button */
+
+button.delete-estimation-button.button {
+    opacity: 0.5;
+    transition:
+        opacity var(--transition-fast),
+        background-color var(--transition-fast),
+        border-color var(--transition-fast);
+    /* Prevent jumpiness: consistent border in all states */
+    border: 1px solid transparent;
+}
+
+.estimation-row:hover .delete-estimation-button {
+    opacity: 1;
+}
+
+button.delete-estimation-button.button:hover {
+    opacity: 1;
+    border-color: var(--color-danger);
+}
+
+/* Empty state */
+.empty-state {
+    padding: 3rem 1.5rem;
+    background-color: var(--bg-muted);
+    border-radius: 6px;
+}
+
+.empty-state p:first-child {
+    color: var(--color-text-light);
+}
+
+/* ==========================================================================
+   BUFFER CONSUMPTION
+   ========================================================================== */
+
+.buffer-consumption {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: var(--bg-muted);
+    border-radius: 6px;
+}
+
+.buffer-consumption .buffer-label {
+    font-size: 0.875rem;
+    color: var(--color-gray-dark);
+    margin-bottom: 0.5rem;
+}
+
+.buffer-consumption .buffer-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+
+@media screen and (max-width: 768px) {
+    /* Hide drag column on mobile - can't drag easily on touch devices */
+    .estimation-items-index {
+        table-layout: auto;
+    }
+
+    .estimation-items-index .col-drag,
+    .estimation-items-index td:first-child {
+        display: none;
+    }
+
+    /* Reduce fixed indicator column width */
+    .estimation-items-index .col-fixed {
+        width: 30px;
+    }
+
+    /* Let calculation column flow naturally */
+    .estimation-items-index .col-calculation {
+        width: auto;
+    }
+
+    /* Larger touch targets on mobile */
+    .drag-handle {
+        width: 50px;
+        padding: 0.75rem;
+    }
+
+    .fixed-button {
+        padding: 0.5rem;
+    }
+
+    .tracking-toggle-button {
+        width: 56px;
+        height: 32px;
+    }
+
+    .tracking-toggle-thumb {
+        width: 26px;
+        height: 26px;
+    }
+
+    .tracking-toggle-button.is-active .tracking-toggle-thumb {
+        transform: translateX(24px);
+    }
+
+    /* Better table handling on mobile */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .field.is-grouped {
+        flex-wrap: wrap;
+    }
+
+    .field.is-grouped > .control {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Summary keeps equation visible on mobile */
+    .estimation-summary .summary-row {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr auto 1fr;
+        gap: var(--gap-small);
+        align-items: center;
+    }
+
+    .estimation-summary .summary-item {
+        flex-direction: column;
+        padding: 0.5rem;
+        text-align: center;
+    }
+
+    .estimation-summary .summary-operator {
+        display: block;
+        font-size: 1rem;
+        padding: 0;
+    }
+
+    /* Estimations index table responsive */
+    .estimations-table .col-estimation-mode {
+        width: 90px;
+    }
+
+    .estimations-table .col-estimation-calculation {
+        width: 170px;
+    }
+
+    .estimation-mode-cell .tag span:not(.icon) {
+        /* Hide text label, keep icon on mobile */
+        display: none;
+    }
+
+    .estimation-mode-cell .tag .icon {
+        margin-right: 0;
+    }
+
+    .estimation-title {
+        font-size: 1rem;
+    }
+
+    /* Larger touch target for delete button on mobile */
+    .delete-estimation-button {
+        opacity: 1;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    /* Ensure delete buttons in estimation items table are always visible on mobile */
+    .estimation-items-index .delete-button {
+        opacity: 1;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    /* Touch-friendly input sizing for tracking mode */
+    .editable-form .input.is-small {
+        min-height: 44px;
+        font-size: 16px; /* Prevents iOS zoom on focus */
+    }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY
+   ========================================================================== */
+
+/* Better focus states */
+.button:focus,
+.input:focus,
+.editable-display:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Ensure icons in buttons don't capture pointer events */
+.icon {
+    pointer-events: none;
+}
