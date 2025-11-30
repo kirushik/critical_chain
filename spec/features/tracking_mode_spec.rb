@@ -71,6 +71,6 @@ feature "Tracking mode", :type => :feature do
     page.locator(".editing").wait_for(state: 'hidden', timeout: 5000)
 
     expect(page.get_by_text("90%")).to be_visible
-    expect(page.locator('#buffer_health.bg-warning')).to be_visible
+    expect(page.locator('#buffer_health.has-text-warning')).to be_visible
   end
 end

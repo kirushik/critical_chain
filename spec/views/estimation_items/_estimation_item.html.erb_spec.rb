@@ -30,6 +30,6 @@ RSpec.describe "estimation_items/_estimation_item.html.erb", :type => :view do
 
     html = Nokogiri::HTML.parse(rendered)
 
-    expect(html.css(".multiplier-total").text).to include("21")
+    expect(html.css(".total_value").text).to include("21")
   end
 end

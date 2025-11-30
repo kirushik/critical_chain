@@ -16,7 +16,7 @@ feature "Deletions", :type => :feature do
     it 'should be possible without AJAX' do
       visit estimation_path(estimation)
 
-      buttons = page.all('button', :text => '×')
+      buttons = page.all('button.is-danger')
       expect(buttons.size).to eq(items_count)
       expect(page).to have_text(first_item.title)
 
@@ -24,7 +24,7 @@ feature "Deletions", :type => :feature do
 
       expect(page.status_code).to eq(200)
 
-      new_buttons = page.all('button', :text => '×')
+      new_buttons = page.all('button.is-danger')
       expect(new_buttons.size).to eq(items_count-1)
       expect(page).not_to have_text(first_item.title)
     end
@@ -32,18 +32,18 @@ feature "Deletions", :type => :feature do
     it 'should be possible with AJAX', :playwright do
       visit estimation_path(estimation)
 
-      initial_button_count = page.locator("button:has-text('×')").count
+      initial_button_count = page.locator("button.is-danger").count
       expect(initial_button_count).to eq(items_count)
       expect(page.get_by_text(first_item.title)).to be_visible
 
       # Set up dialog handler before clicking
       page.once('dialog', ->(dialog) { dialog.accept })
-      page.locator("button:has-text('×')").first.click
+      page.locator("button.is-danger").first.click
 
       # Wait for the item to be removed from the DOM
-      page.locator("button:has-text('×')").nth(items_count - 1).wait_for(state: 'hidden', timeout: 5000)
+      page.locator("button.is-danger").nth(items_count - 1).wait_for(state: 'hidden', timeout: 5000)
 
-      expect(page.locator("button:has-text('×')").count).to eq(items_count - 1)
+      expect(page.locator("button.is-danger").count).to eq(items_count - 1)
       expect(page.get_by_text(first_item.title).count).to eq(0)
 
       estimation.reload.estimation_items.each do |i|
@@ -56,7 +56,7 @@ feature "Deletions", :type => :feature do
     it 'should be possible without AJAX' do
       visit estimations_path
 
-      buttons = page.all('button', :text => '×')
+      buttons = page.all('button.is-danger')
       expect(buttons.size).to eq(estimations_count)
       expect(page).to have_text(estimation.title)
 
@@ -64,7 +64,7 @@ feature "Deletions", :type => :feature do
 
       expect(page.status_code).to eq(200)
 
-      new_buttons = page.all('button', :text => '×')
+      new_buttons = page.all('button.is-danger')
       expect(new_buttons.size).to eq(estimations_count-1)
       expect(page).not_to have_text(estimation.title)
     end
@@ -72,11 +72,11 @@ feature "Deletions", :type => :feature do
     it 'should be possible with AJAX', :playwright do
       visit estimations_path
 
-      expect(page.locator("button:has-text('×')").count).to eq(estimations_count)
+      expect(page.locator("button.is-danger").count).to eq(estimations_count)
       expect(page.get_by_text(estimation.title)).to be_visible
 
       # Find the specific button within the estimation div
-      button_to_click = page.locator("##{dom_id estimation}").locator("button:has-text('×')")
+      button_to_click = page.locator("##{dom_id estimation}").locator("button.is-danger")
 
       # Set up dialog handler before clicking
       page.once('dialog', ->(dialog) { dialog.accept })

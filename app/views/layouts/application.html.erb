@@ -1,65 +1,80 @@
 <!DOCTYPE html>
+
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><%= page_title %></title>
-  <%= stylesheet_link_tag 'https://cdn.jsdelivr.net/npm/[email protected]/css/bulma.min.css', integrity: 'sha256-8WBB/xKCN5nO2xhHwja7LFVUDf2cP9HlBBLdFqZUlLo=', crossorigin: 'anonymous', 'data-turbo-track' => 'reload' %>
-  <%= stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css', integrity: 'sha512-9xKTRVabjVeZmc+GUW8GgSmcREDunMM+Dt/GrzchfN8tkwHizc5RP4Ok/MXFFy5rIjJjzhndFScTceq5e6GvVQ==', crossorigin: 'anonymous', 'data-turbo-track' => 'reload' %>
-  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track' => 'reload' %>
-  <%= csrf_meta_tags %>
-  <%= javascript_importmap_tags %>
-</head>
-<body data-env="<%= Rails.env %>">
-  <nav class="navbar is-dark" role="navigation" aria-label="main navigation" data-controller="navbar">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="/">
-        <strong>Buffer estimator</strong>
-      </a>
+  <head>
+    <meta charset="utf-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><%= page_title %></title>
+
+    <%= stylesheet_link_tag 'https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css', integrity: 'sha384-DCY3M8xLkMu6c9IKcKbe+jHKMjelnwC0p+SBaxfHxoBYZWdJF2X400UdBCgATtAB', crossorigin: 'anonymous', 'data-turbo-track' => 'reload' %>
+    <%= stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css', integrity: 'sha512-9xKTRVabjVeZmc+GUW8GgSmcREDunMM+Dt/GrzchfN8tkwHizc5RP4Ok/MXFFy5rIjJjzhndFScTceq5e6GvVQ==', crossorigin: 'anonymous', 'data-turbo-track' => 'reload' %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track' => 'reload' %>
+    <%= csrf_meta_tags %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body data-env="<%= Rails.env %>">
+    <nav
+      class="navbar is-dark"
+      role="navigation"
+      aria-label="main navigation"
+      data-controller="navbar"
+    >
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/"><strong>Buffer estimator</strong></a>
+
+        <% if user_signed_in? %>
+          <a
+            role="button"
+            class="navbar-burger"
+            aria-label="menu"
+            aria-expanded="false"
+            data-navbar-target="burger"
+            data-action="click->navbar#toggle"
+          >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        <% end %>
+      </div>
 
       <% if user_signed_in? %>
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-navbar-target="burger" data-action="click->navbar#toggle">
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      <% end %>
-    </div>
-
-    <% if user_signed_in? %>
-      <div class="navbar-menu" data-navbar-target="menu">
-        <div class="navbar-end">
-          <div class="navbar-item">
-            <%= link_to :destroy_user_session, class: "button is-light" do %>
-              <span class="icon">
-                <i class="fa-solid fa-right-from-bracket"></i>
-              </span>
-              <span>Sign out</span>
-            <% end %>
+        <div class="navbar-menu" data-navbar-target="menu">
+          <div class="navbar-end">
+            <div class="navbar-item">
+              <%= link_to :destroy_user_session, class: "button is-light" do %>
+                <span class="icon">
+                  <i class="fa-solid fa-right-from-bracket"></i>
+                </span>
+                <span>Sign out</span>
+              <% end %>
+            </div>
           </div>
         </div>
+      <% end %>
+    </nav>
+
+    <% if notice %>
+      <div class="notification is-info is-light" data-controller="notification">
+        <button class="delete" data-action="click->notification#close"></button>
+        <%= notice %>
       </div>
     <% end %>
-  </nav>
+    <% if alert %>
+      <div
+        class="notification is-warning is-light"
+        data-controller="notification"
+      >
+        <button class="delete" data-action="click->notification#close"></button>
+        <%= alert %>
+      </div>
+    <% end %>
 
-  <% if notice %>
-    <div class="notification is-info is-light" data-controller="notification">
-      <button class="delete" data-action="click->notification#close"></button>
-      <%= notice %>
-    </div>
-  <% end %>
-  <% if alert %>
-    <div class="notification is-warning is-light" data-controller="notification">
-      <button class="delete" data-action="click->notification#close"></button>
-      <%= alert %>
-    </div>
-  <% end %>
-
-  <div class="container">
-    <%= yield %>
-  </div>
-
-</body>
+    <div class="container"><%= yield %></div>
+  </body>
 </html>

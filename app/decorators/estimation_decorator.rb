@@ -40,11 +40,11 @@ class EstimationDecorator < Draper::Decorator
   def buffer_health_class
     case object.buffer_health
     when 0...0.8
-      'bg-success'
+      'has-text-success'
     when 0.8...1.0
-      'bg-warning'
+      'has-text-warning'
     else
-      'bg-danger'
+      'has-text-danger'
     end
   end
 
