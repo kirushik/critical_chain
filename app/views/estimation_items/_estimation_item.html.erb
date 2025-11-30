@@ -1,43 +1,64 @@
-<tr id="<%= dom_id estimation_item %>"
-    data-order="<%= estimation_item.order %>"
-    data-sortable-target="item"
-    draggable="true"
-    data-action="dragstart->sortable#dragStart dragend->sortable#dragEnd dragover->sortable#dragOver">
-  <td class="drag-handle" style="cursor: move; width: 30px;">
-    <span class="fa-solid fa-grip-vertical has-text-grey-light" style="opacity: 0.5;"></span>
-  </td>
-  <td class="has-text-right copies">
-    <i class="fa-solid fa-copy has-text-grey-light"></i>
-    <%= estimation_item.decorate.editable :quantity, type: :number %>
-    <span class="multiplier">×</span>
-  </td>
-  <td>
-    <%= estimation_item.decorate.editable :value, type: :number %>
-    <span class="multiplier-total has-text-grey-light">
-      =
-    </span>
-    <span class="total_value has-text-weight-medium">
-      <%= estimation_item.total %>
+<tr
+  id="<%= dom_id estimation_item %>"
+  data-order="<%= estimation_item.order %>"
+  data-sortable-target="item"
+  draggable="true"
+  data-action="dragstart->sortable#dragStart dragend->sortable#dragEnd dragover->sortable#dragOver"
+>
+  <%# Drag Handle %>
+  <td class="col-drag">
+    <span class="drag-handle">
+      <i class="fa-solid fa-grip-vertical"></i>
     </span>
   </td>
-  <td class="has-text-centered" style="width: 80px;">
+
+  <%# Calculation: Qty × Value = Total %>
+  <td class="col-calculation has-text-right">
+    <span class="calculation-group">
+      <span class="quantity">
+        <i class="fa-regular fa-clone has-text-grey-light"></i>
+        <%= estimation_item.decorate.editable :quantity, type: :number %>
+        <span class="has-text-grey">×</span>
+      </span>
+
+      <span class="value">
+        <%= estimation_item.decorate.editable :value, type: :number %>
+      </span>
+
+      <span class="equals">=</span>
+      <span class="total"><%= estimation_item.total %></span>
+    </span>
+  </td>
+
+  <%# Fixed Indicator %>
+  <td class="col-fixed has-text-centered">
     <%= form_with model: [estimation_item.estimation, estimation_item],
-                  method: :patch do |f| %>
+                  method: :patch,
+                  class: 'fixed-toggle' do |f| %>
       <%= f.hidden_field :fixed, value: !estimation_item.fixed? %>
-      <span class="fa fa-dot-circle-o has-text-grey-light"></span>
-      <%= f.button type: :submit, class: 'button is-text is-small toggle-fixed' do %>
-        <span class="icon is-small">
-          <span class="fa <%= estimation_item.fixed? ? 'fa-toggle-on' : 'fa-toggle-off' %>"></span>
-        </span>
-      <% end %>
+
+      <button
+        type="submit"
+        class="fixed-button"
+        title="<%= estimation_item.fixed? ? 'Unmark as fixed estimate' : 'Mark as fixed (excludes from buffer calculation)' %>"
+        aria-label="<%= estimation_item.fixed? ? 'Unmark as fixed' : 'Mark as fixed' %>"
+      >
+        <i class="<%= estimation_item.fixed? ? 'fa-solid fa-thumbtack' : 'fa-regular fa-circle' %>"></i>
+      </button>
     <% end %>
   </td>
-  <td><%= estimation_item.decorate.editable :title %></td>
-  <td class="has-text-centered" style="width: 60px;">
+
+  <%# Title %>
+  <td class="col-title"><%= estimation_item.decorate.editable :title %></td>
+
+  <%# Delete Action %>
+  <td class="col-actions has-text-centered">
     <%= button_to [estimation_item.estimation, estimation_item],
                   method: :delete,
                   data: { turbo_confirm: 'Are you sure?' },
-                  class: 'button is-small is-danger is-light is-outlined' do %>
+                  class: 'button is-small is-danger is-light delete-button',
+                  title: 'Delete this item',
+                  aria: { label: 'Delete item' } do %>
       <span class="icon is-small">
         <i class="fa-solid fa-trash-can"></i>
       </span>

@@ -29,7 +29,7 @@ RSpec.describe "estimations/show.html.erb", :type => :view do
     end
 
     it 'shows tracking mode toggle' do
-      expect(rendered).to have_css('.toggle-tracking')
+      expect(rendered).to have_css('.tracking-toggle-button')
     end
 
     it 'doesn\'t show buffer consumption' do

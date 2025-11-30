@@ -52,7 +52,10 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     # Wait for the display to return with new value
     page.get_by_title('Click to edit').filter(hasText: new_estimation_value.to_s).wait_for(state: 'visible', timeout: 5000)
 
-    expect(page.get_by_text("7 + 7 = 14")).to be_visible
+    # Verify the summary values updated correctly (7 sum + 7 buffer = 14 total)
+    expect(page.locator("#sum").text_content).to eq('7')
+    expect(page.locator("#buffer").text_content).to eq('7')
+    expect(page.locator("#total").text_content).to eq('14')
   end
 
   scenario "AJAX-added items are editable", :playwright do
@@ -77,17 +80,20 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
   end
 
   scenario "I can mark estimation item as fixed", :playwright do
-    page.locator(".toggle-fixed").click
+    page.locator(".fixed-button").click
 
-    # Wait for AJAX to complete and the total to update
-    page.get_by_text("#{old_estimation_value} + 0 = #{old_estimation_value}").wait_for(state: 'visible', timeout: 5000)
+    # Wait for AJAX to complete - the thumbtack icon should appear when item is fixed
+    page.locator(".fa-thumbtack").wait_for(state: 'visible', timeout: 5000)
 
-    expect(page.get_by_text("#{old_estimation_value} + 0 = #{old_estimation_value}")).to be_visible
+    # Verify the summary values updated correctly
+    expect(page.locator("#sum").text_content).to eq(old_estimation_value.to_s)
+    expect(page.locator("#buffer").text_content).to eq('0')
+    expect(page.locator("#total").text_content).to eq(old_estimation_value.to_s)
   end
 
   scenario "I can set the number for a batch", :playwright do
     # Click on quantity to edit (should be "1" initially)
-    page.get_by_title('Click to edit').filter(hasText: /^1$/).click
+    page.get_by_title('Click to edit').filter(hasText: /^1$/).first.click
 
     # Wait for editing state to activate
     page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
@@ -99,12 +105,15 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     # Wait for display to return
     page.get_by_title('Click to edit').filter(hasText: '4').wait_for(state: 'visible', timeout: 5000)
 
-    expect(page.get_by_text("#{4 * old_estimation_value} + #{2 * old_estimation_value} = #{6 * old_estimation_value}")).to be_visible
+    # Verify the summary values updated correctly (4*10=40 sum, 20 buffer, 60 total)
+    expect(page.locator("#sum").text_content).to eq((4 * old_estimation_value).to_s)
+    expect(page.locator("#buffer").text_content).to eq((2 * old_estimation_value).to_s)
+    expect(page.locator("#total").text_content).to eq((6 * old_estimation_value).to_s)
   end
 
   scenario "I can see updated total when estimation or count has been changed", :playwright do
     # Click on quantity to edit
-    page.get_by_title('Click to edit').filter(hasText: /^1$/).click
+    page.get_by_title('Click to edit').filter(hasText: /^1$/).first.click
     page.locator(".editing input[name*='[quantity]']").fill("20")
     page.get_by_role('button', name: 'Save').click
 
@@ -119,6 +128,7 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     # Wait for display to return
     page.get_by_title('Click to edit').filter(hasText: '17').wait_for(state: 'visible', timeout: 5000)
 
-    expect(page.get_by_text("= 340")).to be_visible
+    # Verify the total in the item row (20*17=340)
+    expect(page.locator(".calculation-group .total").text_content).to eq("340")
   end
 end

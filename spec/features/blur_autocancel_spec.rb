@@ -14,17 +14,17 @@ feature "BlurAutocancel", :type => :feature do
     original_title = estimation.title
     expect(page.get_by_text(original_title)).to be_visible
 
-    # Click to open editor
-    page.get_by_title('Click to edit').filter(hasText: original_title).click
-    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
+    # Click to open editor (scope to h1 to avoid matching estimation_item titles)
+    page.locator("h1 [title='Click to edit']").click
+    page.locator("h1 .editing").wait_for(state: 'visible', timeout: 5000)
     expect(page.get_by_role('button', name: 'Cancel')).to be_visible
 
-    # Blur without making changes (click somewhere else)
-    page.locator("body").click
+    # Blur without making changes (click on navbar which is not editable)
+    page.locator("nav.navbar").click
 
     # Editor should auto-cancel and return to display mode
-    page.locator(".editing").wait_for(state: 'hidden', timeout: 5000)
-    expect(page.get_by_role('button', name: 'Cancel').count).to eq(0)
+    page.locator("h1 .editing").wait_for(state: 'hidden', timeout: 5000)
+    expect(page.locator("h1").get_by_role('button', name: 'Cancel').count).to eq(0)
     expect(page.get_by_text(original_title)).to be_visible
   end
 
@@ -33,23 +33,23 @@ feature "BlurAutocancel", :type => :feature do
     new_title = "Modified Title"
     expect(page.get_by_text(original_title)).to be_visible
 
-    # Click to open editor
-    page.get_by_title('Click to edit').filter(hasText: original_title).click
-    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
+    # Click to open editor (scope to h1 to avoid matching estimation_item titles)
+    page.locator("h1 [title='Click to edit']").click
+    page.locator("h1 .editing").wait_for(state: 'visible', timeout: 5000)
 
     # Make a change
     page.locator("h1 input[type='text']").fill(new_title)
 
-    # Blur with changes (click somewhere else)
-    page.locator("body").click
+    # Blur with changes (click on navbar which is not editable)
+    page.locator("nav.navbar").click
 
     # Editor should remain open because there are unsaved changes
-    expect(page.get_by_role('button', name: 'Cancel')).to be_visible
-    expect(page.locator(".editing")).to be_visible
+    expect(page.locator("h1").get_by_role('button', name: 'Cancel')).to be_visible
+    expect(page.locator("h1 .editing")).to be_visible
 
     # Cancel to clean up
-    page.get_by_role('button', name: 'Cancel').click
-    page.locator(".editing").wait_for(state: 'hidden', timeout: 5000)
+    page.locator("h1").get_by_role('button', name: 'Cancel').click
+    page.locator("h1 .editing").wait_for(state: 'hidden', timeout: 5000)
   end
 
   scenario "Estimation item title editor auto-cancels on blur without changes", :playwright do
@@ -61,8 +61,8 @@ feature "BlurAutocancel", :type => :feature do
     page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
     expect(page.get_by_role('button', name: 'Cancel')).to be_visible
 
-    # Blur without making changes (click somewhere else)
-    page.locator("body").click
+    # Blur without making changes (click on navbar which is not editable)
+    page.locator("nav.navbar").click
 
     # Editor should auto-cancel and return to display mode
     page.locator(".editing").wait_for(state: 'hidden', timeout: 5000)
@@ -72,20 +72,21 @@ feature "BlurAutocancel", :type => :feature do
 
   scenario "Estimation item value editor auto-cancels on blur without changes", :playwright do
     original_value = estimation_item.value
-    expect(page.get_by_title('Click to edit').filter(hasText: original_value.to_s).first).to be_visible
+    expect(page.locator("table [title='Click to edit']").filter(hasText: original_value.to_s).first).to be_visible
 
-    # Click to open editor
-    page.get_by_title('Click to edit').filter(hasText: original_value.to_s).click
-    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
+    # Click to open editor (scope to table to target estimation_item, not estimation title)
+    page.locator("table [title='Click to edit']").filter(hasText: original_value.to_s).first.click
+    page.locator("table .editing").wait_for(state: 'visible', timeout: 5000)
     expect(page.get_by_role('button', name: 'Cancel')).to be_visible
 
-    # Blur without making changes (click somewhere else)
-    page.locator("body").click
+    # Blur without making changes (click on navbar which is not editable)
+    page.locator("nav.navbar").click
 
     # Editor should auto-cancel and return to display mode
-    page.locator(".editing").wait_for(state: 'hidden', timeout: 5000)
-    expect(page.get_by_role('button', name: 'Cancel').count).to eq(0)
-    expect(page.get_by_title('Click to edit').filter(hasText: original_value.to_s).first).to be_visible
+    page.locator("table .editing").wait_for(state: 'hidden', timeout: 5000)
+    # Note: There may be Cancel buttons from other editable fields in the table, check that none are in editing state
+    expect(page.locator("table .editing").count).to eq(0)
+    expect(page.locator("table [title='Click to edit']").filter(hasText: original_value.to_s).first).to be_visible
   end
 
   scenario "Save button works despite blur event", :playwright do
@@ -93,18 +94,18 @@ feature "BlurAutocancel", :type => :feature do
     new_title = "New Title Via Save"
     expect(page.get_by_text(original_title)).to be_visible
 
-    # Click to open editor
-    page.get_by_title('Click to edit').filter(hasText: original_title).click
-    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
+    # Click to open editor (scope to h1 to avoid matching estimation_item titles)
+    page.locator("h1 [title='Click to edit']").click
+    page.locator("h1 .editing").wait_for(state: 'visible', timeout: 5000)
 
     # Change the value
     page.locator("h1 input[type='text']").fill(new_title)
 
     # Click Save button (this will trigger blur, but should complete the save)
-    page.get_by_role('button', name: 'Save').click
+    page.locator("h1").get_by_role('button', name: 'Save').click
 
     # Wait for Turbo Stream response and editing state to close
-    page.locator(".editing").wait_for(state: 'hidden', timeout: 5000)
+    page.locator("h1 .editing").wait_for(state: 'hidden', timeout: 5000)
 
     # Verify the new title is saved and displayed
     expect(page.get_by_text(new_title)).to be_visible
@@ -121,18 +122,18 @@ feature "BlurAutocancel", :type => :feature do
     new_title = "Title That Should Not Be Saved"
     expect(page.get_by_text(original_title)).to be_visible
 
-    # Click to open editor
-    page.get_by_title('Click to edit').filter(hasText: original_title).click
-    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
+    # Click to open editor (scope to h1 to avoid matching estimation_item titles)
+    page.locator("h1 [title='Click to edit']").click
+    page.locator("h1 .editing").wait_for(state: 'visible', timeout: 5000)
 
     # Change the value
     page.locator("h1 input[type='text']").fill(new_title)
 
     # Click Cancel button (this will trigger blur, but should complete the cancel)
-    page.get_by_role('button', name: 'Cancel').click
+    page.locator("h1").get_by_role('button', name: 'Cancel').click
 
     # Wait for editing state to close
-    page.locator(".editing").wait_for(state: 'hidden', timeout: 5000)
+    page.locator("h1 .editing").wait_for(state: 'hidden', timeout: 5000)
 
     # Verify the original title is still displayed (change was not saved)
     expect(page.get_by_text(original_title)).to be_visible
@@ -149,9 +150,9 @@ feature "BlurAutocancel", :type => :feature do
     new_title = "Temporary Change"
     expect(page.get_by_text(original_title)).to be_visible
 
-    # Click to open editor
-    page.get_by_title('Click to edit').filter(hasText: original_title).click
-    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
+    # Click to open editor (scope to h1 to avoid matching estimation_item titles)
+    page.locator("h1 [title='Click to edit']").click
+    page.locator("h1 .editing").wait_for(state: 'visible', timeout: 5000)
 
     # Make a change
     page.locator("h1 input[type='text']").fill(new_title)
@@ -160,20 +161,20 @@ feature "BlurAutocancel", :type => :feature do
     page.locator("h1 input[type='text']").press('Escape')
 
     # Wait for editing state to close
-    page.locator(".editing").wait_for(state: 'hidden', timeout: 5000)
+    page.locator("h1 .editing").wait_for(state: 'hidden', timeout: 5000)
 
     # Open editor again
-    page.get_by_title('Click to edit').filter(hasText: original_title).click
-    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
+    page.locator("h1 [title='Click to edit']").click
+    page.locator("h1 .editing").wait_for(state: 'visible', timeout: 5000)
 
     # Verify input has original value (was properly reset on cancel)
     expect(page.locator("h1 input[type='text']").input_value).to eq(original_title)
 
-    # Now blur without changes - should auto-cancel
-    page.locator("body").click
+    # Now blur without changes - should auto-cancel (click on navbar which is not editable)
+    page.locator("nav.navbar").click
 
     # Editor should auto-cancel
-    page.locator(".editing").wait_for(state: 'hidden', timeout: 5000)
+    page.locator("h1 .editing").wait_for(state: 'hidden', timeout: 5000)
     expect(page.get_by_text(original_title)).to be_visible
   end
 end

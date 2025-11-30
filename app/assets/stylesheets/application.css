@@ -1,75 +1,355 @@
 /* Custom application styles for Bulma */
 
-/* Form field sizing - removed, now using inline styles for better control */
+/* ==========================================================================
+   ESTIMATION ITEMS TABLE - Layout Stability
+   ========================================================================== */
 
-/* Results table styling */
-#results-table {
-    margin-top: 1rem;
+.estimation-items-index {
+    table-layout: fixed;
+    margin-top: 1.5rem;
 }
 
-#results-table td {
-    padding-right: 0.5rem;
+/* Column widths for stable layout */
+.estimation-items-index .col-drag {
+    width: 40px;
 }
 
-/* Table row hover enhancement */
-.estimation-item:hover {
-    background-color: hsl(0, 0%, 98%) !important;
+.estimation-items-index .col-calculation {
+    width: 180px;
 }
 
-/* Toggle button alignment */
-.toggle-fixed {
+.estimation-items-index .col-fixed {
+    width: 50px;
+}
+
+.estimation-items-index .col-title {
+    width: auto;
+}
+
+.estimation-items-index .col-actions {
+    width: 60px;
+}
+
+/* Ensure cells don't overflow and cause jumping */
+.estimation-items-index td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+/* ==========================================================================
+   DRAG HANDLE
+   ========================================================================== */
+
+.drag-handle {
+    cursor: move;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: hsl(0, 0%, 71%);
+    transition: color 0.2s ease;
+}
+
+.drag-handle:hover {
+    color: hsl(0, 0%, 48%);
+}
+
+/* Dragging state */
+tr.dragging {
+    opacity: 0.5;
+    background-color: hsl(48, 100%, 96%);
+}
+
+/* ==========================================================================
+   CALCULATION DISPLAY (Qty × Value = Total)
+   ========================================================================== */
+
+.calculation-group {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.calculation-group .quantity {
+    color: hsl(0, 0%, 48%);
+    font-size: 0.875rem;
+}
+
+.calculation-group .quantity .editable-field {
+    display: inline;
+}
+
+.calculation-group .value .editable-field {
+    display: inline;
+}
+
+.calculation-group .equals {
+    color: hsl(0, 0%, 71%);
+    margin: 0 0.125rem;
+}
+
+.calculation-group .total {
+    font-weight: 600;
+    color: hsl(0, 0%, 29%);
+    min-width: 2em;
+    text-align: right;
+}
+
+/* ==========================================================================
+   ITEM TITLE STYLING
+   ========================================================================== */
+
+.col-title {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: hsl(0, 0%, 21%);
+    letter-spacing: -0.01em;
+}
+
+.col-title .editable-field .editable-display {
+    border-bottom-color: hsl(0, 0%, 86%);
+}
+
+/* ==========================================================================
+   FIXED TOGGLE BUTTON
+   ========================================================================== */
+
+.fixed-toggle {
+    display: inline;
+}
+
+.fixed-button {
+    border: none !important;
+    background: transparent !important;
     padding: 0.25rem;
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        color 0.2s ease;
+}
+
+.fixed-button:hover {
+    transform: scale(1.2);
+    background: transparent !important;
+}
+
+.fixed-button.is-active,
+.fixed-button .fa-thumbtack {
+    color: hsl(204, 86%, 53%);
+}
+
+.fixed-button .fa-circle {
+    color: hsl(0, 0%, 86%);
+}
+
+/* ==========================================================================
+   TRACKING MODE TOGGLE
+   ========================================================================== */
+
+.tracking-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: hsl(0, 0%, 98%);
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.tracking-toggle-label {
+    font-weight: 500;
+    color: hsl(0, 0%, 29%);
+    user-select: none;
+}
+
+.tracking-toggle-button {
+    position: relative;
+    width: 50px;
+    height: 28px;
+    background: hsl(0, 0%, 86%);
     border: none;
-    background: none;
-}
-
-.toggle-fixed:hover {
-    background-color: transparent !important;
-}
-
-.toggle-tracking {
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
     padding: 0;
 }
 
-/* Copies icon spacing */
-.copies > i.fa-copy {
-    margin-right: 0.3rem;
+.tracking-toggle-button:hover {
+    background: hsl(0, 0%, 76%);
 }
 
-/* Multiplier spacing */
-.multiplier {
-    margin-left: 0.5rem;
-    margin-right: 0.25rem;
+.tracking-toggle-button.is-active {
+    background: hsl(171, 100%, 41%);
 }
 
-.multiplier-total {
-    margin-left: 0.5rem;
-    margin-right: 0.25rem;
+.tracking-toggle-button.is-active:hover {
+    background: hsl(171, 100%, 36%);
 }
 
-/* Turbo progress bar styling */
-.turbo-progress-bar {
-    height: 5px;
-    background-color: hsl(204, 86%, 53%); /* Bulma's $blue */
+.tracking-toggle-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Editable field container */
+.tracking-toggle-button.is-active .tracking-toggle-thumb {
+    transform: translateX(22px);
+}
+
+/* ==========================================================================
+   RESULTS DISPLAY
+   ========================================================================== */
+
+.estimation-summary {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.estimation-summary .summary-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.estimation-summary .summary-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-variant-numeric: tabular-nums;
+}
+
+.estimation-summary .summary-item.is-sum {
+    background: hsl(141, 53%, 93%);
+}
+
+.estimation-summary .summary-item.is-sum .summary-value {
+    color: hsl(141, 53%, 31%);
+}
+
+.estimation-summary .summary-item.is-buffer {
+    background: hsl(206, 70%, 93%);
+}
+
+.estimation-summary .summary-item.is-buffer .summary-value {
+    color: hsl(206, 70%, 41%);
+}
+
+.estimation-summary .summary-item.is-total {
+    background: hsl(44, 100%, 90%);
+}
+
+.estimation-summary .summary-item.is-total .summary-value {
+    color: hsl(44, 100%, 32%);
+}
+
+.estimation-summary .summary-label {
+    font-size: 0.75rem;
+    color: hsl(0, 0%, 48%);
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.estimation-summary .summary-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.estimation-summary .summary-operator {
+    color: hsl(0, 0%, 71%);
+    font-size: 1.25rem;
+    padding: 0 0.25rem;
+}
+
+/* Tracking mode results */
+.tracking-results {
+    margin-top: 1rem;
+}
+
+.tracking-results .tracking-progress {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.tracking-results .tracking-progress .actual {
+    color: hsl(141, 53%, 41%);
+}
+
+.tracking-results .tracking-progress .total {
+    color: hsl(44, 100%, 42%);
+}
+
+/* ==========================================================================
+   EDITABLE FIELDS
+   ========================================================================== */
+
 .editable-field {
     display: inline-block;
+    min-width: 2em;
+    position: relative;
+}
+
+/* Prevent layout shift when editing */
+.editable-field.quantity {
+    min-width: 1.5em;
+}
+
+.editable-field.value {
+    min-width: 2.5em;
+}
+
+.editable-field.title {
+    min-width: 4em;
+    max-width: 100%;
 }
 
 /* Display state (default - visible) */
 .editable-field .editable-display {
-    border-bottom: 1px dashed hsl(0, 0%, 48%); /* Bulma grey-dark */
+    border-bottom: 1px dashed hsl(0, 0%, 80%);
     position: relative;
     display: inline-block;
+    cursor: pointer;
+    padding: 0.125rem 0.25rem;
+    border-radius: 2px;
+    transition: background-color 0.2s ease;
+}
+
+.editable-field .editable-display:hover {
+    background-color: hsl(48, 100%, 96%);
+}
+
+/* Pencil icon - tiny, top-right, overlaid */
+.editable-field .editable-display::after {
+    content: "\270E";
+    position: absolute;
+    top: -0.4em;
+    right: -0.5em;
+    font-size: 0.65em;
+    color: hsl(0, 0%, 70%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+    z-index: 10;
+    text-shadow:
+        -1px -1px 0 white,
+        1px -1px 0 white,
+        -1px 1px 0 white,
+        1px 1px 0 white;
 }
 
 .editable-field .editable-display:hover::after {
-    content: '\270E'; /* Pencil icon */
-    margin-left: 0.3em;
-    color: hsl(0, 0%, 40%); /* Bulma grey */
-    font-size: 0.9em;
+    opacity: 1;
 }
 
 /* Edit form (default - hidden) */
@@ -83,65 +363,121 @@
 }
 
 .editable-field.editing .editable-form {
-    display: inline-block;
-}
-
-/* Bulma field styling for inline forms */
-.editable-form .field {
-    width: auto;
-}
-
-.editable-form .field.has-addons {
     display: inline-flex;
 }
 
-/* Highlight flash animation */
-@keyframes highlight-flash {
-    0% { background-color: hsl(48, 100%, 67%); /* Bulma warning light */ }
-    100% { background-color: transparent; }
+/* Compact inline form styling */
+.editable-form .field.has-addons {
+    display: inline-flex;
+    margin-bottom: 0;
 }
 
-/* Additional Bulma customizations */
+.editable-form .input.is-small {
+    width: 4em;
+    padding: 0.25rem 0.5rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Wider input for title fields */
+.editable-field.title .editable-form .input.is-small {
+    width: 10em;
+}
+
+.editable-form .button.is-small {
+    padding: 0.25rem 0.4rem;
+}
+
+/* ==========================================================================
+   DELETE BUTTON
+   ========================================================================== */
+
+.estimation-items-index .delete-button {
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.estimation-items-index tr:hover .delete-button {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   ADD NEW ITEM FORM
+   ========================================================================== */
+
+.new-item-form {
+    margin-bottom: 1.5rem;
+}
+
+.new-item-form .field.has-addons {
+    margin-bottom: 0;
+}
+
+.new-item-form .input-value {
+    width: 6rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   TURBO PROGRESS BAR
+   ========================================================================== */
+
+.turbo-progress-bar {
+    height: 3px;
+    background-color: hsl(171, 100%, 41%);
+}
+
+/* ==========================================================================
+   FLASH NOTIFICATIONS
+   ========================================================================== */
+
+.notification {
+    margin-bottom: 0;
+}
+
+/* ==========================================================================
+   PAGE LAYOUT
+   ========================================================================== */
+
 .container {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
 }
 
-/* Mobile-friendly drag handle */
-.drag-handle {
-    cursor: move;
-    width: 40px; /* Slightly larger for better touch targets */
-    padding: 0.5rem;
+#estimation_title h1 {
+    margin-bottom: 1rem;
 }
 
-@media screen and (max-width: 768px) {
-    .drag-handle {
-        width: 50px; /* Even larger on mobile */
+/* ==========================================================================
+   ANIMATIONS
+   ========================================================================== */
+
+@keyframes highlight-flash {
+    0% {
+        background-color: hsl(48, 100%, 67%);
+    }
+    100% {
+        background-color: transparent;
     }
 }
 
-/* Better spacing for icons in forms */
-.icon {
-    pointer-events: none;
+.highlight-flash {
+    animation: highlight-flash 1s ease-out;
 }
 
-/* Ensure buttons in forms align properly */
-.field.has-addons .control:not(:last-child) {
-    margin-right: 0;
+/* Smooth transitions for interactive elements */
+.button,
+.input {
+    transition: all 0.2s ease;
 }
 
+/* ==========================================================================
+   ESTIMATION INDEX TABLE
+   ========================================================================== */
 
-/* Estimation items spacing */
-.estimation-items-index {
-    margin-top: 1.5rem;
-}
-
-/* Estimation index spacing */
 #estimations-index {
     margin-bottom: 0;
 }
 
-/* Make estimation title links more prominent */
 #estimations-index td a {
     text-decoration: none;
 }
@@ -150,8 +486,58 @@
     text-decoration: underline;
 }
 
-/* Better mobile table responsiveness */
+/* ==========================================================================
+   BUFFER CONSUMPTION
+   ========================================================================== */
+
+.buffer-consumption {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: hsl(0, 0%, 98%);
+    border-radius: 6px;
+}
+
+.buffer-consumption .buffer-label {
+    font-size: 0.875rem;
+    color: hsl(0, 0%, 48%);
+    margin-bottom: 0.5rem;
+}
+
+.buffer-consumption .buffer-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+
 @media screen and (max-width: 768px) {
+    /* Larger touch targets on mobile */
+    .drag-handle {
+        width: 50px;
+        padding: 0.75rem;
+    }
+
+    .fixed-button {
+        padding: 0.5rem;
+    }
+
+    .tracking-toggle-button {
+        width: 56px;
+        height: 32px;
+    }
+
+    .tracking-toggle-thumb {
+        width: 26px;
+        height: 26px;
+    }
+
+    .tracking-toggle-button.is-active .tracking-toggle-thumb {
+        transform: translateX(24px);
+    }
+
+    /* Better table handling on mobile */
     .table-container {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -164,30 +550,31 @@
     .field.is-grouped > .control {
         margin-bottom: 0.5rem;
     }
+
+    /* Summary stacks vertically on mobile */
+    .estimation-summary .summary-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .estimation-summary .summary-operator {
+        display: none;
+    }
 }
 
-/* Ensure small inputs in editable fields are appropriately sized */
-.field.is-small .input {
-    min-width: 4em;
+/* ==========================================================================
+   ACCESSIBILITY
+   ========================================================================== */
+
+/* Better focus states */
+.button:focus,
+.input:focus,
+.editable-display:focus {
+    outline: 2px solid hsl(204, 86%, 53%);
+    outline-offset: 2px;
 }
 
-/* Better notification spacing */
-.notification {
-    margin-bottom: 0;
+/* Ensure icons in buttons don't capture pointer events */
+.icon {
+    pointer-events: none;
 }
-
-
-/* Title styling improvements */
-#estimation_title h1 {
-    margin-bottom: 1rem;
-}
-
-/* Smooth transitions for interactive elements */
-.button, .input {
-    transition: all 0.2s ease;
-}
-
-.highlight-flash {
-    animation: highlight-flash 1s ease-out;
-}
-

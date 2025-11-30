@@ -1,15 +1,17 @@
-<div class="field">
-  <%= form_for @estimation, method: :patch, data: { turbo: false } do |f| %>
-    <div class="is-flex is-align-items-center">
-      <span class="title is-5 mr-2">
-        <span class="is-size-6">Tracking mode</span>
-      </span>
-      <%= f.hidden_field :tracking_mode, :value => !@estimation.tracking_mode? %>
-      <%= f.button type: :submit, class: 'button is-text toggle-tracking' do %>
-        <span class="icon is-large">
-          <span class="fa fa-lg <%= @estimation.tracking_mode? ? 'fa-toggle-on' : 'fa-toggle-off' %>"></span>
-        </span>
-      <% end %>
-    </div>
-  <% end %>
-</div>
+<%= form_for @estimation, method: :patch, data: { turbo: false }, html: { class: 'tracking-toggle-form' } do |f| %>
+  <%= f.hidden_field :tracking_mode, value: !@estimation.tracking_mode? %>
+
+  <div class="tracking-toggle-container">
+    <span class="tracking-toggle-label">Tracking mode</span>
+
+    <button
+      type="submit"
+      class="tracking-toggle-button <%= 'is-active' if @estimation.tracking_mode? %>"
+      title="<%= @estimation.tracking_mode? ? 'Switch to planning mode' : 'Switch to tracking mode' %>"
+      aria-label="<%= @estimation.tracking_mode? ? 'Disable tracking mode' : 'Enable tracking mode' %>"
+      aria-pressed="<%= @estimation.tracking_mode? %>"
+    >
+      <span class="tracking-toggle-thumb"></span>
+    </button>
+  </div>
+<% end %>

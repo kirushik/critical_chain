@@ -7,10 +7,20 @@
 <div class="columns">
   <div class="column is-7">
     <div class="table-container">
-      <table id="<%= dom_id @estimation %>"
-             class="table is-hoverable is-fullwidth estimation-items-index"
-             data-controller="sortable"
-             data-sortable-update-url="<%= estimation_estimation_items_path(@estimation) %>">
+      <table
+        id="<%= dom_id @estimation %>"
+        class="table is-hoverable is-fullwidth estimation-items-index"
+        data-controller="sortable"
+        data-sortable-update-url="<%= estimation_estimation_items_path(@estimation) %>"
+      >
+        <colgroup>
+          <col class="col-drag">
+          <col class="col-calculation">
+          <col class="col-fixed">
+          <col class="col-title">
+          <col class="col-actions">
+        </colgroup>
+
         <tbody>
           <%= render partial: @estimation.items_partial_name, collection: @estimation.estimation_items, as: :estimation_item %>
         </tbody>
@@ -19,9 +29,7 @@
   </div>
 
   <div class="column is-5">
-    <div id="mode_toggle">
-      <%= render 'mode_toggle' %>
-    </div>
+    <div id="mode_toggle"><%= render 'mode_toggle' %></div>
     <%= render 'estimation_items/form_for_new' unless @estimation.tracking_mode? %>
     <%= render 'results' %>
     <%= render 'buffer_consumption' if @estimation.tracking_mode? %>

@@ -17,9 +17,9 @@ feature "EscKeyCancellation", :type => :feature do
     original_title = estimation.title
     expect(page.get_by_text(original_title)).to be_visible
 
-    # Click to open editor
-    page.get_by_title('Click to edit').filter(hasText: original_title).click
-    page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
+    # Click to open editor (scope to h1 to avoid matching estimation_item titles)
+    page.locator("h1 [title='Click to edit']").click
+    page.locator("h1 .editing").wait_for(state: 'visible', timeout: 5000)
     expect(page.get_by_role('button', name: 'Cancel')).to be_visible
 
     # Change the value
@@ -29,7 +29,7 @@ feature "EscKeyCancellation", :type => :feature do
     page.locator("h1 input[type='text']").press('Escape')
 
     # Wait for display to become visible again
-    page.get_by_title('Click to edit').filter(hasText: original_title).wait_for(state: 'visible', timeout: 5000)
+    page.locator("h1 [title='Click to edit']").wait_for(state: 'visible', timeout: 5000)
 
     # Verify the original title is still displayed
     expect(page.get_by_text(original_title)).to be_visible
@@ -114,8 +114,8 @@ feature "EscKeyCancellation", :type => :feature do
     expected_sum = original_quantity * original_value
     expect(initial_sum).to eq(expected_sum)
 
-    # Click to open editor - find quantity field in the copies column
-    page.locator(".copies [title='Click to edit']").filter(hasText: /^1$/).click
+    # Click to open editor - find quantity field in the quantity span
+    page.locator(".quantity [title='Click to edit']").filter(hasText: /^1$/).click
     page.locator(".editing").wait_for(state: 'visible', timeout: 5000)
     expect(page.get_by_role('button', name: 'Cancel')).to be_visible
 
