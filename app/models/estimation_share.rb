@@ -114,26 +114,19 @@ class EstimationShare < ActiveRecord::Base
       end
     end
 
-    # Check for duplicate email shares
+    # Check for duplicate email shares and email matching existing user shares
     if shared_with_email.present?
-      duplicate = estimation.estimation_shares
-        .where(shared_with_email: shared_with_email)
-        .where.not(id: id)
+      # Check email-based duplicates and user-based duplicates in one query
+      user_with_email = User.find_by(email: shared_with_email)
+      
+      duplicate = estimation.estimation_shares.where.not(id: id).where(
+        "shared_with_email = ? OR shared_with_user_id = ?",
+        shared_with_email,
+        user_with_email&.id
+      )
       
       if duplicate.exists?
         errors.add(:shared_with_email, "already has access to this estimation")
-      end
-
-      # Also check if this email belongs to a user who already has access
-      user_with_email = User.find_by(email: shared_with_email)
-      if user_with_email
-        duplicate = estimation.estimation_shares
-          .where(shared_with_user_id: user_with_email.id)
-          .where.not(id: id)
-        
-        if duplicate.exists?
-          errors.add(:shared_with_email, "already has access to this estimation")
-        end
       end
     end
   end

@@ -31,12 +31,17 @@ class EstimationSharesController < ApplicationController
         format.turbo_stream
       end
     else
+      @error_message = @estimation_share.errors.full_messages.first || "Share failed"
       respond_to do |format|
-        format.html { render :index, status: :unprocessable_entity }
+        format.html { 
+          flash.now[:alert] = @error_message
+          render :index, status: :unprocessable_entity 
+        }
         format.turbo_stream do
-          render turbo_stream: turbo_stream.append(
-            "shares_list",
-            ActionController::Base.helpers.content_tag(:script, "alert('#{j(@estimation_share.errors.full_messages.first) || "Share failed"}');")
+          render turbo_stream: turbo_stream.replace(
+            "shares_form",
+            partial: "estimation_shares/error",
+            locals: { message: @error_message }
           ), status: :unprocessable_entity
         end
       end
@@ -74,11 +79,13 @@ class EstimationSharesController < ApplicationController
       # Remove the share record as they are now the owner
       @estimation_share.destroy
 
-      # Create a viewer share for the old owner AFTER transfer
-      @estimation.estimation_shares.create!(
-        shared_with_user: old_owner,
-        role: 'viewer'
-      )
+      # Create a viewer share for the old owner AFTER transfer (if they don't already have one)
+      unless @estimation.estimation_shares.exists?(shared_with_user: old_owner)
+        @estimation.estimation_shares.create!(
+          shared_with_user: old_owner,
+          role: 'viewer'
+        )
+      end
     end
 
     redirect_to estimation_estimation_shares_path(@estimation), notice: 'Ownership transferred successfully.'
