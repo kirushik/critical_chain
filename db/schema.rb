@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_06_105927) do
+ActiveRecord::Schema[7.2].define(version: 2025_12_08_151837) do
   create_table "estimation_items", force: :cascade do |t|
     t.integer "value"
     t.string "title"
@@ -23,6 +23,21 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_06_105927) do
     t.float "order", default: 0.0, null: false
     t.index ["estimation_id", "order"], name: "index_estimation_items_on_estimation_id_and_order"
     t.index ["estimation_id"], name: "index_estimation_items_on_estimation_id"
+  end
+
+  create_table "estimation_shares", force: :cascade do |t|
+    t.integer "estimation_id", null: false
+    t.integer "shared_with_user_id"
+    t.string "shared_with_email"
+    t.string "role", default: "viewer", null: false
+    t.datetime "last_accessed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["estimation_id", "shared_with_email"], name: "index_estimation_shares_on_estimation_and_email", unique: true
+    t.index ["estimation_id", "shared_with_user_id"], name: "index_estimation_shares_on_estimation_and_user", unique: true
+    t.index ["estimation_id"], name: "index_estimation_shares_on_estimation_id"
+    t.index ["shared_with_email"], name: "index_estimation_shares_on_shared_with_email"
+    t.index ["shared_with_user_id"], name: "index_estimation_shares_on_shared_with_user_id"
   end
 
   create_table "estimations", force: :cascade do |t|
@@ -52,5 +67,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_06_105927) do
   end
 
   add_foreign_key "estimation_items", "estimations"
+  add_foreign_key "estimation_shares", "estimations"
+  add_foreign_key "estimation_shares", "users", column: "shared_with_user_id"
   add_foreign_key "estimations", "users"
 end

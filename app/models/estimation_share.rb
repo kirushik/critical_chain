@@ -88,6 +88,8 @@ class EstimationShare < ActiveRecord::Base
   end
 
   def cannot_share_with_owner
+    return unless estimation_id # Skip validation if estimation not set yet
+    
     owner_email = estimation&.user&.email
     return unless owner_email
 

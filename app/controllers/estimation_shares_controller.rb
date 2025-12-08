@@ -4,7 +4,9 @@ class EstimationSharesController < ApplicationController
 
   def index
     @estimation_shares = @estimation.estimation_shares.includes(:estimation, :shared_with_user)
-    authorize @estimation_shares.first || EstimationShare.new(estimation: @estimation)
+    # Authorize using a sample share or a new one
+    authorize(@estimation_shares.first || EstimationShare.new(estimation: @estimation))
+    skip_policy_scope
   end
 
   def create
@@ -54,26 +56,29 @@ class EstimationSharesController < ApplicationController
   def transfer_ownership
     authorize @estimation_share
 
+    # Determine the target user
+    target_user = @estimation_share.shared_with_user
+    
+    unless target_user
+      redirect_to estimation_estimation_shares_path(@estimation), 
+                  alert: 'Cannot transfer ownership: user has not signed up yet.'
+      return
+    end
+
+    old_owner = @estimation.user
+
     ActiveRecord::Base.transaction do
-      # Determine the target user
-      target_user = @estimation_share.shared_with_user
-      
-      unless target_user
-        redirect_to estimation_estimation_shares_path(@estimation), 
-                    alert: 'Cannot transfer ownership: user has not signed up yet.' and return
-      end
-
-      # Create a viewer share for the old owner
-      @estimation.estimation_shares.create!(
-        shared_with_user: @estimation.user,
-        role: 'viewer'
-      )
-
-      # Transfer ownership
+      # Transfer ownership FIRST
       @estimation.update!(user: target_user)
 
       # Remove the share record as they are now the owner
       @estimation_share.destroy
+
+      # Create a viewer share for the old owner AFTER transfer
+      @estimation.estimation_shares.create!(
+        shared_with_user: old_owner,
+        role: 'viewer'
+      )
     end
 
     redirect_to estimation_estimation_shares_path(@estimation), notice: 'Ownership transferred successfully.'

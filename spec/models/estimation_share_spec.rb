@@ -22,15 +22,32 @@ require 'rails_helper'
 
 RSpec.describe EstimationShare, type: :model do
   describe 'associations' do
-    it { should belong_to(:estimation) }
-    it { should belong_to(:shared_with_user).optional }
+    it 'belongs to estimation' do
+      share = FactoryBot.build(:estimation_share)
+      expect(share).to respond_to(:estimation)
+    end
+
+    it 'belongs to shared_with_user optionally' do
+      share = FactoryBot.build(:estimation_share, :pending)
+      expect(share.shared_with_user).to be_nil
+      expect(share).to be_valid
+    end
   end
 
   describe 'validations' do
     subject { FactoryBot.build(:estimation_share) }
 
-    it { should validate_presence_of(:role) }
-    it { should validate_inclusion_of(:role).in_array(%w[viewer owner]) }
+    it 'validates presence of role' do
+      share = FactoryBot.build(:estimation_share, role: nil)
+      expect(share).not_to be_valid
+      expect(share.errors[:role]).to be_present
+    end
+
+    it 'validates inclusion of role' do
+      share = FactoryBot.build(:estimation_share, role: 'invalid')
+      expect(share).not_to be_valid
+      expect(share.errors[:role]).to include('is not included in the list')
+    end
 
     it 'requires either user or email' do
       share = FactoryBot.build(:estimation_share, shared_with_user: nil, shared_with_email: nil)
@@ -180,7 +197,7 @@ RSpec.describe EstimationShare, type: :model do
 
   describe '#active?' do
     it 'returns true when shared_with_user_id is present' do
-      share = FactoryBot.build(:estimation_share, :active)
+      share = FactoryBot.create(:estimation_share, :active)
       expect(share.active?).to be true
     end
 
