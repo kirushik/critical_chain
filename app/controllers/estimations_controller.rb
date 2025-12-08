@@ -31,6 +31,12 @@ class EstimationsController < ApplicationController
   def show
     @estimation = Estimation.includes(estimation_items: :estimation).find(params[:id]).decorate
     authorize @estimation
+    
+    # Track last access for shared users
+    if current_user.id != @estimation.user_id
+      share = @estimation.share_for(current_user)
+      share&.touch_last_accessed
+    end
   end
 
   def destroy

@@ -17,6 +17,7 @@
 class Estimation < ActiveRecord::Base
   belongs_to :user
   has_many :estimation_items, -> { order(:order) }, dependent: :destroy
+  has_many :estimation_shares, dependent: :destroy
 
   def sum
     estimation_items.sum('value * quantity').to_f
@@ -47,6 +48,26 @@ class Estimation < ActiveRecord::Base
   def buffer_health
     health = buffer_consumption/project_progress
     health.nan? ? 0.0 : health
+  end
+
+  def shared_with?(user)
+    return false if user.nil?
+    estimation_shares.for_user(user).exists?
+  end
+
+  def share_for(user)
+    return nil if user.nil?
+    estimation_shares.for_user(user).first
+  end
+
+  def can_edit?(user)
+    return false if user.nil?
+    user.id == user_id || estimation_shares.for_user(user).exists?(role: 'owner')
+  end
+
+  def can_view?(user)
+    return false if user.nil?
+    can_edit?(user) || estimation_shares.for_user(user).exists?
   end
 
   private

@@ -1,0 +1,35 @@
+<tr id="<%= dom_id(share) %>">
+  <td><%= share.display_email %></td>
+  <td>
+    <% if share.pending? %>
+      <span class="tag is-warning">Pending</span>
+    <% else %>
+      <span class="tag is-success">Active</span>
+    <% end %>
+  </td>
+  <td>
+    <span class="tag <%= share.owner? ? 'is-info' : '' %>">
+      <%= share.role.titleize %>
+    </span>
+  </td>
+  <td>
+    <% if share.last_accessed_at %>
+      <%= time_ago_in_words(share.last_accessed_at) %> ago
+    <% else %>
+      <span class="has-text-grey-light">Never</span>
+    <% end %>
+  </td>
+  <td>
+    <%= button_to "Revoke", estimation_estimation_share_path(estimation, share), 
+        method: :delete, 
+        class: "button is-small is-danger",
+        data: { confirm: "Are you sure you want to revoke access for #{share.display_email}?" } %>
+    
+    <% if current_user.id == estimation.user_id && share.active? %>
+      <%= button_to "Transfer Ownership", transfer_ownership_estimation_estimation_share_path(estimation, share),
+          method: :post,
+          class: "button is-small is-warning",
+          data: { confirm: "Are you sure you want to transfer ownership to #{share.display_email}? You will become a viewer." } %>
+    <% end %>
+  </td>
+</tr>

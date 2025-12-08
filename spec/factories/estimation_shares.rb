@@ -1,0 +1,51 @@
+# == Schema Information
+#
+# Table name: estimation_shares
+#
+#  id                  :integer          not null, primary key
+#  estimation_id       :integer          not null
+#  shared_with_user_id :integer
+#  shared_with_email   :string
+#  role                :string           not null, default("viewer")
+#  last_accessed_at    :datetime
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#
+# Indexes
+#
+#  index_estimation_shares_on_estimation_and_email  (estimation_id,shared_with_email) UNIQUE
+#  index_estimation_shares_on_estimation_and_user   (estimation_id,shared_with_user_id) UNIQUE
+#  index_estimation_shares_on_shared_with_email     (shared_with_email)
+#
+
+FactoryBot.define do
+  factory :estimation_share do
+    estimation
+    role { 'viewer' }
+
+    # Default: pending share with email
+    sequence(:shared_with_email) { Faker::Internet.email }
+
+    trait :viewer do
+      role { 'viewer' }
+    end
+
+    trait :owner do
+      role { 'owner' }
+    end
+
+    trait :active do
+      shared_with_email { nil }
+      association :shared_with_user, factory: :user
+    end
+
+    trait :pending do
+      shared_with_user { nil }
+      sequence(:shared_with_email) { Faker::Internet.email }
+    end
+
+    trait :accessed do
+      last_accessed_at { 1.hour.ago }
+    end
+  end
+end

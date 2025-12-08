@@ -26,15 +26,27 @@ class User < ActiveRecord::Base
   devise :omniauthable, :rememberable, :trackable, :omniauth_providers => [:google_oauth2]
 
   has_many :estimations
+  has_many :estimation_shares, foreign_key: :shared_with_user_id, dependent: :destroy
+
+  after_create :activate_pending_shares
+  after_update :activate_pending_shares, if: :saved_change_to_email?
 
   def self.from_omniauth auth, current_user = nil
     return current_user if current_user
     
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.email = auth.info.email
+    user = where(provider: auth.provider, uid: auth.uid).first_or_create do |u|
+      u.email = auth.info.email
       # user.name = auth.info.name   # assuming the user model has a name
       # user.image = auth.info.image # assuming the user model has an image
     end
 
+    # Activate any pending shares for this user
+    user.activate_pending_shares
+
+    user
+  end
+
+  def activate_pending_shares
+    EstimationShare.activate_pending_shares_for_user(self)
   end
 end

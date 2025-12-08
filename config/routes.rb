@@ -32,6 +32,11 @@ Rails.application.routes.draw do
 
   resources :estimations do
     resources :estimation_items
+    resources :estimation_shares, only: [:index, :create, :destroy] do
+      member do
+        post :transfer_ownership
+      end
+    end
   end
   
   root 'estimations#index'
