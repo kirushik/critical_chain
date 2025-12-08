@@ -22,7 +22,7 @@ FactoryBot.define do
   factory :estimation_share do
     estimation
     role { 'viewer' }
-    
+
     # Default to pending with email
     shared_with_user { nil }
     sequence(:shared_with_email) { Faker::Internet.email }
@@ -38,15 +38,11 @@ FactoryBot.define do
     trait :active do
       shared_with_email { nil }
       association :shared_with_user, factory: :user
-      
-      after(:build) do |share|
-        share.shared_with_email = nil
-      end
     end
 
     trait :pending do
       shared_with_user { nil }
-      
+
       after(:build) do |share|
         share.shared_with_email ||= Faker::Internet.email
       end

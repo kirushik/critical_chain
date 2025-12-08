@@ -1,31 +1,31 @@
-<% page_title! "Manage Shares - #{@estimation.title}" %>
+<% page_title! "Sharing options - #{@estimation.title}" %>
 
 <div class="container">
-  <h1 class="title">Manage Shares</h1>
-  <h2 class="subtitle"><%= @estimation.title %></h2>
+  <h1 class="title"><%= @estimation.title %></h1>
+  <h2 class="subtitle">Sharing options</h2>
 
   <div class="columns">
     <div class="column is-half">
       <div class="box">
         <h3 class="title is-4">Share this Estimation</h3>
-        
+
         <%= form_with model: [@estimation, EstimationShare.new], local: true do |form| %>
           <div class="field">
-            <%= form.label :shared_with_email, "Email Address", class: "label" %>
+            <%= form.label :shared_with_email, "Email Address", class: "label", for: "estimation_share_shared_with_email" %>
             <div class="control">
-              <%= form.email_field :shared_with_email, class: "input", placeholder: "user@example.com", required: true %>
+              <%= form.email_field :shared_with_email, class: "input", placeholder: "user@example.com", required: true, id: "estimation_share_shared_with_email" %>
             </div>
             <p class="help">
-              Enter the email address of the person you want to share with. 
+              Enter the email address of the person you want to share with.
               If they haven't signed up yet, they'll get access when they sign in with this email.
             </p>
           </div>
 
           <div class="field">
-            <%= form.label :role, "Access Level", class: "label" %>
+            <%= form.label :role, "Access Level", class: "label", for: "estimation_share_role" %>
             <div class="control">
               <div class="select">
-                <%= form.select :role, [['Viewer (read-only)', 'viewer'], ['Owner (can edit)', 'owner']], {}, { class: "select" } %>
+                <%= form.select :role, [['Viewer (read-only)', 'viewer'], ['Owner (can edit)', 'owner']], {}, { class: "select", id: "estimation_share_role" } %>
               </div>
             </div>
             <p class="help">Viewers can only view the estimation. Owners can edit it.</p>
@@ -34,7 +34,7 @@
           <div class="field">
             <div class="control">
               <%= form.submit "Share", class: "button is-primary" %>
-              <%= link_to "Back to Estimation", estimation_path(@estimation), class: "button" %>
+              <%= link_to "Back to #{@estimation.title}", estimation_path(@estimation), class: "button" %>
             </div>
           </div>
         <% end %>
@@ -43,8 +43,8 @@
 
     <div class="column is-half">
       <div class="box">
-        <h3 class="title is-4">Current Shares</h3>
-        
+        <h3 class="title is-4">Sharing with</h3>
+
         <% if @estimation_shares.any? %>
           <div id="shares_list">
             <table class="table is-fullwidth is-hoverable">
@@ -81,11 +81,11 @@
                       <% end %>
                     </td>
                     <td>
-                      <%= button_to "Revoke", estimation_estimation_share_path(@estimation, share), 
-                          method: :delete, 
+                      <%= button_to "Revoke", estimation_estimation_share_path(@estimation, share),
+                          method: :delete,
                           class: "button is-small is-danger",
                           data: { confirm: "Are you sure you want to revoke access for #{share.display_email}?" } %>
-                      
+
                       <% if current_user.id == @estimation.user_id && share.active? %>
                         <%= button_to "Transfer Ownership", transfer_ownership_estimation_estimation_share_path(@estimation, share),
                             method: :post,

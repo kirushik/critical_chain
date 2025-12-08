@@ -32,10 +32,11 @@ class EstimationSharesController < ApplicationController
       end
     else
       @error_message = @estimation_share.errors.full_messages.first || "Share failed"
+      @estimation_shares = @estimation.estimation_shares.includes(:estimation, :shared_with_user)
       respond_to do |format|
-        format.html { 
+        format.html {
           flash.now[:alert] = @error_message
-          render :index, status: :unprocessable_entity 
+          render :index, status: :unprocessable_entity
         }
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace(
@@ -63,9 +64,9 @@ class EstimationSharesController < ApplicationController
 
     # Determine the target user
     target_user = @estimation_share.shared_with_user
-    
+
     unless target_user
-      redirect_to estimation_estimation_shares_path(@estimation), 
+      redirect_to estimation_estimation_shares_path(@estimation),
                   alert: 'Cannot transfer ownership: user has not signed up yet.'
       return
     end
@@ -88,7 +89,8 @@ class EstimationSharesController < ApplicationController
       end
     end
 
-    redirect_to estimation_estimation_shares_path(@estimation), notice: 'Ownership transferred successfully.'
+    # Redirect to estimation page since the old owner no longer has manage_shares permission
+    redirect_to estimation_path(@estimation), notice: 'Ownership transferred successfully.'
   rescue ActiveRecord::RecordInvalid => e
     redirect_to estimation_estimation_shares_path(@estimation), alert: "Transfer failed: #{e.message}"
   end

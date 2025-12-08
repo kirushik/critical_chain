@@ -21,9 +21,20 @@ class EstimationPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      owned = scope.where(user_id: user.id)
-      shared = scope.joins(:estimation_shares).where(estimation_shares: { shared_with_email: user.email })
-      owned.or(shared).distinct
+      # Get IDs of owned estimations
+      owned_ids = scope.where(user_id: user.id).pluck(:id)
+
+      # Get IDs of shared estimations (both active user shares and pending email shares)
+      shared_ids = scope.joins(:estimation_shares)
+        .where(
+          "estimation_shares.shared_with_user_id = :user_id OR estimation_shares.shared_with_email = :email",
+          user_id: user.id,
+          email: user.email
+        )
+        .pluck(:id)
+
+      # Return combined results using IDs to avoid structural incompatibility with .or()
+      scope.where(id: (owned_ids + shared_ids).uniq)
     end
   end
 end
