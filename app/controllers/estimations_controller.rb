@@ -29,7 +29,11 @@ class EstimationsController < ApplicationController
   end
 
   def show
-    @estimation = Estimation.includes(estimation_items: :estimation).find(params[:id]).decorate
+    @estimation = Estimation.includes(
+      estimation_items: :estimation,
+      estimation_shares: :shared_with_user,
+      :user
+    ).find(params[:id]).decorate
     authorize @estimation
     
     # Track last access for shared users
