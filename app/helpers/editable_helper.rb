@@ -9,6 +9,22 @@ module EditableHelper
     css_class = options[:css_class] || field.to_s
     field_id = "editable_#{object.class.name.underscore}_#{object.id}_#{field}"
 
+    can_edit = if options.key?(:can_edit)
+                 options[:can_edit]
+               else
+                 editable_by_current_user?(object)
+               end
+
+    unless can_edit
+      return content_tag(:div,
+                         class: "editable-field #{css_class} is-readonly",
+                         id: field_id) do
+        content_tag(:span,
+                    h(display_value),
+                    class: 'editable-display')
+      end
+    end
+
     content_tag(:div,
                 class: "editable-field #{css_class}",
                 id: field_id,
@@ -88,6 +104,30 @@ module EditableHelper
       end
 
       safe_join([display, edit_form])
+    end
+  end
+
+  private
+
+  def editable_by_current_user?(object)
+    user = respond_to?(:current_user) ? current_user : nil
+    return true if user.nil?
+
+    estimation = object.respond_to?(:estimation) ? object.estimation : nil
+
+    if object.respond_to?(:can_edit?)
+      object.can_edit?(user)
+    elsif estimation && estimation.respond_to?(:can_edit?)
+      estimation.can_edit?(user)
+    elsif respond_to?(:policy)
+      begin
+        policy_object = policy(object)
+        policy_object.nil? || !policy_object.respond_to?(:update?) || policy_object.update?
+      rescue StandardError
+        true
+      end
+    else
+      true
     end
   end
 end

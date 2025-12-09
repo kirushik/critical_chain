@@ -6,7 +6,6 @@
 #  estimation_id       :integer          not null
 #  shared_with_user_id :integer
 #  shared_with_email   :string
-#  role                :string           not null, default("viewer")
 #  last_accessed_at    :datetime
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
@@ -15,32 +14,23 @@
 #
 #  index_estimation_shares_on_estimation_and_email  (estimation_id,shared_with_email) UNIQUE
 #  index_estimation_shares_on_estimation_and_user   (estimation_id,shared_with_user_id) UNIQUE
+#  index_estimation_shares_on_estimation_id         (estimation_id)
 #  index_estimation_shares_on_shared_with_email     (shared_with_email)
+#  index_estimation_shares_on_shared_with_user_id   (shared_with_user_id)
 #
 
 class EstimationShare < ActiveRecord::Base
   belongs_to :estimation
   belongs_to :shared_with_user, class_name: 'User', optional: true
 
-  validates :role, presence: true, inclusion: { in: %w[viewer owner] }
   validate :has_user_or_email
   validate :email_format_if_present
   validate :cannot_share_with_owner
   validate :unique_share_per_estimation
 
   scope :for_user, ->(user) { where(shared_with_user: user).or(where(shared_with_email: user.email)) }
-  scope :viewers, -> { where(role: 'viewer') }
-  scope :owners, -> { where(role: 'owner') }
   scope :pending, -> { where(shared_with_user_id: nil).where.not(shared_with_email: nil) }
   scope :active, -> { where.not(shared_with_user_id: nil) }
-
-  def viewer?
-    role == 'viewer'
-  end
-
-  def owner?
-    role == 'owner'
-  end
 
   def pending?
     shared_with_user_id.nil? && shared_with_email.present?
@@ -89,7 +79,7 @@ class EstimationShare < ActiveRecord::Base
 
   def cannot_share_with_owner
     return unless estimation_id # Skip validation if estimation not set yet
-    
+
     owner_email = estimation&.user&.email
     return unless owner_email
 
@@ -108,7 +98,7 @@ class EstimationShare < ActiveRecord::Base
       duplicate = estimation.estimation_shares
         .where(shared_with_user_id: shared_with_user_id)
         .where.not(id: id)
-      
+
       if duplicate.exists?
         errors.add(:shared_with_user, "already has access to this estimation")
       end
@@ -118,13 +108,13 @@ class EstimationShare < ActiveRecord::Base
     if shared_with_email.present?
       # Check email-based duplicates and user-based duplicates in one query
       user_with_email = User.find_by(email: shared_with_email)
-      
+
       duplicate = estimation.estimation_shares.where.not(id: id).where(
         "shared_with_email = ? OR shared_with_user_id = ?",
         shared_with_email,
         user_with_email&.id
       )
-      
+
       if duplicate.exists?
         errors.add(:shared_with_email, "already has access to this estimation")
       end

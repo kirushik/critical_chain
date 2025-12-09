@@ -1,51 +1,40 @@
 class EstimationSharesController < ApplicationController
   before_action :set_estimation
-  before_action :set_estimation_share, only: [:destroy, :transfer_ownership]
+  before_action :set_estimation_share, only: %i[destroy transfer_ownership]
 
   def index
-    @estimation_shares = @estimation.estimation_shares.includes(:estimation, :shared_with_user)
-    # Authorize using a sample share or a new one
-    authorize(@estimation_shares.first || EstimationShare.new(estimation: @estimation))
+    load_shares
+    @estimation_share = EstimationShare.new(estimation: @estimation)
+    authorize(@estimation_shares.first || @estimation_share)
     skip_policy_scope
   end
 
   def create
-    # Check if email belongs to an existing user
-    email = estimation_share_params[:shared_with_email]
-    existing_user = User.find_by(email: email) if email.present?
+    raw_email = estimation_share_params[:shared_with_email].to_s.strip
+    normalized_email = raw_email.downcase
+    existing_user = normalized_email.present? ? User.where('LOWER(email) = ?', normalized_email).first : nil
 
-    if existing_user
-      @estimation_share = @estimation.estimation_shares.build(
-        shared_with_user: existing_user,
-        role: estimation_share_params[:role]
-      )
-    else
-      @estimation_share = @estimation.estimation_shares.build(estimation_share_params)
-    end
-
+    @estimation_share = EstimationShare.new(estimation: @estimation)
     authorize @estimation_share
 
+    if (existing_share = existing_share_for(normalized_email, existing_user))
+      flash.now[:notice] = "#{existing_share.display_email} already has access."
+      reset_form_state
+      respond_with_updates(status: :ok)
+      return
+    end
+
+    @estimation_share.assign_attributes(default_attributes(existing_user, normalized_email))
+
     if @estimation_share.save
-      respond_to do |format|
-        format.html { redirect_to estimation_estimation_shares_path(@estimation), notice: 'Estimation shared successfully.' }
-        format.turbo_stream
-      end
+      flash.now[:notice] = 'Estimation shared successfully.'
+      reset_form_state
+      respond_with_updates(status: :ok)
     else
-      @error_message = @estimation_share.errors.full_messages.first || "Share failed"
-      @estimation_shares = @estimation.estimation_shares.includes(:estimation, :shared_with_user)
-      respond_to do |format|
-        format.html {
-          flash.now[:alert] = @error_message
-          render :index, status: :unprocessable_entity
-        }
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(
-            "shares_form",
-            partial: "estimation_shares/error",
-            locals: { message: @error_message }
-          ), status: :unprocessable_entity
-        end
-      end
+      @estimation_share.shared_with_email = raw_email if raw_email.present?
+      flash.now[:alert] = @estimation_share.errors.full_messages.first || 'Share failed'
+      load_shares
+      respond_with_updates(status: :unprocessable_entity)
     end
   end
 
@@ -53,43 +42,28 @@ class EstimationSharesController < ApplicationController
     authorize @estimation_share
     @estimation_share.destroy
 
-    respond_to do |format|
-      format.html { redirect_to estimation_estimation_shares_path(@estimation), notice: 'Access revoked successfully.' }
-      format.turbo_stream
-    end
+    flash.now[:notice] = 'Access revoked successfully.'
+    reset_form_state
+    respond_with_updates(status: :ok)
   end
 
   def transfer_ownership
     authorize @estimation_share
 
-    # Determine the target user
     target_user = @estimation_share.shared_with_user
-
     unless target_user
       redirect_to estimation_estimation_shares_path(@estimation),
                   alert: 'Cannot transfer ownership: user has not signed up yet.'
       return
     end
 
-    old_owner = @estimation.user
-
     ActiveRecord::Base.transaction do
-      # Transfer ownership FIRST
+      old_owner = @estimation.user
       @estimation.update!(user: target_user)
-
-      # Remove the share record as they are now the owner
       @estimation_share.destroy
-
-      # Create a viewer share for the old owner AFTER transfer (if they don't already have one)
-      unless @estimation.estimation_shares.exists?(shared_with_user: old_owner)
-        @estimation.estimation_shares.create!(
-          shared_with_user: old_owner,
-          role: 'viewer'
-        )
-      end
+      @estimation.estimation_shares.find_or_create_by!(shared_with_user: old_owner)
     end
 
-    # Redirect to estimation page since the old owner no longer has manage_shares permission
     redirect_to estimation_path(@estimation), notice: 'Ownership transferred successfully.'
   rescue ActiveRecord::RecordInvalid => e
     redirect_to estimation_estimation_shares_path(@estimation), alert: "Transfer failed: #{e.message}"
@@ -105,7 +79,53 @@ class EstimationSharesController < ApplicationController
     @estimation_share = @estimation.estimation_shares.find(params[:id])
   end
 
+  def load_shares
+    @estimation_shares = @estimation.estimation_shares
+                                     .includes(:estimation, :shared_with_user)
+                                     .order(:created_at)
+  end
+
+  def existing_share_for(normalized_email, existing_user)
+    return if normalized_email.blank? && existing_user.blank?
+
+    scope = @estimation.estimation_shares
+    share = scope.find_by(shared_with_user: existing_user) if existing_user
+    share ||= scope.where.not(shared_with_email: nil)
+                   .find_by('LOWER(shared_with_email) = ?', normalized_email) if normalized_email.present?
+    share
+  end
+
+  def default_attributes(existing_user, normalized_email)
+    if existing_user
+      { shared_with_user: existing_user }
+    else
+      { shared_with_email: normalized_email.presence }
+    end
+  end
+
+  def reset_form_state
+    @estimation_share = EstimationShare.new(estimation: @estimation)
+    load_shares
+  end
+
+  def respond_with_updates(status:)
+    respond_to do |format|
+      format.html do
+        if status == :ok
+          %i[notice alert].each do |type|
+            value = flash.now[type]
+            flash[type] = value if value.present?
+          end
+          redirect_to estimation_estimation_shares_path(@estimation)
+        else
+          render :index, status: status
+        end
+      end
+      format.turbo_stream { render status: status }
+    end
+  end
+
   def estimation_share_params
-    params.require(:estimation_share).permit(:shared_with_email, :role)
+    params.require(:estimation_share).permit(:shared_with_email)
   end
 end

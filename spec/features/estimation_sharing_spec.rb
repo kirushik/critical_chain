@@ -13,34 +13,42 @@ feature "EstimationSharing", type: :feature do
     click_link 'Sharing'
 
     fill_in 'Email Address', with: 'shared@example.com'
-    select 'Viewer (read-only)', from: 'Access Level'
     click_button 'Share'
 
     expect(page).to have_content('Estimation shared successfully')
     expect(page).to have_content('shared@example.com')
     expect(page).to have_content('Active')
-    expect(page).to have_content('Viewer')
+
   end
 
-  scenario 'Owner can share estimation with pending user (not signed up)' do
+  scenario 'Sharing button shows share count badge' do
+    shared_user = FactoryBot.create(:user, email: 'badge@example.com')
+    FactoryBot.create(:estimation_share, :active, estimation: estimation, shared_with_user: shared_user)
+
+    login_as owner
+    visit estimation_path(estimation)
+
+    expect(page).to have_css('a.button.is-small.is-link .tag', text: '1')
+  end
+
+  scenario 'Owner can share estimation with pending viewer (not signed up)' do
     login_as owner
     visit estimation_path(estimation)
 
     click_link 'Sharing'
 
     fill_in 'Email Address', with: 'pending@example.com'
-    select 'Owner (can edit)', from: 'Access Level'
     click_button 'Share'
 
     expect(page).to have_content('Estimation shared successfully')
     expect(page).to have_content('pending@example.com')
     expect(page).to have_content('Pending')
-    expect(page).to have_content('Owner')
+
   end
 
   scenario 'Shared user can view but not share estimation' do
     shared_user = FactoryBot.create(:user, email: 'viewer@example.com')
-    FactoryBot.create(:estimation_share, :active, :viewer, estimation: estimation, shared_with_user: shared_user)
+    FactoryBot.create(:estimation_share, :active, estimation: estimation, shared_with_user: shared_user)
 
     login_as shared_user
     visit estimation_path(estimation)
@@ -48,18 +56,22 @@ feature "EstimationSharing", type: :feature do
     expect(page).to have_content('Test Estimation')
     expect(page).to have_content('This estimation is shared with you')
     expect(page).not_to have_link('Manage Shares')
+    expect(page).not_to have_css('form.editable-form')
   end
 
-  scenario 'Shared owner can edit estimation' do
-    shared_owner = FactoryBot.create(:user, email: 'editor@example.com')
-    FactoryBot.create(:estimation_share, :active, :owner, estimation: estimation, shared_with_user: shared_owner)
 
-    login_as shared_owner
-    visit estimation_path(estimation)
 
-    expect(page).to have_content('Test Estimation')
-    # Shared owners can see the estimation but not manage shares (only original owner can)
-    expect(page).not_to have_link('Manage Shares')
+  scenario 'Owner is notified when attempting to share with an existing viewer' do
+    shared_user = FactoryBot.create(:user, email: 'shared@example.com')
+    FactoryBot.create(:estimation_share, :active, estimation: estimation, shared_with_user: shared_user)
+
+    login_as owner
+    visit estimation_estimation_shares_path(estimation)
+
+    fill_in 'Email Address', with: 'shared@example.com'
+    click_button 'Share'
+
+    expect(page).to have_content('shared@example.com already has access.')
   end
 
   scenario 'Owner can revoke access' do
@@ -79,7 +91,7 @@ feature "EstimationSharing", type: :feature do
 
   scenario 'Owner can transfer ownership' do
     new_owner = FactoryBot.create(:user, email: 'newowner@example.com')
-    FactoryBot.create(:estimation_share, :active, :owner, estimation: estimation, shared_with_user: new_owner)
+    FactoryBot.create(:estimation_share, :active, estimation: estimation, shared_with_user: new_owner)
 
     login_as owner
     visit estimation_estimation_shares_path(estimation)
@@ -94,7 +106,7 @@ feature "EstimationSharing", type: :feature do
 
     # Original owner should now be a viewer
     expect(estimation.reload.user).to eq(new_owner)
-    expect(estimation.estimation_shares.where(shared_with_user: owner, role: 'viewer')).to exist
+    expect(estimation.estimation_shares.where(shared_with_user: owner)).to exist
   end
 
   scenario 'Pending share becomes active when user signs up' do
@@ -128,7 +140,6 @@ feature "EstimationSharing", type: :feature do
     visit estimation_estimation_shares_path(estimation)
 
     fill_in 'Email Address', with: owner.email
-    select 'Viewer (read-only)', from: 'Access Level'
     click_button 'Share'
 
     # Should show error and not create the share
@@ -137,7 +148,7 @@ feature "EstimationSharing", type: :feature do
 
   scenario 'Owner can view last accessed time for shares' do
     shared_user = FactoryBot.create(:user, email: 'accessed@example.com')
-    share = FactoryBot.create(:estimation_share, :active, :accessed, estimation: estimation, shared_with_user: shared_user)
+    share = FactoryBot.create(:estimation_share, :active, estimation: estimation, shared_with_user: shared_user, last_accessed_at: 1.hour.ago)
 
     login_as owner
     visit estimation_estimation_shares_path(estimation)

@@ -49,8 +49,7 @@ RSpec.describe EstimationSharesController, type: :controller do
           post :create, params: {
             estimation_id: estimation.id,
             estimation_share: {
-              shared_with_email: shared_user.email,
-              role: 'viewer'
+              shared_with_email: shared_user.email
             }
           }
         }.to change(EstimationShare, :count).by(1)
@@ -68,8 +67,7 @@ RSpec.describe EstimationSharesController, type: :controller do
           post :create, params: {
             estimation_id: estimation.id,
             estimation_share: {
-              shared_with_email: 'newuser@example.com',
-              role: 'viewer'
+              shared_with_email: 'newuser@example.com'
             }
           }
         }.to change(EstimationShare, :count).by(1)
@@ -78,21 +76,6 @@ RSpec.describe EstimationSharesController, type: :controller do
         expect(share.shared_with_email).to eq('newuser@example.com')
         expect(share.shared_with_user).to be_nil
         expect(share.pending?).to be true
-      end
-    end
-
-    context 'with owner role' do
-      it 'creates a share with owner role' do
-        post :create, params: {
-          estimation_id: estimation.id,
-          estimation_share: {
-            shared_with_email: 'editor@example.com',
-            role: 'owner'
-          }
-        }
-
-        share = EstimationShare.last
-        expect(share.owner?).to be true
       end
     end
 
@@ -106,8 +89,7 @@ RSpec.describe EstimationSharesController, type: :controller do
           post :create, params: {
             estimation_id: estimation.id,
             estimation_share: {
-              shared_with_email: 'duplicate@example.com',
-              role: 'viewer'
+              shared_with_email: 'duplicate@example.com'
             }
           }
         }.not_to change(EstimationShare, :count)
@@ -120,8 +102,7 @@ RSpec.describe EstimationSharesController, type: :controller do
           post :create, params: {
             estimation_id: estimation.id,
             estimation_share: {
-              shared_with_email: owner.email,
-              role: 'viewer'
+              shared_with_email: owner.email
             }
           }
         }.not_to change(EstimationShare, :count)
@@ -160,28 +141,25 @@ RSpec.describe EstimationSharesController, type: :controller do
   describe 'POST #transfer_ownership' do
     context 'with active share' do
       let(:new_owner) { FactoryBot.create(:user) }
-      let!(:share) { FactoryBot.create(:estimation_share, :active, :owner, estimation: estimation, shared_with_user: new_owner) }
+      let!(:share) { FactoryBot.create(:estimation_share, :active, estimation: estimation, shared_with_user: new_owner) }
 
       before { sign_in owner }
 
       it 'transfers ownership to shared user' do
         post :transfer_ownership, params: { estimation_id: estimation.id, id: share.id }
-        
+
         expect(estimation.reload.user).to eq(new_owner)
       end
 
-      it 'creates viewer share for old owner' do
+      it 'creates share for old owner' do
         expect {
           post :transfer_ownership, params: { estimation_id: estimation.id, id: share.id }
         }.to change { estimation.estimation_shares.where(shared_with_user: owner).count }.by(1)
-
-        old_owner_share = estimation.estimation_shares.find_by(shared_with_user: owner)
-        expect(old_owner_share.viewer?).to be true
       end
 
       it 'removes the original share' do
         post :transfer_ownership, params: { estimation_id: estimation.id, id: share.id }
-        
+
         expect(EstimationShare.exists?(share.id)).to be false
       end
     end
@@ -194,7 +172,7 @@ RSpec.describe EstimationSharesController, type: :controller do
       it 'does not transfer ownership' do
         original_owner = estimation.user
         post :transfer_ownership, params: { estimation_id: estimation.id, id: share.id }
-        
+
         expect(estimation.reload.user).to eq(original_owner)
       end
 

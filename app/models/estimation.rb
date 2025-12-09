@@ -62,7 +62,7 @@ class Estimation < ActiveRecord::Base
 
   def can_edit?(user)
     return false if user.nil?
-    self.user == user || estimation_shares.for_user(user).exists?(role: 'owner')
+    self.user == user
   end
 
   def can_view?(user)

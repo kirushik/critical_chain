@@ -1,0 +1,22 @@
+<% flash.each do |type, message| %>
+  <% next if message.blank? %>
+
+  <% messages = Array(message) %>
+  <% notification_class = case type.to_sym
+                          when :notice, :info, :success then 'is-info is-light'
+                          when :alert, :warning then 'is-warning is-light'
+                          when :error, :danger then 'is-danger is-light'
+                          else 'is-link is-light'
+                          end %>
+  <% data_attributes = { controller: 'notification' } %>
+  <% data_attributes[:auto_dismiss] = 5000 if %i[notice success info].include?(type.to_sym) %>
+
+  <% messages.each do |msg| %>
+    <%= content_tag :div,
+                    class: "notification #{notification_class}",
+                    data: data_attributes do %>
+      <button class="delete" data-action="click->notification#close"></button>
+      <%= msg %>
+    <% end %>
+  <% end %>
+<% end %>

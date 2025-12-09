@@ -6,7 +6,6 @@
 #  estimation_id       :integer          not null
 #  shared_with_user_id :integer
 #  shared_with_email   :string
-#  role                :string           not null, default("viewer")
 #  last_accessed_at    :datetime
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
@@ -15,7 +14,9 @@
 #
 #  index_estimation_shares_on_estimation_and_email  (estimation_id,shared_with_email) UNIQUE
 #  index_estimation_shares_on_estimation_and_user   (estimation_id,shared_with_user_id) UNIQUE
+#  index_estimation_shares_on_estimation_id         (estimation_id)
 #  index_estimation_shares_on_shared_with_email     (shared_with_email)
+#  index_estimation_shares_on_shared_with_user_id   (shared_with_user_id)
 #
 
 require 'rails_helper'
@@ -37,18 +38,6 @@ RSpec.describe EstimationShare, type: :model do
   describe 'validations' do
     subject { FactoryBot.build(:estimation_share) }
 
-    it 'validates presence of role' do
-      share = FactoryBot.build(:estimation_share, role: nil)
-      expect(share).not_to be_valid
-      expect(share.errors[:role]).to be_present
-    end
-
-    it 'validates inclusion of role' do
-      share = FactoryBot.build(:estimation_share, role: 'invalid')
-      expect(share).not_to be_valid
-      expect(share.errors[:role]).to include('is not included in the list')
-    end
-
     it 'requires either user or email' do
       share = FactoryBot.build(:estimation_share, shared_with_user: nil, shared_with_email: nil)
       expect(share).not_to be_valid
@@ -65,7 +54,7 @@ RSpec.describe EstimationShare, type: :model do
       user = FactoryBot.create(:user)
       estimation = FactoryBot.create(:estimation)
       FactoryBot.create(:estimation_share, :active, estimation: estimation, shared_with_user: user)
-      
+
       duplicate = FactoryBot.build(:estimation_share, :active, estimation: estimation, shared_with_user: user)
       expect(duplicate).not_to be_valid
       expect(duplicate.errors[:shared_with_user]).to include('already has access to this estimation')
@@ -74,7 +63,7 @@ RSpec.describe EstimationShare, type: :model do
     it 'validates uniqueness of email per estimation' do
       estimation = FactoryBot.create(:estimation)
       FactoryBot.create(:estimation_share, :pending, estimation: estimation, shared_with_email: 'test@example.com')
-      
+
       duplicate = FactoryBot.build(:estimation_share, :pending, estimation: estimation, shared_with_email: 'test@example.com')
       expect(duplicate).not_to be_valid
       expect(duplicate.errors[:shared_with_email]).to include('already has access to this estimation')
@@ -83,7 +72,7 @@ RSpec.describe EstimationShare, type: :model do
     it 'allows same email for different estimations' do
       share1 = FactoryBot.create(:estimation_share, :pending, shared_with_email: 'test@example.com')
       share2 = FactoryBot.build(:estimation_share, :pending, shared_with_email: 'test@example.com')
-      
+
       expect(share2).to be_valid
     end
 
@@ -91,7 +80,7 @@ RSpec.describe EstimationShare, type: :model do
       user = FactoryBot.create(:user)
       estimation = FactoryBot.create(:estimation, user: user)
       share = FactoryBot.build(:estimation_share, :active, estimation: estimation, shared_with_user: user)
-      
+
       expect(share).not_to be_valid
       expect(share.errors[:shared_with_user]).to include('cannot share with the estimation owner')
     end
@@ -100,7 +89,7 @@ RSpec.describe EstimationShare, type: :model do
       user = FactoryBot.create(:user)
       estimation = FactoryBot.create(:estimation, user: user)
       share = FactoryBot.build(:estimation_share, :pending, estimation: estimation, shared_with_email: user.email)
-      
+
       expect(share).not_to be_valid
       expect(share.errors[:shared_with_email]).to include('cannot share with the estimation owner')
     end
@@ -109,7 +98,7 @@ RSpec.describe EstimationShare, type: :model do
       user = FactoryBot.create(:user, email: 'test@example.com')
       estimation = FactoryBot.create(:estimation)
       FactoryBot.create(:estimation_share, :active, estimation: estimation, shared_with_user: user)
-      
+
       duplicate = FactoryBot.build(:estimation_share, :pending, estimation: estimation, shared_with_email: 'test@example.com')
       expect(duplicate).not_to be_valid
       expect(duplicate.errors[:shared_with_email]).to include('already has access to this estimation')
@@ -119,67 +108,30 @@ RSpec.describe EstimationShare, type: :model do
   describe 'scopes' do
     let(:user) { FactoryBot.create(:user, email: 'user@example.com') }
     let(:estimation) { FactoryBot.create(:estimation) }
-    let!(:active_viewer) { FactoryBot.create(:estimation_share, :viewer, :active, estimation: estimation, shared_with_user: user) }
-    let!(:pending_viewer) { FactoryBot.create(:estimation_share, :viewer, :pending, estimation: estimation, shared_with_email: 'pending@example.com') }
-    let!(:owner_share) { FactoryBot.create(:estimation_share, :owner, :active, estimation: estimation) }
+    let!(:active_share) { FactoryBot.create(:estimation_share, :active, estimation: estimation, shared_with_user: user) }
+    let!(:pending_share) { FactoryBot.create(:estimation_share, :pending, estimation: estimation, shared_with_email: 'pending@example.com') }
 
     describe '.for_user' do
       it 'returns active shares for a user' do
-        expect(EstimationShare.for_user(user)).to contain_exactly(active_viewer)
+        expect(EstimationShare.for_user(user)).to contain_exactly(active_share)
       end
 
       it 'returns pending shares matching user email' do
         pending_user = FactoryBot.create(:user, email: 'pending@example.com')
-        expect(EstimationShare.for_user(pending_user)).to contain_exactly(pending_viewer)
-      end
-    end
-
-    describe '.viewers' do
-      it 'returns only viewer shares' do
-        expect(estimation.estimation_shares.viewers).to contain_exactly(active_viewer, pending_viewer)
-      end
-    end
-
-    describe '.owners' do
-      it 'returns only owner shares' do
-        expect(estimation.estimation_shares.owners).to contain_exactly(owner_share)
+        expect(EstimationShare.for_user(pending_user)).to contain_exactly(pending_share)
       end
     end
 
     describe '.pending' do
       it 'returns only pending shares' do
-        expect(EstimationShare.pending).to contain_exactly(pending_viewer)
+        expect(estimation.estimation_shares.pending).to contain_exactly(pending_share)
       end
     end
 
     describe '.active' do
       it 'returns only active shares' do
-        expect(EstimationShare.active).to contain_exactly(active_viewer, owner_share)
+        expect(estimation.estimation_shares.active).to contain_exactly(active_share)
       end
-    end
-  end
-
-  describe '#viewer?' do
-    it 'returns true for viewer role' do
-      share = FactoryBot.build(:estimation_share, role: 'viewer')
-      expect(share.viewer?).to be true
-    end
-
-    it 'returns false for owner role' do
-      share = FactoryBot.build(:estimation_share, role: 'owner')
-      expect(share.viewer?).to be false
-    end
-  end
-
-  describe '#owner?' do
-    it 'returns true for owner role' do
-      share = FactoryBot.build(:estimation_share, role: 'owner')
-      expect(share.owner?).to be true
-    end
-
-    it 'returns false for viewer role' do
-      share = FactoryBot.build(:estimation_share, role: 'viewer')
-      expect(share.owner?).to be false
     end
   end
 
@@ -223,7 +175,7 @@ RSpec.describe EstimationShare, type: :model do
   describe '#touch_last_accessed' do
     it 'updates last_accessed_at timestamp' do
       share = FactoryBot.create(:estimation_share, last_accessed_at: nil)
-      
+
       expect {
         share.touch_last_accessed
       }.to change { share.reload.last_accessed_at }.from(nil)
@@ -232,9 +184,9 @@ RSpec.describe EstimationShare, type: :model do
     it 'does not update updated_at' do
       share = FactoryBot.create(:estimation_share)
       original_updated_at = share.updated_at
-      
+
       share.touch_last_accessed
-      
+
       expect(share.reload.updated_at).to eq(original_updated_at)
     end
   end
@@ -243,7 +195,7 @@ RSpec.describe EstimationShare, type: :model do
     it 'converts pending share to active' do
       user = FactoryBot.create(:user, email: 'test@example.com')
       share = FactoryBot.create(:estimation_share, :pending, shared_with_email: 'test@example.com')
-      
+
       expect(share.activate_for_user!(user)).to be true
       expect(share.reload).to be_active
       expect(share.shared_with_user).to eq(user)
@@ -253,14 +205,14 @@ RSpec.describe EstimationShare, type: :model do
     it 'returns false if share is already active' do
       share = FactoryBot.create(:estimation_share, :active)
       user = FactoryBot.create(:user)
-      
+
       expect(share.activate_for_user!(user)).to be false
     end
 
     it 'returns false if email does not match' do
       user = FactoryBot.create(:user, email: 'different@example.com')
       share = FactoryBot.create(:estimation_share, :pending, shared_with_email: 'test@example.com')
-      
+
       expect(share.activate_for_user!(user)).to be false
     end
   end
@@ -270,13 +222,13 @@ RSpec.describe EstimationShare, type: :model do
       user = FactoryBot.create(:user, email: 'test@example.com')
       estimation1 = FactoryBot.create(:estimation)
       estimation2 = FactoryBot.create(:estimation)
-      
+
       share1 = FactoryBot.create(:estimation_share, :pending, estimation: estimation1, shared_with_email: 'test@example.com')
       share2 = FactoryBot.create(:estimation_share, :pending, estimation: estimation2, shared_with_email: 'test@example.com')
       other_share = FactoryBot.create(:estimation_share, :pending, shared_with_email: 'other@example.com')
-      
+
       EstimationShare.activate_pending_shares_for_user(user)
-      
+
       expect(share1.reload).to be_active
       expect(share2.reload).to be_active
       expect(other_share.reload).to be_pending

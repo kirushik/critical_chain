@@ -9,99 +9,26 @@
       <div class="box">
         <h3 class="title is-4">Share this Estimation</h3>
 
-        <%= form_with model: [@estimation, EstimationShare.new], local: true do |form| %>
-          <div class="field">
-            <%= form.label :shared_with_email, "Email Address", class: "label", for: "estimation_share_shared_with_email" %>
-            <div class="control">
-              <%= form.email_field :shared_with_email, class: "input", placeholder: "user@example.com", required: true, id: "estimation_share_shared_with_email" %>
-            </div>
-            <p class="help">
-              Enter the email address of the person you want to share with.
-              If they haven't signed up yet, they'll get access when they sign in with this email.
-            </p>
-          </div>
-
-          <div class="field">
-            <%= form.label :role, "Access Level", class: "label", for: "estimation_share_role" %>
-            <div class="control">
-              <div class="select">
-                <%= form.select :role, [['Viewer (read-only)', 'viewer'], ['Owner (can edit)', 'owner']], {}, { class: "select", id: "estimation_share_role" } %>
-              </div>
-            </div>
-            <p class="help">Viewers can only view the estimation. Owners can edit it.</p>
-          </div>
-
-          <div class="field">
-            <div class="control">
-              <%= form.submit "Share", class: "button is-primary" %>
-              <%= link_to "Back to #{@estimation.title}", estimation_path(@estimation), class: "button" %>
-            </div>
-          </div>
+        <%= turbo_frame_tag "shares_form" do %>
+          <%= render "estimation_shares/form", estimation: @estimation, estimation_share: @estimation_share %>
         <% end %>
       </div>
     </div>
 
     <div class="column is-half">
       <div class="box">
-        <h3 class="title is-4">Sharing with</h3>
+        <h3 class="title is-4">Shared with</h3>
 
-        <% if @estimation_shares.any? %>
-          <div id="shares_list">
-            <table class="table is-fullwidth is-hoverable">
-              <thead>
-                <tr>
-                  <th>Email</th>
-                  <th>Status</th>
-                  <th>Role</th>
-                  <th>Last Accessed</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @estimation_shares.each do |share| %>
-                  <tr id="<%= dom_id(share) %>">
-                    <td><%= share.display_email %></td>
-                    <td>
-                      <% if share.pending? %>
-                        <span class="tag is-warning">Pending</span>
-                      <% else %>
-                        <span class="tag is-success">Active</span>
-                      <% end %>
-                    </td>
-                    <td>
-                      <span class="tag <%= share.owner? ? 'is-info' : '' %>">
-                        <%= share.role.titleize %>
-                      </span>
-                    </td>
-                    <td>
-                      <% if share.last_accessed_at %>
-                        <%= time_ago_in_words(share.last_accessed_at) %> ago
-                      <% else %>
-                        <span class="has-text-grey-light">Never</span>
-                      <% end %>
-                    </td>
-                    <td>
-                      <%= button_to "Revoke", estimation_estimation_share_path(@estimation, share),
-                          method: :delete,
-                          class: "button is-small is-danger",
-                          data: { confirm: "Are you sure you want to revoke access for #{share.display_email}?" } %>
-
-                      <% if current_user.id == @estimation.user_id && share.active? %>
-                        <%= button_to "Transfer Ownership", transfer_ownership_estimation_estimation_share_path(@estimation, share),
-                            method: :post,
-                            class: "button is-small is-warning",
-                            data: { confirm: "Are you sure you want to transfer ownership to #{share.display_email}? You will become a viewer." } %>
-                      <% end %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        <% else %>
-          <p class="has-text-grey-light">This estimation has not been shared with anyone yet.</p>
+        <%= turbo_frame_tag "shares_list" do %>
+          <%= render "estimation_shares/list",
+                     estimation: @estimation,
+                     shares: @estimation_shares %>
         <% end %>
       </div>
     </div>
+  </div>
+
+  <div class="mt-4">
+    <%= link_to "Back to #{@estimation.title}", estimation_path(@estimation), class: "button" %>
   </div>
 </div>

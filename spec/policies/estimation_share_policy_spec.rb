@@ -77,10 +77,10 @@ RSpec.describe EstimationSharePolicy, type: :policy do
       end
     end
 
-    context 'when user has owner role share but is not the estimation owner' do
-      let(:shared_owner) { FactoryBot.create(:user) }
-      let!(:owner_share) { FactoryBot.create(:estimation_share, :active, :owner, estimation: estimation, shared_with_user: shared_owner) }
-      subject { described_class.new(shared_owner, estimation_share) }
+    context 'when user has a share but is not the estimation owner' do
+      let(:shared_user) { FactoryBot.create(:user) }
+      let!(:share) { FactoryBot.create(:estimation_share, :active, estimation: estimation, shared_with_user: shared_user) }
+      subject { described_class.new(shared_user, estimation_share) }
 
       it 'denies access (only actual owner can transfer)' do
         expect(subject.transfer_ownership?).to be false
