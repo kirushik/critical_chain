@@ -55,7 +55,7 @@ feature "EstimationSharing", type: :feature do
 
     expect(page).to have_content('Test Estimation')
     expect(page).to have_content('This estimation is shared with you')
-    expect(page).not_to have_link('Manage Shares')
+    expect(page).not_to have_link('Sharing')
     expect(page).not_to have_css('form.editable-form')
   end
 

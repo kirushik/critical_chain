@@ -67,7 +67,7 @@ class Estimation < ActiveRecord::Base
 
   def can_view?(user)
     return false if user.nil?
-    can_edit?(user) || estimation_shares.for_user(user).exists?
+    can_edit?(user) || shared_with?(user)
   end
 
   private

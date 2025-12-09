@@ -108,6 +108,55 @@ RSpec.describe EstimationSharesController, type: :controller do
         }.not_to change(EstimationShare, :count)
       end
     end
+
+    context 'with case-insensitive email handling' do
+      it 'finds existing user regardless of email case in input' do
+        # Devise normalizes emails to lowercase, so user will have lowercase email
+        shared_user = FactoryBot.create(:user, email: 'test.user@example.com')
+
+        expect {
+          post :create, params: {
+            estimation_id: estimation.id,
+            estimation_share: {
+              shared_with_email: 'TEST.USER@EXAMPLE.COM'
+            }
+          }
+        }.to change(EstimationShare, :count).by(1)
+
+        share = EstimationShare.last
+        expect(share.shared_with_user).to eq(shared_user)
+        expect(share.active?).to be true
+      end
+
+      it 'normalizes email to lowercase for pending shares' do
+        expect {
+          post :create, params: {
+            estimation_id: estimation.id,
+            estimation_share: {
+              shared_with_email: 'NEW.USER@EXAMPLE.COM'
+            }
+          }
+        }.to change(EstimationShare, :count).by(1)
+
+        share = EstimationShare.last
+        expect(share.shared_with_email).to eq('new.user@example.com')
+      end
+
+      it 'detects duplicate share regardless of email case' do
+        FactoryBot.create(:estimation_share, estimation: estimation, shared_with_email: 'duplicate@example.com')
+
+        expect {
+          post :create, params: {
+            estimation_id: estimation.id,
+            estimation_share: {
+              shared_with_email: 'DUPLICATE@EXAMPLE.COM'
+            }
+          }
+        }.not_to change(EstimationShare, :count)
+
+        expect(flash[:notice]).to include('already has access')
+      end
+    end
   end
 
   describe 'DELETE #destroy' do

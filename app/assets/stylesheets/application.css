@@ -5,39 +5,39 @@
    ========================================================================== */
 
 :root {
-  /* Brand colors */
-  --color-primary: hsl(204, 86%, 53%);
-  --color-success: hsl(141, 53%, 31%);
-  --color-success-light: hsl(141, 53%, 41%);
-  --color-info: hsl(206, 70%, 41%);
-  --color-warning: hsl(44, 100%, 32%);
-  --color-danger: hsl(348, 86%, 61%);
-  --color-turbo: hsl(171, 100%, 41%);
+    /* Brand colors */
+    --color-primary: hsl(204, 86%, 53%);
+    --color-success: hsl(141, 53%, 31%);
+    --color-success-light: hsl(141, 53%, 41%);
+    --color-info: hsl(206, 70%, 41%);
+    --color-warning: hsl(44, 100%, 32%);
+    --color-danger: hsl(348, 86%, 61%);
+    --color-turbo: hsl(171, 100%, 41%);
 
-  /* Neutral grays */
-  --color-gray-lightest: hsl(0, 0%, 86%);
-  --color-gray-light: hsl(0, 0%, 80%);
-  --color-gray-medium: hsl(0, 0%, 71%);
-  --color-gray-dark: hsl(0, 0%, 48%);
-  --color-text: hsl(0, 0%, 21%);
-  --color-text-light: hsl(0, 0%, 29%);
+    /* Neutral grays */
+    --color-gray-lightest: hsl(0, 0%, 86%);
+    --color-gray-light: hsl(0, 0%, 80%);
+    --color-gray-medium: hsl(0, 0%, 71%);
+    --color-gray-dark: hsl(0, 0%, 48%);
+    --color-text: hsl(0, 0%, 21%);
+    --color-text-light: hsl(0, 0%, 29%);
 
-  /* Background colors */
-  --bg-highlight: hsl(48, 100%, 96%);
-  --bg-sum: hsl(141, 53%, 93%);
-  --bg-buffer: hsl(206, 70%, 93%);
-  --bg-total: hsl(44, 100%, 90%);
-  --bg-muted: hsl(0, 0%, 98%);
-  --bg-dragging: hsl(48, 100%, 96%);
+    /* Background colors */
+    --bg-highlight: hsl(48, 100%, 96%);
+    --bg-sum: hsl(141, 53%, 93%);
+    --bg-buffer: hsl(206, 70%, 93%);
+    --bg-total: hsl(44, 100%, 90%);
+    --bg-muted: hsl(0, 0%, 98%);
+    --bg-dragging: hsl(48, 100%, 96%);
 
-  /* Transitions */
-  --transition-fast: 0.2s ease;
-  --transition-medium: 0.3s ease;
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.3s ease;
 
-  /* Spacing (matching Bulma) */
-  --gap-small: 0.25rem;
-  --gap-medium: 0.5rem;
-  --gap-large: 0.75rem;
+    /* Spacing (matching Bulma) */
+    --gap-small: 0.25rem;
+    --gap-medium: 0.5rem;
+    --gap-large: 0.75rem;
 }
 
 /* ==========================================================================
@@ -396,6 +396,21 @@ button.fixed-button.button:hover {
 
 /* Edit form (default - hidden) */
 .editable-field .editable-form {
+    display: none;
+}
+
+/* Readonly state - no interactive styling */
+.editable-field.is-readonly .editable-display {
+    border-bottom: none;
+    cursor: default;
+    padding: 0;
+}
+
+.editable-field.is-readonly .editable-display:hover {
+    background-color: transparent;
+}
+
+.editable-field.is-readonly .editable-display::after {
     display: none;
 }
 

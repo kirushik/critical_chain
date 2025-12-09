@@ -16,6 +16,9 @@ Bundler.require(*Rails.groups)
 
 module CriticalChain
   class Application < Rails::Application
+    # Opt into Rails 8.0 behavior for timezone handling
+    config.active_support.to_time_preserves_timezone = true
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

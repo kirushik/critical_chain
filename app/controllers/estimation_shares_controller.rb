@@ -10,28 +10,27 @@ class EstimationSharesController < ApplicationController
   end
 
   def create
-    raw_email = estimation_share_params[:shared_with_email].to_s.strip
-    normalized_email = raw_email.downcase
-    existing_user = normalized_email.present? ? User.where('LOWER(email) = ?', normalized_email).first : nil
-
     @estimation_share = EstimationShare.new(estimation: @estimation)
     authorize @estimation_share
 
-    if (existing_share = existing_share_for(normalized_email, existing_user))
+    email = estimation_share_params[:shared_with_email].to_s.strip.downcase
+    existing_user = email.present? ? User.where('LOWER(email) = ?', email).first : nil
+
+    if (existing_share = existing_share_for(email, existing_user))
       flash.now[:notice] = "#{existing_share.display_email} already has access."
       reset_form_state
       respond_with_updates(status: :ok)
       return
     end
 
-    @estimation_share.assign_attributes(default_attributes(existing_user, normalized_email))
+    @estimation_share.assign_attributes(share_attributes(existing_user, email))
 
     if @estimation_share.save
       flash.now[:notice] = 'Estimation shared successfully.'
       reset_form_state
       respond_with_updates(status: :ok)
     else
-      @estimation_share.shared_with_email = raw_email if raw_email.present?
+      @estimation_share.shared_with_email = email if email.present?
       flash.now[:alert] = @estimation_share.errors.full_messages.first || 'Share failed'
       load_shares
       respond_with_updates(status: :unprocessable_entity)
@@ -85,21 +84,21 @@ class EstimationSharesController < ApplicationController
                                      .order(:created_at)
   end
 
-  def existing_share_for(normalized_email, existing_user)
-    return if normalized_email.blank? && existing_user.blank?
+  def existing_share_for(email, existing_user)
+    return if email.blank? && existing_user.blank?
 
     scope = @estimation.estimation_shares
     share = scope.find_by(shared_with_user: existing_user) if existing_user
     share ||= scope.where.not(shared_with_email: nil)
-                   .find_by('LOWER(shared_with_email) = ?', normalized_email) if normalized_email.present?
+                   .find_by(shared_with_email: email) if email.present?
     share
   end
 
-  def default_attributes(existing_user, normalized_email)
+  def share_attributes(existing_user, email)
     if existing_user
       { shared_with_user: existing_user }
     else
-      { shared_with_email: normalized_email.presence }
+      { shared_with_email: email.presence }
     end
   end
 

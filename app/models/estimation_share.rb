@@ -23,12 +23,16 @@ class EstimationShare < ActiveRecord::Base
   belongs_to :estimation
   belongs_to :shared_with_user, class_name: 'User', optional: true
 
+  before_validation :normalize_email
+
   validate :has_user_or_email
   validate :email_format_if_present
   validate :cannot_share_with_owner
   validate :unique_share_per_estimation
 
-  scope :for_user, ->(user) { where(shared_with_user: user).or(where(shared_with_email: user.email)) }
+  scope :for_user, ->(user) {
+    where(shared_with_user: user).or(where(shared_with_email: user.email&.downcase))
+  }
   scope :pending, -> { where(shared_with_user_id: nil).where.not(shared_with_email: nil) }
   scope :active, -> { where.not(shared_with_user_id: nil) }
 
@@ -51,19 +55,25 @@ class EstimationShare < ActiveRecord::Base
   # Convert a pending email share to an active user share
   def activate_for_user!(user)
     return false if active?
-    return false unless user.email == shared_with_email
+    return false unless user.email&.downcase == shared_with_email&.downcase
 
     update!(shared_with_user: user, shared_with_email: nil)
   end
 
   # Class method to convert all pending shares for a user
   def self.activate_pending_shares_for_user(user)
-    pending.where(shared_with_email: user.email).find_each do |share|
+    return if user.email.blank?
+
+    pending.where(shared_with_email: user.email.downcase).find_each do |share|
       share.activate_for_user!(user)
     end
   end
 
   private
+
+  def normalize_email
+    self.shared_with_email = shared_with_email.to_s.strip.downcase.presence
+  end
 
   def has_user_or_email
     if shared_with_user_id.blank? && shared_with_email.blank?
@@ -80,12 +90,12 @@ class EstimationShare < ActiveRecord::Base
   def cannot_share_with_owner
     return unless estimation_id # Skip validation if estimation not set yet
 
-    owner_email = estimation&.user&.email
+    owner_email = estimation&.user&.email&.downcase
     return unless owner_email
 
     if shared_with_user_id == estimation.user_id
       errors.add(:shared_with_user, "cannot share with the estimation owner")
-    elsif shared_with_email == owner_email
+    elsif shared_with_email&.downcase == owner_email
       errors.add(:shared_with_email, "cannot share with the estimation owner")
     end
   end
@@ -106,12 +116,13 @@ class EstimationShare < ActiveRecord::Base
 
     # Check for duplicate email shares and email matching existing user shares
     if shared_with_email.present?
+      normalized_email = shared_with_email.downcase
       # Check email-based duplicates and user-based duplicates in one query
-      user_with_email = User.find_by(email: shared_with_email)
+      user_with_email = User.where("LOWER(email) = ?", normalized_email).first
 
       duplicate = estimation.estimation_shares.where.not(id: id).where(
-        "shared_with_email = ? OR shared_with_user_id = ?",
-        shared_with_email,
+        "LOWER(shared_with_email) = ? OR shared_with_user_id = ?",
+        normalized_email,
         user_with_email&.id
       )
 

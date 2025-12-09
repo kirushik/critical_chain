@@ -4,7 +4,6 @@ class CreateEstimationShares < ActiveRecord::Migration[7.2]
       t.references :estimation, null: false, foreign_key: true
       t.references :shared_with_user, foreign_key: { to_table: :users }
       t.string :shared_with_email
-      t.string :role, null: false, default: 'viewer'
       t.datetime :last_accessed_at
 
       t.timestamps
