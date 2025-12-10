@@ -71,7 +71,7 @@ class EstimationSharesController < ApplicationController
   private
 
   def set_estimation
-    @estimation = Estimation.find(params[:estimation_id])
+    @estimation = Estimation.includes(:user).find(params[:estimation_id])
   end
 
   def set_estimation_share

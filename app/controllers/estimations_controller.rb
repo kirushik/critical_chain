@@ -25,17 +25,20 @@ class EstimationsController < ApplicationController
   end
 
   def index
-    @estimations = policy_scope(Estimation).all.decorate
+    @estimations = policy_scope(Estimation)
+                     .includes(:estimation_items)
+                     .all
+                     .decorate
   end
 
   def show
     @estimation = Estimation.includes(
-      estimation_items: :estimation,
-      estimation_shares: :shared_with_user,
-      :user
+      :user,
+      :estimation_items,
+      estimation_shares: :shared_with_user
     ).find(params[:id]).decorate
     authorize @estimation
-    
+
     # Track last access for shared users
     if current_user.id != @estimation.user_id
       share = @estimation.share_for(current_user)
