@@ -2,6 +2,21 @@
 
 <div id="estimation_title">
   <h1><%= @estimation.editable :title %></h1>
+  <% if policy(@estimation).manage_shares? %>
+    <div class="mt-2">
+      <%= link_to estimation_estimation_shares_path(@estimation), class: "button is-small is-link" do %>
+        <span class="icon"><i class="fas fa-users"></i></span>
+        <span>Sharing</span>
+        <% if @estimation.estimation_shares.any? %>
+          <span class="tag is-info is-light ml-1"><%= @estimation.estimation_shares.count %></span>
+        <% end %>
+      <% end %>
+    </div>
+  <% elsif @estimation.user_id != current_user.id %>
+    <div class="notification is-info is-light mt-2">
+      <p>This estimation is shared with you by <%= @estimation.user.email %></p>
+    </div>
+  <% end %>
 </div>
 
 <div class="columns">

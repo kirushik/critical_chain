@@ -1,23 +1,41 @@
 class EstimationPolicy < ApplicationPolicy
   def show?
-    record.user_id == user.id
+    owner? || record.shared_with?(user)
   end
 
   def create?
-    record.user_id == user.id
+    owner?
   end
 
   def update?
-    record.user_id == user.id
+    owner?
   end
 
   def destroy?
+    owner?
+  end
+
+  def manage_shares?
+    owner?
+  end
+
+  private
+
+  def owner?
     record.user_id == user.id
   end
 
   class Scope < Scope
     def resolve
-      scope.where(user_id: user.id)
+      scope.left_joins(:estimation_shares)
+           .where(
+             "estimations.user_id = :user_id OR " \
+             "estimation_shares.shared_with_user_id = :user_id OR " \
+             "LOWER(estimation_shares.shared_with_email) = :email",
+             user_id: user.id,
+             email: user.email&.downcase
+           )
+           .distinct
     end
   end
 end

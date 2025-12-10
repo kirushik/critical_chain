@@ -10,7 +10,20 @@ class EstimationItemDecorator < Draper::Decorator
   #     end
   #   end
 
-  def editable field, type: :text, css_class: nil
-    helpers.editable object, field, url: helpers.estimation_estimation_item_path(object.estimation, object), type: type, css_class: css_class || field
+  def editable(field, type: :text, css_class: nil)
+    current_user = begin
+      helpers.current_user
+    rescue Devise::MissingWarden
+      nil
+    end
+
+    can_edit = object.estimation.can_edit?(current_user)
+
+    helpers.editable(object,
+                     field,
+                     url: helpers.estimation_estimation_item_path(object.estimation, object),
+                     type: type,
+                     css_class: css_class || field,
+                     can_edit: can_edit)
   end
 end

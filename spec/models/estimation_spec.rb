@@ -217,4 +217,110 @@ RSpec.describe Estimation, :type => :model do
       expect(subject.buffer_health).to eq 2
     end
   end
+
+  describe '#shared_with?' do
+    let(:owner) { subject.user }
+    let(:other_user) { FactoryBot.create(:user) }
+
+    it 'returns false when user is nil' do
+      expect(subject.shared_with?(nil)).to be false
+    end
+
+    it 'returns false when no share exists for user' do
+      expect(subject.shared_with?(other_user)).to be false
+    end
+
+    it 'returns true when user has an active share' do
+      FactoryBot.create(:estimation_share, :active, estimation: subject, shared_with_user: other_user)
+      expect(subject.shared_with?(other_user)).to be true
+    end
+
+    it 'returns true when user has a pending share matching their email' do
+      FactoryBot.create(:estimation_share, :pending, estimation: subject, shared_with_email: other_user.email)
+      expect(subject.shared_with?(other_user)).to be true
+    end
+
+    it 'returns true with case-insensitive email matching' do
+      FactoryBot.create(:estimation_share, :pending, estimation: subject, shared_with_email: other_user.email.upcase)
+      expect(subject.shared_with?(other_user)).to be true
+    end
+  end
+
+  describe '#share_for' do
+    let(:other_user) { FactoryBot.create(:user) }
+
+    it 'returns nil when user is nil' do
+      expect(subject.share_for(nil)).to be_nil
+    end
+
+    it 'returns nil when no share exists for user' do
+      expect(subject.share_for(other_user)).to be_nil
+    end
+
+    it 'returns the share when user has an active share' do
+      share = FactoryBot.create(:estimation_share, :active, estimation: subject, shared_with_user: other_user)
+      expect(subject.share_for(other_user)).to eq(share)
+    end
+
+    it 'returns the share when user has a pending share matching their email' do
+      share = FactoryBot.create(:estimation_share, :pending, estimation: subject, shared_with_email: other_user.email)
+      expect(subject.share_for(other_user)).to eq(share)
+    end
+  end
+
+  describe '#can_edit?' do
+    let(:owner) { subject.user }
+    let(:other_user) { FactoryBot.create(:user) }
+
+    it 'returns false when user is nil' do
+      expect(subject.can_edit?(nil)).to be false
+    end
+
+    it 'returns true for the owner' do
+      expect(subject.can_edit?(owner)).to be true
+    end
+
+    it 'returns false for other users' do
+      expect(subject.can_edit?(other_user)).to be false
+    end
+
+    it 'returns false for users with shares (view-only)' do
+      FactoryBot.create(:estimation_share, :active, estimation: subject, shared_with_user: other_user)
+      expect(subject.can_edit?(other_user)).to be false
+    end
+  end
+
+  describe '#can_view?' do
+    let(:owner) { subject.user }
+    let(:other_user) { FactoryBot.create(:user) }
+
+    it 'returns false when user is nil' do
+      expect(subject.can_view?(nil)).to be false
+    end
+
+    it 'returns true for the owner' do
+      expect(subject.can_view?(owner)).to be true
+    end
+
+    it 'returns false for other users without shares' do
+      expect(subject.can_view?(other_user)).to be false
+    end
+
+    it 'returns true for users with active shares' do
+      FactoryBot.create(:estimation_share, :active, estimation: subject, shared_with_user: other_user)
+      expect(subject.can_view?(other_user)).to be true
+    end
+
+    it 'returns true for users with pending shares matching their email' do
+      FactoryBot.create(:estimation_share, :pending, estimation: subject, shared_with_email: other_user.email)
+      expect(subject.can_view?(other_user)).to be true
+    end
+  end
+
+  describe 'estimation_shares association' do
+    it 'destroys associated shares when estimation is destroyed' do
+      FactoryBot.create(:estimation_share, estimation: subject)
+      expect { subject.destroy! }.to change(EstimationShare, :count).by(-1)
+    end
+  end
 end

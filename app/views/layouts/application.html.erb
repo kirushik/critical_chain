@@ -59,20 +59,8 @@
       <% end %>
     </nav>
 
-    <% if notice %>
-      <div class="notification is-info is-light" data-controller="notification" data-auto-dismiss="5000">
-        <button class="delete" data-action="click->notification#close"></button>
-        <%= notice %>
-      </div>
-    <% end %>
-    <% if alert %>
-      <div
-        class="notification is-warning is-light"
-        data-controller="notification"
-      >
-        <button class="delete" data-action="click->notification#close"></button>
-        <%= alert %>
-      </div>
+    <%= turbo_frame_tag "flash" do %>
+      <%= render "shared/flash" %>
     <% end %>
 
     <div class="container"><%= yield %></div>

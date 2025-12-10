@@ -1,0 +1,39 @@
+<%= form_with model: [estimation, estimation_share] do |form| %>
+  <% if estimation_share.errors.any? %>
+    <div class="notification is-danger is-light" data-controller="notification">
+      <button class="delete" data-action="click->notification#close"></button>
+      <p class="has-text-weight-semibold mb-2">Unable to share estimation</p>
+      <ul class="mb-0">
+        <% estimation_share.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :shared_with_email, "Email Address", class: "label", for: "estimation_share_shared_with_email" %>
+    <div class="control">
+      <%= form.email_field :shared_with_email,
+                           class: "input #{'is-danger' if estimation_share.errors[:shared_with_email].present?}",
+                           placeholder: "user@example.com",
+                           required: true,
+                           id: "estimation_share_shared_with_email" %>
+    </div>
+    <p class="help">
+      Enter the email address of the person you want to share with.
+      If they haven't signed up yet, they'll get access when they sign in with this email.
+    </p>
+    <% estimation_share.errors[:shared_with_email].each do |message| %>
+      <p class="help is-danger"><%= message %></p>
+    <% end %>
+  </div>
+
+
+
+  <div class="field">
+    <div class="control">
+      <%= form.submit "Share", class: "button is-primary" %>
+    </div>
+  </div>
+<% end %>

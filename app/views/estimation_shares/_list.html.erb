@@ -1,0 +1,22 @@
+<% if shares.any? %>
+  <table class="table is-fullwidth is-hoverable">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Last Accessed</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="shares_list_body">
+      <%= render partial: "estimation_shares/share",
+                 collection: shares,
+                 as: :share,
+                 locals: { estimation: estimation } %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="has-text-grey-light" id="shares_list_empty">
+    This estimation has not been shared with anyone yet.
+  </p>
+<% end %>

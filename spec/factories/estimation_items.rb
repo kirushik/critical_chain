@@ -11,10 +11,12 @@
 #  fixed         :boolean          default(FALSE), not null
 #  quantity      :integer          default(1), not null
 #  actual_value  :float
+#  order         :float            default(0.0), not null
 #
 # Indexes
 #
-#  index_estimation_items_on_estimation_id  (estimation_id)
+#  index_estimation_items_on_estimation_id            (estimation_id)
+#  index_estimation_items_on_estimation_id_and_order  (estimation_id,order)
 #
 
 FactoryBot.define do

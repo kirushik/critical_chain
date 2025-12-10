@@ -9,6 +9,18 @@ module EditableHelper
     css_class = options[:css_class] || field.to_s
     field_id = "editable_#{object.class.name.underscore}_#{object.id}_#{field}"
 
+    can_edit = options.fetch(:can_edit, true)
+
+    unless can_edit
+      return content_tag(:div,
+                         class: "editable-field #{css_class} is-readonly",
+                         id: field_id) do
+        content_tag(:span,
+                    h(display_value),
+                    class: 'editable-display')
+      end
+    end
+
     content_tag(:div,
                 class: "editable-field #{css_class}",
                 id: field_id,

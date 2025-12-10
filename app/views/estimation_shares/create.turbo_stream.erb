@@ -1,0 +1,15 @@
+<%= turbo_stream.replace 'flash' do %>
+  <%= turbo_frame_tag 'flash' do %>
+    <%= render 'shared/flash' %>
+  <% end %>
+<% end %>
+<%= turbo_stream.replace 'shares_form' do %>
+  <%= turbo_frame_tag 'shares_form' do %>
+    <%= render 'estimation_shares/form', estimation: @estimation, estimation_share: @estimation_share %>
+  <% end %>
+<% end %>
+<%= turbo_stream.replace 'shares_list' do %>
+  <%= turbo_frame_tag 'shares_list' do %>
+    <%= render 'estimation_shares/list', estimation: @estimation, shares: @estimation_shares %>
+  <% end %>
+<% end %>

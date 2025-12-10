@@ -81,4 +81,51 @@ RSpec.describe User, :type => :model do
       expect(user.estimations.size).to eq(3)
     end
   end
+
+  describe "#activate_pending_shares" do
+    let(:user) { FactoryBot.create(:user, email: 'test@example.com') }
+
+    it 'activates pending shares for the user email' do
+      estimation1 = FactoryBot.create(:estimation)
+      estimation2 = FactoryBot.create(:estimation)
+      
+      share1 = FactoryBot.create(:estimation_share, :pending, estimation: estimation1, shared_with_email: 'test@example.com')
+      share2 = FactoryBot.create(:estimation_share, :pending, estimation: estimation2, shared_with_email: 'test@example.com')
+      other_share = FactoryBot.create(:estimation_share, :pending, shared_with_email: 'other@example.com')
+      
+      user.activate_pending_shares
+      
+      expect(share1.reload.shared_with_user).to eq(user)
+      expect(share2.reload.shared_with_user).to eq(user)
+      expect(other_share.reload.shared_with_user).to be_nil
+    end
+
+    it 'is called after user creation' do
+      estimation = FactoryBot.create(:estimation)
+      FactoryBot.create(:estimation_share, :pending, estimation: estimation, shared_with_email: 'newuser@example.com')
+      
+      new_user = FactoryBot.create(:user, email: 'newuser@example.com')
+      
+      share = estimation.estimation_shares.first
+      expect(share.reload.shared_with_user).to eq(new_user)
+    end
+  end
+
+  describe '.from_omniauth' do
+    it 'activates pending shares when user signs in' do
+      estimation = FactoryBot.create(:estimation)
+      FactoryBot.create(:estimation_share, :pending, estimation: estimation, shared_with_email: 'oauth@example.com')
+      
+      payload = double
+      info = double
+      allow(payload).to receive_messages(provider: 'google_oauth2', uid: '12345')
+      allow(info).to receive(:email).and_return('oauth@example.com')
+      allow(payload).to receive(:info).and_return(info)
+      
+      user = User.from_omniauth(payload)
+      
+      share = estimation.estimation_shares.first
+      expect(share.reload.shared_with_user).to eq(user)
+    end
+  end
 end
