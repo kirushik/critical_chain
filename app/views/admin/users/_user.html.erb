@@ -27,9 +27,10 @@
           <i class="fa-solid fa-unlock"></i>&nbsp;Unban
         <% end %>
       <% else %>
+        <% confirm_message = "Are you sure you want to ban #{user.email}? They will be immediately logged out." %>
         <%= button_to ban_admin_user_path(user), method: :post,
             class: 'button is-small is-danger',
-            data: { turbo_confirm: "Are you sure you want to ban #{user.email}? They will be immediately logged out." } do %>
+            data: { turbo_confirm: confirm_message } do %>
           <i class="fa-solid fa-ban"></i>&nbsp;Ban
         <% end %>
       <% end %>

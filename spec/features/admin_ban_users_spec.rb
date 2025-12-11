@@ -33,7 +33,7 @@ feature "Admin Ban/Unban Users", type: :feature do
       original_value = ENV['ADMIN_EMAILS']
       ENV['ADMIN_EMAILS'] = 'admin@example.com,admin2@example.com'
 
-      other_admin = FactoryBot.create(:user, email: 'admin2@example.com')
+      FactoryBot.create(:user, email: 'admin2@example.com')
 
       login_as admin
       visit admin_users_path

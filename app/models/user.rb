@@ -53,10 +53,19 @@ class User < ActiveRecord::Base
     EstimationShare.activate_pending_shares_for_user(self)
   end
 
+  def self.admin_emails
+    env_value = ENV.fetch('ADMIN_EMAILS', '')
+    # Cache based on the ENV value to handle test environment properly
+    if @admin_emails_cache_key != env_value
+      @admin_emails_cache_key = env_value
+      @admin_emails = env_value.split(',').map(&:strip).map(&:downcase)
+    end
+    @admin_emails
+  end
+
   def admin?
     return false if email.blank?
-    admin_emails = ENV.fetch('ADMIN_EMAILS', '').split(',').map(&:strip).map(&:downcase)
-    admin_emails.include?(email.downcase)
+    self.class.admin_emails.include?(email.downcase)
   end
 
   def banned?
@@ -64,6 +73,9 @@ class User < ActiveRecord::Base
   end
 
   def ban!(admin_user)
+    raise ArgumentError, 'admin_user is required' if admin_user.nil?
+    raise ArgumentError, 'admin_user must have an email' if admin_user.email.blank?
+
     update!(
       banned_at: Time.current,
       banned_by_email: admin_user.email
