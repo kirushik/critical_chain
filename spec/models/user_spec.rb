@@ -133,6 +133,11 @@ RSpec.describe User, :type => :model do
   end
 
   describe '#admin?' do
+    before do
+      # Clear cached admin emails before each test
+      User.instance_variable_set(:@admin_emails, nil)
+    end
+
     it 'returns false when ADMIN_EMAILS is not set' do
       allow(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('')
       user = FactoryBot.create(:user, email: 'user@example.com')
@@ -174,6 +179,18 @@ RSpec.describe User, :type => :model do
 
       expect(user.admin?).to be false
     end
+
+    it 'caches parsed admin emails' do
+      allow(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('admin@example.com')
+      user = FactoryBot.create(:user, email: 'admin@example.com')
+
+      # First call should fetch from ENV
+      expect(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('admin@example.com')
+      expect(user.admin?).to be true
+
+      # Second call should use cached value (ENV.fetch not called again)
+      expect(user.admin?).to be true
+    end
   end
 
   describe '#banned?' do
@@ -210,6 +227,20 @@ RSpec.describe User, :type => :model do
       user_to_ban.ban!(admin)
 
       expect(user_to_ban.reload.banned?).to be true
+    end
+
+    it 'raises ArgumentError when admin_user is nil' do
+      expect {
+        user_to_ban.ban!(nil)
+      }.to raise_error(ArgumentError, 'admin_user is required')
+    end
+
+    it 'raises ArgumentError when admin_user has blank email' do
+      admin_without_email = FactoryBot.build(:user, email: '')
+
+      expect {
+        user_to_ban.ban!(admin_without_email)
+      }.to raise_error(ArgumentError, 'admin_user must have an email')
     end
   end
 

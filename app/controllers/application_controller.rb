@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   helper :application
 
   before_action :authenticate_user!
-  before_action :check_if_banned
 
   include Pundit::Authorization
   # Exception to ensure every action contains authorization call
@@ -23,13 +22,5 @@ private
 
   def permission_denied
     head 403
-  end
-
-  def check_if_banned
-    return unless current_user&.banned?
-
-    sign_out current_user
-    flash[:alert] = I18n.t('devise.failure.banned')
-    redirect_to new_user_session_path
   end
 end
