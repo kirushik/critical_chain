@@ -54,7 +54,14 @@ class User < ActiveRecord::Base
   end
 
   def self.admin_emails
-    @admin_emails ||= ENV.fetch('ADMIN_EMAILS', '').split(',').map(&:strip).map(&:downcase)
+    env_value = ENV.fetch('ADMIN_EMAILS', '')
+    # Cache based on the ENV value to handle test environment properly
+    @admin_emails_cache_key ||= nil
+    if @admin_emails_cache_key != env_value
+      @admin_emails_cache_key = env_value
+      @admin_emails = env_value.split(',').map(&:strip).map(&:downcase)
+    end
+    @admin_emails
   end
 
   def admin?

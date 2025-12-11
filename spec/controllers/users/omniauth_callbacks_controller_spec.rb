@@ -57,7 +57,7 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
       it "sets banned alert flash message" do
         get :google_oauth2
 
-        expect(flash[:alert]).to eq('Your account has been suspended.')
+        expect(flash[:alert]).to eq('Your account has been suspended. Please contact support.')
       end
 
       it "redirects to sign in page" do

@@ -133,11 +133,6 @@ RSpec.describe User, :type => :model do
   end
 
   describe '#admin?' do
-    before do
-      # Clear cached admin emails before each test
-      User.instance_variable_set(:@admin_emails, nil)
-    end
-
     it 'returns false when ADMIN_EMAILS is not set' do
       allow(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('')
       user = FactoryBot.create(:user, email: 'user@example.com')
@@ -180,16 +175,32 @@ RSpec.describe User, :type => :model do
       expect(user.admin?).to be false
     end
 
-    it 'caches parsed admin emails' do
-      allow(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('admin@example.com')
+    it 'caches parsed admin emails when ENV value unchanged' do
+      allow(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('admin@example.com').twice
       user = FactoryBot.create(:user, email: 'admin@example.com')
 
-      # First call should fetch from ENV
-      expect(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('admin@example.com')
+      # First call should fetch from ENV and parse
       expect(user.admin?).to be true
 
-      # Second call should use cached value (ENV.fetch not called again)
+      # Second call with same ENV value should use cached parsed value
+      # (splitting/mapping not repeated)
       expect(user.admin?).to be true
+    end
+
+    it 'recomputes cache when ENV value changes' do
+      allow(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('admin@example.com')
+      user = FactoryBot.create(:user, email: 'admin@example.com')
+      other_user = FactoryBot.create(:user, email: 'other@example.com')
+
+      expect(user.admin?).to be true
+      expect(other_user.admin?).to be false
+
+      # Change ENV value
+      allow(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('other@example.com')
+
+      # Cache should be invalidated and recomputed
+      expect(user.admin?).to be false
+      expect(other_user.admin?).to be true
     end
   end
 
