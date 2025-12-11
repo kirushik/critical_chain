@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Warden hooks', type: :request do
+RSpec.describe 'Warden hooks', type: :feature do
   let(:admin) { FactoryBot.create(:user, email: 'admin@example.com') }
 
   before do
@@ -12,35 +12,32 @@ RSpec.describe 'Warden hooks', type: :request do
       user = FactoryBot.create(:user, email: 'user@example.com')
       
       # Sign in as the user
-      sign_in user
-      get root_path
-      expect(response).to have_http_status(:success)
+      login_as user
+      visit root_path
+      expect(page).to have_link('Sign out')
       
       # Ban the user
       user.ban!(admin)
       
       # Try to access a page with the existing session
-      get root_path
+      visit root_path
       
       # Should be redirected to sign in page
-      expect(response).to redirect_to(new_user_session_path)
-      
-      # Follow redirect to see the flash message
-      follow_redirect!
-      expect(response.body).to include('Your account has been suspended')
+      expect(page).to have_current_path(new_user_session_path)
+      expect(page).to have_text('Your account has been suspended')
     end
 
     it 'allows a non-banned user to continue their session' do
       user = FactoryBot.create(:user, email: 'user@example.com')
       
       # Sign in as the user
-      sign_in user
-      get root_path
-      expect(response).to have_http_status(:success)
+      login_as user
+      visit root_path
+      expect(page).to have_link('Sign out')
       
       # Access another page - should work fine
-      get root_path
-      expect(response).to have_http_status(:success)
+      visit root_path
+      expect(page).to have_link('Sign out')
     end
   end
 end

@@ -37,6 +37,8 @@ RSpec.describe Admin::DashboardController, type: :controller do
       before do
         allow(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('admin@example.com')
         sign_in admin
+        # Clear the dashboard stats cache before each test
+        Rails.cache.delete("admin_dashboard_stats")
       end
 
       it "returns http success" do
