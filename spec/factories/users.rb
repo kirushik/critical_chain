@@ -14,12 +14,15 @@
 #  updated_at          :datetime
 #  provider            :string
 #  uid                 :string
+#  banned_at           :datetime
+#  banned_by_email     :string
 #
 # Indexes
 #
-#  index_users_on_email     (email) UNIQUE
-#  index_users_on_provider  (provider)
-#  index_users_on_uid       (uid)
+#  index_users_on_banned_at  (banned_at)
+#  index_users_on_email      (email) UNIQUE
+#  index_users_on_provider   (provider)
+#  index_users_on_uid        (uid)
 #
 
 FactoryBot.define do
@@ -49,6 +52,15 @@ FactoryBot.define do
       after(:create) do |user, evaluator|
         FactoryBot.create_list(:estimation, evaluator.n, :user => user)
       end
+    end
+
+    trait :admin do
+      email { 'admin@example.com' }
+    end
+
+    trait :banned do
+      banned_at { Time.current }
+      banned_by_email { 'admin@example.com' }
     end
   end
 end

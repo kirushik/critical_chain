@@ -14,12 +14,15 @@
 #  updated_at          :datetime
 #  provider            :string
 #  uid                 :string
+#  banned_at           :datetime
+#  banned_by_email     :string
 #
 # Indexes
 #
-#  index_users_on_email     (email) UNIQUE
-#  index_users_on_provider  (provider)
-#  index_users_on_uid       (uid)
+#  index_users_on_banned_at  (banned_at)
+#  index_users_on_email      (email) UNIQUE
+#  index_users_on_provider   (provider)
+#  index_users_on_uid        (uid)
 #
 
 class User < ActiveRecord::Base
@@ -33,7 +36,7 @@ class User < ActiveRecord::Base
 
   def self.from_omniauth auth, current_user = nil
     return current_user if current_user
-    
+
     user = where(provider: auth.provider, uid: auth.uid).first_or_create do |u|
       u.email = auth.info.email
       # user.name = auth.info.name   # assuming the user model has a name
@@ -48,5 +51,39 @@ class User < ActiveRecord::Base
 
   def activate_pending_shares
     EstimationShare.activate_pending_shares_for_user(self)
+  end
+
+  def admin?
+    return false if email.blank?
+    admin_emails = ENV.fetch('ADMIN_EMAILS', '').split(',').map(&:strip).map(&:downcase)
+    admin_emails.include?(email.downcase)
+  end
+
+  def banned?
+    banned_at.present?
+  end
+
+  def ban!(admin_user)
+    update!(
+      banned_at: Time.current,
+      banned_by_email: admin_user.email
+    )
+  end
+
+  def unban!
+    update!(
+      banned_at: nil,
+      banned_by_email: nil
+    )
+  end
+
+  # Devise hook: Prevent banned users from authenticating
+  def active_for_authentication?
+    super && !banned?
+  end
+
+  # Custom message for banned users
+  def inactive_message
+    banned? ? :banned : super
   end
 end

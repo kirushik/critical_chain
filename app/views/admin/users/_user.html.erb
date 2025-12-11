@@ -1,0 +1,38 @@
+<tr class="<%= 'has-background-danger-light' if user.banned? %>">
+  <td>
+    <%= user.email %>
+    <% if user.admin? %>
+      <span class="tag is-info is-light">Admin</span>
+    <% end %>
+  </td>
+  <td><%= user.sign_in_count %></td>
+  <td><%= user.last_sign_in_at ? time_ago_in_words(user.last_sign_in_at) + ' ago' : 'Never' %></td>
+  <td><%= user.created_at.strftime('%Y-%m-%d') %></td>
+  <td>
+    <% if user.banned? %>
+      <span class="tag is-danger">
+        Banned <%= time_ago_in_words(user.banned_at) %> ago
+        <% if user.banned_by_email.present? %>
+          by <%= user.banned_by_email %>
+        <% end %>
+      </span>
+    <% else %>
+      <span class="tag is-success">Active</span>
+    <% end %>
+  </td>
+  <td>
+    <% unless user.admin? %>
+      <% if user.banned? %>
+        <%= button_to unban_admin_user_path(user), method: :post, class: 'button is-small is-success' do %>
+          <i class="fa-solid fa-unlock"></i>&nbsp;Unban
+        <% end %>
+      <% else %>
+        <%= button_to ban_admin_user_path(user), method: :post,
+            class: 'button is-small is-danger',
+            data: { turbo_confirm: "Are you sure you want to ban #{user.email}? They will be immediately logged out." } do %>
+          <i class="fa-solid fa-ban"></i>&nbsp;Ban
+        <% end %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

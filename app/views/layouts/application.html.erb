@@ -46,6 +46,16 @@
       <% if user_signed_in? %>
         <div class="navbar-menu" data-navbar-target="menu">
           <div class="navbar-end">
+            <% if current_user.admin? %>
+              <div class="navbar-item">
+                <%= link_to admin_root_path, class: "button is-danger is-light" do %>
+                  <span class="icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                  </span>
+                  <span>Admin</span>
+                <% end %>
+              </div>
+            <% end %>
             <div class="navbar-item">
               <%= link_to :destroy_user_session, class: "button is-light" do %>
                 <span class="icon">

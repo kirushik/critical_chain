@@ -14,12 +14,15 @@
 #  updated_at          :datetime
 #  provider            :string
 #  uid                 :string
+#  banned_at           :datetime
+#  banned_by_email     :string
 #
 # Indexes
 #
-#  index_users_on_email     (email) UNIQUE
-#  index_users_on_provider  (provider)
-#  index_users_on_uid       (uid)
+#  index_users_on_banned_at  (banned_at)
+#  index_users_on_email      (email) UNIQUE
+#  index_users_on_provider   (provider)
+#  index_users_on_uid        (uid)
 #
 
 require 'rails_helper'
@@ -115,17 +118,148 @@ RSpec.describe User, :type => :model do
     it 'activates pending shares when user signs in' do
       estimation = FactoryBot.create(:estimation)
       FactoryBot.create(:estimation_share, :pending, estimation: estimation, shared_with_email: 'oauth@example.com')
-      
+
       payload = double
       info = double
       allow(payload).to receive_messages(provider: 'google_oauth2', uid: '12345')
       allow(info).to receive(:email).and_return('oauth@example.com')
       allow(payload).to receive(:info).and_return(info)
-      
+
       user = User.from_omniauth(payload)
-      
+
       share = estimation.estimation_shares.first
       expect(share.reload.shared_with_user).to eq(user)
+    end
+  end
+
+  describe '#admin?' do
+    it 'returns false when ADMIN_EMAILS is not set' do
+      allow(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('')
+      user = FactoryBot.create(:user, email: 'user@example.com')
+
+      expect(user.admin?).to be false
+    end
+
+    it 'returns true when user email is in ADMIN_EMAILS' do
+      allow(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('admin@example.com,admin2@example.com')
+      user = FactoryBot.create(:user, email: 'admin@example.com')
+
+      expect(user.admin?).to be true
+    end
+
+    it 'returns false when user email is not in ADMIN_EMAILS' do
+      allow(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('admin@example.com')
+      user = FactoryBot.create(:user, email: 'regular@example.com')
+
+      expect(user.admin?).to be false
+    end
+
+    it 'is case insensitive' do
+      allow(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('Admin@Example.COM')
+      user = FactoryBot.create(:user, email: 'admin@example.com')
+
+      expect(user.admin?).to be true
+    end
+
+    it 'handles whitespace in ADMIN_EMAILS' do
+      allow(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('admin@example.com , admin2@example.com')
+      user = FactoryBot.create(:user, email: 'admin2@example.com')
+
+      expect(user.admin?).to be true
+    end
+
+    it 'returns false when email is blank' do
+      allow(ENV).to receive(:fetch).with('ADMIN_EMAILS', '').and_return('admin@example.com')
+      user = FactoryBot.build(:user, email: '')
+
+      expect(user.admin?).to be false
+    end
+  end
+
+  describe '#banned?' do
+    it 'returns true when banned_at is present' do
+      user = FactoryBot.create(:user, :banned)
+
+      expect(user.banned?).to be true
+    end
+
+    it 'returns false when banned_at is nil' do
+      user = FactoryBot.create(:user)
+
+      expect(user.banned?).to be false
+    end
+  end
+
+  describe '#ban!' do
+    let(:admin) { FactoryBot.create(:user, email: 'admin@example.com') }
+    let(:user_to_ban) { FactoryBot.create(:user) }
+
+    it 'sets banned_at to current time' do
+      user_to_ban.ban!(admin)
+
+      expect(user_to_ban.banned_at).to be_within(1.second).of(Time.current)
+    end
+
+    it 'sets banned_by_email to admin email' do
+      user_to_ban.ban!(admin)
+
+      expect(user_to_ban.banned_by_email).to eq('admin@example.com')
+    end
+
+    it 'persists the changes' do
+      user_to_ban.ban!(admin)
+
+      expect(user_to_ban.reload.banned?).to be true
+    end
+  end
+
+  describe '#unban!' do
+    let(:banned_user) { FactoryBot.create(:user, :banned) }
+
+    it 'clears banned_at' do
+      banned_user.unban!
+
+      expect(banned_user.banned_at).to be_nil
+    end
+
+    it 'clears banned_by_email' do
+      banned_user.unban!
+
+      expect(banned_user.banned_by_email).to be_nil
+    end
+
+    it 'persists the changes' do
+      banned_user.unban!
+
+      expect(banned_user.reload.banned?).to be false
+    end
+  end
+
+  describe '#active_for_authentication?' do
+    it 'returns true for non-banned users' do
+      user = FactoryBot.create(:user)
+
+      expect(user.active_for_authentication?).to be true
+    end
+
+    it 'returns false for banned users' do
+      user = FactoryBot.create(:user, :banned)
+
+      expect(user.active_for_authentication?).to be false
+    end
+  end
+
+  describe '#inactive_message' do
+    it 'returns :banned for banned users' do
+      user = FactoryBot.create(:user, :banned)
+
+      expect(user.inactive_message).to eq(:banned)
+    end
+
+    it 'returns default message for non-banned users' do
+      user = FactoryBot.create(:user)
+
+      expect(user.inactive_message).to eq(:inactive)
     end
   end
 end

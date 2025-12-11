@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: estimation_shares
+#
+#  id                  :integer          not null, primary key
+#  estimation_id       :integer          not null
+#  shared_with_user_id :integer
+#  shared_with_email   :string
+#  last_accessed_at    :datetime
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#
+# Indexes
+#
+#  index_estimation_shares_on_estimation_and_email  (estimation_id,shared_with_email) UNIQUE
+#  index_estimation_shares_on_estimation_and_user   (estimation_id,shared_with_user_id) UNIQUE
+#  index_estimation_shares_on_estimation_id         (estimation_id)
+#  index_estimation_shares_on_shared_with_email     (shared_with_email)
+#  index_estimation_shares_on_shared_with_user_id   (shared_with_user_id)
+#
 require 'rails_helper'
 
 RSpec.describe EstimationSharesController, type: :controller do
