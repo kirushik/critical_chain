@@ -38,6 +38,16 @@ Rails.application.routes.draw do
       end
     end
   end
-  
+
+  namespace :admin do
+    root 'dashboard#index'
+    resources :users, only: [:index] do
+      member do
+        post :ban
+        post :unban
+      end
+    end
+  end
+
   root 'estimations#index'
 end

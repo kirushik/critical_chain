@@ -1,0 +1,72 @@
+<h1 class="title">Dashboard</h1>
+<h2 class="subtitle">System Overview</h2>
+
+<div class="columns is-multiline">
+  <div class="column is-4">
+    <div class="box">
+      <h3 class="title is-5"><i class="fa-solid fa-users"></i> Users</h3>
+      <table class="table is-fullwidth">
+        <tr>
+          <td>Total Users</td>
+          <td class="has-text-right has-text-weight-bold"><%= @stats[:total_users] %></td>
+        </tr>
+        <tr>
+          <td>New (7 days)</td>
+          <td class="has-text-right"><%= @stats[:users_last_7_days] %></td>
+        </tr>
+        <tr>
+          <td>New (30 days)</td>
+          <td class="has-text-right"><%= @stats[:users_last_30_days] %></td>
+        </tr>
+        <tr>
+          <td>Banned</td>
+          <td class="has-text-right has-text-danger"><%= @stats[:banned_users] %></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="column is-4">
+    <div class="box">
+      <h3 class="title is-5"><i class="fa-solid fa-chart-bar"></i> Activity</h3>
+      <table class="table is-fullwidth">
+        <tr>
+          <td>Active (7 days)</td>
+          <td class="has-text-right"><%= @stats[:active_users_last_7_days] %></td>
+        </tr>
+        <tr>
+          <td>Active (30 days)</td>
+          <td class="has-text-right"><%= @stats[:active_users_last_30_days] %></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="column is-4">
+    <div class="box">
+      <h3 class="title is-5"><i class="fa-solid fa-calculator"></i> Estimations</h3>
+      <table class="table is-fullwidth">
+        <tr>
+          <td>Total</td>
+          <td class="has-text-right has-text-weight-bold"><%= @stats[:total_estimations] %></td>
+        </tr>
+        <tr>
+          <td>New (7 days)</td>
+          <td class="has-text-right"><%= @stats[:estimations_last_7_days] %></td>
+        </tr>
+        <tr>
+          <td>New (30 days)</td>
+          <td class="has-text-right"><%= @stats[:estimations_last_30_days] %></td>
+        </tr>
+        <tr>
+          <td>Total Items</td>
+          <td class="has-text-right"><%= @stats[:total_estimation_items] %></td>
+        </tr>
+        <tr>
+          <td>Total Shares</td>
+          <td class="has-text-right"><%= @stats[:total_shares] %></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

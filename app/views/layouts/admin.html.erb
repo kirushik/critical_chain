@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin - Buffer Estimator</title>
+
+    <%= stylesheet_link_tag 'https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css', integrity: 'sha384-DCY3M8xLkMu6c9IKcKbe+jHKMjelnwC0p+SBaxfHxoBYZWdJF2X400UdBCgATtAB', crossorigin: 'anonymous', 'data-turbo-track' => 'reload' %>
+    <%= stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css', integrity: 'sha512-9xKTRVabjVeZmc+GUW8GgSmcREDunMM+Dt/GrzchfN8tkwHizc5RP4Ok/MXFFy5rIjJjzhndFScTceq5e6GvVQ==', crossorigin: 'anonymous', 'data-turbo-track' => 'reload' %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track' => 'reload' %>
+    <%= csrf_meta_tags %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body data-env="<%= Rails.env %>" class="has-background-light">
+    <nav class="navbar is-danger" role="navigation" aria-label="admin navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="<%= admin_root_path %>">
+          <strong><i class="fa-solid fa-shield-halved"></i> Admin Panel</strong>
+        </a>
+      </div>
+
+      <div class="navbar-menu">
+        <div class="navbar-start">
+          <%= link_to admin_root_path, class: "navbar-item #{controller_name == 'dashboard' ? 'is-active' : ''}" do %>
+            <i class="fa-solid fa-chart-line"></i>&nbsp;Dashboard
+          <% end %>
+          <%= link_to admin_users_path, class: "navbar-item #{controller_name == 'users' ? 'is-active' : ''}" do %>
+            <i class="fa-solid fa-users"></i>&nbsp;Users
+          <% end %>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <%= link_to root_path, class: "button is-light is-small" do %>
+              <i class="fa-solid fa-arrow-left"></i>&nbsp;Back to App
+            <% end %>
+          </div>
+          <div class="navbar-item">
+            <%= link_to destroy_user_session_path, class: "button is-light is-small" do %>
+              <i class="fa-solid fa-right-from-bracket"></i>&nbsp;Sign Out
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <%= turbo_frame_tag "flash" do %>
+      <%= render "shared/flash" %>
+    <% end %>
+
+    <section class="section">
+      <div class="container">
+        <%= yield %>
+      </div>
+    </section>
+  </body>
+</html>

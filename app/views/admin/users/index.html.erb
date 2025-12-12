@@ -1,0 +1,20 @@
+<h1 class="title">Users</h1>
+<h2 class="subtitle">Manage registered users</h2>
+
+<div class="box">
+  <table class="table is-fullwidth is-striped is-hoverable">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Sign-ins</th>
+        <th>Last Sign-in</th>
+        <th>Registered</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: 'admin/users/user', collection: @users %>
+    </tbody>
+  </table>
+</div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_08_151837) do
+ActiveRecord::Schema[7.2].define(version: 2025_12_11_215907) do
   create_table "estimation_items", force: :cascade do |t|
     t.integer "value"
     t.string "title"
@@ -60,6 +60,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_08_151837) do
     t.datetime "updated_at", precision: nil
     t.string "provider"
     t.string "uid"
+    t.datetime "banned_at"
+    t.string "banned_by_email"
+    t.index ["banned_at"], name: "index_users_on_banned_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["provider"], name: "index_users_on_provider"
     t.index ["uid"], name: "index_users_on_uid"
