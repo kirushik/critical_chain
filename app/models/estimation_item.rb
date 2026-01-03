@@ -20,6 +20,8 @@
 #
 
 class EstimationItem < ActiveRecord::Base
+  include RealtimeBroadcastable::EstimationItem
+  
   belongs_to :estimation
 
   validates :value, presence: true, :numericality => { :greater_than_or_equal_to => 0 }

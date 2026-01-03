@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.3.8'
+ruby '3.2.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 7.2.3'
@@ -47,6 +47,8 @@ gem 'bullet', group: :development
 # gem 'capistrano-rails', group: :development
 group :production do
   gem 'pg'
+  # Enhanced PostgreSQL adapter for ActionCable with better LISTEN/NOTIFY support
+  gem 'actioncable-enhanced-postgresql-adapter'
 end
 
 group :development, :test do
