@@ -20,7 +20,7 @@
 #
 
 class EstimationItem < ActiveRecord::Base
-  include Broadcastable::EstimationItem
+  include RealtimeBroadcastable::EstimationItem
   
   belongs_to :estimation
 

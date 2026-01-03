@@ -7,9 +7,6 @@ import { application } from "controllers/application";
 import EditableController from "controllers/editable_controller";
 application.register("editable", EditableController);
 
-import EstimationRealtimeController from "controllers/estimation_realtime_controller";
-application.register("estimation-realtime", EstimationRealtimeController);
-
 import NavbarController from "controllers/navbar_controller";
 application.register("navbar", NavbarController);
 
