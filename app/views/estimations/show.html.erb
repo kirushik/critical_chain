@@ -1,5 +1,10 @@
 <% page_title! @estimation.title %>
 
+<div 
+  data-controller="estimation-realtime"
+  data-estimation-realtime-estimation-id-value="<%= @estimation.id %>"
+  data-estimation-realtime-can-edit-value="<%= @estimation.can_edit?(current_user) %>"
+>
 <div id="estimation_title">
   <h1><%= @estimation.editable :title %></h1>
   <% if policy(@estimation).manage_shares? %>
@@ -50,4 +55,5 @@
     <%= render 'buffer_consumption' if @estimation.tracking_mode? %>
     <%= render 'graph' if @estimation.tracking_mode? %>
   </div>
+</div>
 </div>

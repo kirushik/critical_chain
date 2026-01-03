@@ -1,0 +1,9 @@
+development:
+  adapter: async
+
+test:
+  adapter: test
+
+production:
+  adapter: enhanced_postgresql
+  url: <%= ENV.fetch("DATABASE_URL") { "postgresql://localhost/critical_chain_production" } %>

@@ -7,6 +7,10 @@ GEM
       nio4r (~> 2.0)
       websocket-driver (>= 0.6.1)
       zeitwerk (~> 2.6)
+    actioncable-enhanced-postgresql-adapter (1.0.2)
+      actioncable (>= 6.0)
+      connection_pool (>= 2.2.5)
+      pg (~> 1.5)
     actionmailbox (7.2.3)
       actionpack (= 7.2.3)
       activejob (= 7.2.3)
@@ -470,6 +474,7 @@ PLATFORMS
   x86_64-linux-gnu
 
 DEPENDENCIES
+  actioncable-enhanced-postgresql-adapter
   annotate
   better_errors
   binding_of_caller
