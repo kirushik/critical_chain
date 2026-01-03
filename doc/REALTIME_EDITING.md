@@ -1,6 +1,6 @@
 # Real-time Editing Feature
 
-This feature enables viewers to see edits made by the editor in real-time using ActionCable with PostgreSQL's LISTEN/NOTIFY mechanism.
+This feature enables viewers to see edits made by the editor in real-time using Turbo Streams with ActionCable and PostgreSQL's LISTEN/NOTIFY mechanism.
 
 ## Architecture
 
@@ -11,41 +11,49 @@ This feature enables viewers to see edits made by the editor in real-time using 
    - Handles connection management and automatic reconnection
    - Used in production environment
 
-2. **Broadcastable Concerns**
-   - `Broadcastable::Estimation` - Broadcasts changes to Estimation model
-   - `Broadcastable::EstimationItem` - Broadcasts changes to EstimationItem model
-   - Both concerns send lightweight notifications (< 200 bytes) containing only IDs and metadata
+2. **RealtimeBroadcastable Concerns**
+   - `RealtimeBroadcastable::Estimation` - Broadcasts changes to Estimation model
+   - `RealtimeBroadcastable::EstimationItem` - Broadcasts changes to EstimationItem model
+   - Both concerns use Turbo::StreamsChannel to render and broadcast HTML partials
 
 3. **EstimationUpdatesChannel**
    - ActionCable channel that handles WebSocket connections
    - Authorizes users based on estimation ownership or sharing
    - Subscribes users to `estimation_{id}` channels
 
-4. **Stimulus Controller** (`estimation-realtime`)
-   - Client-side controller that manages WebSocket subscriptions
-   - Only reloads page for viewers (not editors making changes)
-   - Editors see their changes immediately through Turbo Stream responses
-
-### Payload Size Management
-
-The implementation strictly adheres to PostgreSQL's 8KB NOTIFY payload limit by:
-
-- **Sending only metadata**: Broadcasts contain only `type`, `estimation_id`, `estimation_item_id`, `action`, and `timestamp`
-- **No data duplication**: Actual data (titles, values, etc.) is fetched separately via page reload
-- **Typical payload size**: < 200 bytes per notification
-- **Tested limits**: Comprehensive tests verify payload sizes stay under limits even with:
-  - Maximum-length titles (255 characters)
-  - Estimations with 50+ items
-  - Large item quantities and values
+4. **Turbo Streams**
+   - Uses `turbo_stream_from` helper in views for viewers
+   - Broadcasts rendered HTML partials (not JSON)
+   - Cache-friendly approach
+   - No custom JavaScript required
 
 ### Broadcasting Flow
 
 ```
 Editor makes change → Model saved → after_commit callback → 
-Broadcastable concern → ActionCable.server.broadcast → 
+RealtimeBroadcastable concern → Turbo::StreamsChannel.broadcast_* → 
 PostgreSQL LISTEN/NOTIFY → Enhanced PostgreSQL Adapter → 
-WebSocket clients → Stimulus controller → Turbo.visit (viewers only)
+WebSocket clients → Turbo applies DOM updates automatically
 ```
+
+### Turbo Stream Operations
+
+**Estimation Updates (title changes):**
+- Operation: `replace`
+- Target: `#estimation_title`
+- Partial: `estimations/title`
+
+**EstimationItem Creation:**
+- Operation: `append` (item) + multiple `replace` (totals)
+- Targets: Table tbody, `#total`, `#sum`, `#buffer`, etc.
+
+**EstimationItem Updates:**
+- Operation: multiple `replace`
+- Targets: Item row, `#total`, `#sum`, `#buffer`, etc.
+
+**EstimationItem Deletion:**
+- Operation: `remove` (item) + multiple `replace` (totals)
+- Targets: Item row, `#total`, `#sum`, `#buffer`, etc.
 
 ## Configuration
 
@@ -72,40 +80,41 @@ development:
 
 The feature includes comprehensive test coverage:
 
-- **Broadcaster tests** (`spec/models/concerns/broadcastable_*_spec.rb`)
-  - Verifies broadcasts on create/update/destroy
-  - Validates payload size limits
-  - Confirms payload structure
+- **Broadcaster tests** (`spec/models/concerns/realtime_broadcastable_*_spec.rb`)
+  - Verifies concerns are properly included
+  - Confirms broadcast methods don't raise errors
+  - Tests with proper ActionCable test adapter
 
 - **Channel tests** (`spec/channels/estimation_updates_channel_spec.rb`)
   - Tests authorization (owner, shared user, unauthorized)
   - Verifies stream subscriptions
   - Tests cleanup on unsubscribe
 
-All tests use ActionCable's test adapter (no stubbing required).
+All 216 tests pass, including existing functionality.
 
 ## Usage
 
 ### For Viewers
 
 When viewing a shared estimation:
-1. WebSocket connection is automatically established
-2. Changes made by the editor are received in real-time
-3. Page automatically reloads to show updated data
-4. No action required from the viewer
+1. `turbo_stream_from` helper establishes WebSocket connection
+2. Changes made by the editor are received as Turbo Streams
+3. Turbo automatically applies DOM updates
+4. No page reload or manual JavaScript needed
 
 ### For Editors
 
 When editing an estimation:
-1. Changes are saved normally through Turbo Stream
-2. Updates appear immediately in their browser
+1. Changes are saved normally through Turbo Stream responses
+2. Updates appear immediately in their browser via Turbo
 3. Broadcasts are sent to all viewers
-4. No additional setup required
+4. No subscription needed (editors see direct Turbo Stream responses)
 
 ## Performance Considerations
 
-- **Lightweight notifications**: Only IDs are broadcast, not full data
-- **Selective reloading**: Only viewers reload; editors see instant updates
+- **Server-side rendering**: HTML is rendered once on the server and broadcast to all viewers
+- **Cacheable partials**: Partials can use fragment caching
+- **Selective broadcasting**: Only viewers subscribe; editors use direct Turbo Stream responses
 - **Connection pooling**: Enhanced adapter manages PostgreSQL connections efficiently
 - **Graceful degradation**: If ActionCable is unavailable, application continues to function normally
 
@@ -115,3 +124,29 @@ When editing an estimation:
 - **Warden integration**: Uses existing Devise authentication
 - **Per-estimation channels**: Users only receive updates for estimations they can access
 - **Error handling**: Broadcast failures don't affect database transactions
+- **XSS protection**: All content is rendered through Rails ERB with automatic escaping
+
+## Implementation Details
+
+### Viewer Subscription
+
+In `app/views/estimations/show.html.erb`:
+```erb
+<% unless @estimation.can_edit?(current_user) %>
+  <%= turbo_stream_from "estimation_#{@estimation.id}" %>
+<% end %>
+```
+
+### Broadcasting Example
+
+When an estimation item is updated:
+1. `after_commit` callback fires
+2. Concern method `broadcast_estimation_item_change` executes
+3. Multiple Turbo Streams are broadcast:
+   - Replace the updated item row
+   - Replace total display
+   - Replace sum display  
+   - Replace buffer display
+   - (If tracking mode) Replace actual_sum and buffer_health
+
+All broadcasts render actual HTML partials server-side, ensuring consistency with the editor's view.
