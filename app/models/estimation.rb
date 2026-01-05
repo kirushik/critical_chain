@@ -15,6 +15,8 @@
 #
 
 class Estimation < ActiveRecord::Base
+  include RealtimeBroadcastable::Estimation
+  
   belongs_to :user
   has_many :estimation_items, -> { order(:order) }, dependent: :destroy
   has_many :estimation_shares, dependent: :destroy
