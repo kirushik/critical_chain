@@ -47,6 +47,8 @@ gem 'bullet', group: :development
 # gem 'capistrano-rails', group: :development
 group :production do
   gem 'pg'
+  # Enhanced PostgreSQL adapter for ActionCable with better LISTEN/NOTIFY support
+  gem 'actioncable-enhanced-postgresql-adapter'
 end
 
 group :development, :test do

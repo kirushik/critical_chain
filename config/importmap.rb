@@ -11,3 +11,5 @@ pin '@hotwired/turbo-rails', to: 'turbo.min.js', preload: true
 
 # Pin custom application files from app/javascript
 pin_all_from 'app/javascript'
+pin "@rails/actioncable", to: "actioncable.esm.js"
+pin_all_from "app/javascript/channels", under: "channels"
