@@ -69,6 +69,12 @@ end
 
 group :development do
   gem 'foreman'
+  
+  
+  # Speed up development by keeping application running in the background
+  gem 'ruby-lsp', require: false
+  # Give AI agents ability to talk to your local Rails
+  gem 'rails-mcp-server', require: false
 end
 
 group :test do
