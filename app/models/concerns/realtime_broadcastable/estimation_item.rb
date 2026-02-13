@@ -15,7 +15,9 @@ module RealtimeBroadcastable
       return unless defined?(Turbo)
 
       # Reload the estimation with items to get fresh data
-      est = ::Estimation.includes(:estimation_items).find(estimation_id)
+      # Use find_by to handle cascade deletes gracefully (estimation may already be gone)
+      est = ::Estimation.includes(:estimation_items).find_by(id: estimation_id)
+      return unless est
       est_decorated = est.decorate
       
       if destroyed?

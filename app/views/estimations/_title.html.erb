@@ -1,16 +1,3 @@
 <div id="estimation_title">
   <h1><%= estimation.title %></h1>
-  <% if estimation.estimation_shares.any? && estimation.object.can_edit?(current_user) %>
-    <div class="mt-2">
-      <%= link_to estimation_estimation_shares_path(estimation), class: "button is-small is-link" do %>
-        <span class="icon"><i class="fas fa-users"></i></span>
-        <span>Sharing</span>
-        <span class="tag is-info is-light ml-1"><%= estimation.estimation_shares.count %></span>
-      <% end %>
-    </div>
-  <% elsif estimation.object.user_id != current_user&.id %>
-    <div class="notification is-info is-light mt-2">
-      <p>This estimation is shared with you by <%= estimation.user.email %></p>
-    </div>
-  <% end %>
 </div>
