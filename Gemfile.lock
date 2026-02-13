@@ -7,6 +7,10 @@ GEM
       nio4r (~> 2.0)
       websocket-driver (>= 0.6.1)
       zeitwerk (~> 2.6)
+    actioncable-enhanced-postgresql-adapter (1.0.2)
+      actioncable (>= 6.0)
+      connection_pool (>= 2.2.5)
+      pg (~> 1.5)
     actionmailbox (7.2.3)
       actionpack (= 7.2.3)
       activejob (= 7.2.3)
@@ -78,8 +82,8 @@ GEM
       minitest (>= 5.1)
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
-    addressable (2.8.7)
-      public_suffix (>= 2.0.2, < 7.0)
+    addressable (2.8.8)
+      public_suffix (>= 2.0.2, < 8.0)
     annotate (3.2.0)
       activerecord (>= 3.2, < 8.0)
       rake (>= 10.4, < 14.0)
@@ -91,7 +95,7 @@ GEM
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
       rouge (>= 1.0.0)
-    bigdecimal (3.3.1)
+    bigdecimal (4.0.1)
     binding_of_caller (1.0.1)
       debug_inspector (>= 1.2.0)
     brakeman (8.0.2)
@@ -127,7 +131,7 @@ GEM
     database_cleaner-core (2.0.1)
     date (3.5.1)
     debug_inspector (1.2.0)
-    devise (5.0.0)
+    devise (5.0.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 7.0)
@@ -143,6 +147,35 @@ GEM
       request_store (>= 1.0)
       ruby2_keywords
     drb (2.2.3)
+    dry-configurable (1.3.0)
+      dry-core (~> 1.1)
+      zeitwerk (~> 2.6)
+    dry-core (1.2.0)
+      concurrent-ruby (~> 1.0)
+      logger
+      zeitwerk (~> 2.6)
+    dry-inflector (1.3.1)
+    dry-initializer (3.2.0)
+    dry-logic (1.6.0)
+      bigdecimal
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.1)
+      zeitwerk (~> 2.6)
+    dry-schema (1.15.0)
+      concurrent-ruby (~> 1.0)
+      dry-configurable (~> 1.0, >= 1.0.1)
+      dry-core (~> 1.1)
+      dry-initializer (~> 3.2)
+      dry-logic (~> 1.6)
+      dry-types (~> 1.8)
+      zeitwerk (~> 2.6)
+    dry-types (1.9.0)
+      bigdecimal (>= 3.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.0)
+      dry-inflector (~> 1.0)
+      dry-logic (~> 1.4)
+      zeitwerk (~> 2.6)
     erb (6.0.1)
     erubi (1.13.1)
     factory_bot (6.5.6)
@@ -158,23 +191,29 @@ GEM
       logger
     faraday-net_http (3.4.2)
       net-http (~> 0.5)
-    ffi (1.17.2-x86_64-linux-gnu)
+    fast-mcp (1.6.0)
+      addressable (~> 2.8)
+      base64
+      dry-schema (~> 1.14)
+      json (~> 2.0)
+      mime-types (~> 3.4)
+      rack (>= 2.0, < 4.0)
+    ffi (1.17.3-x86_64-linux-gnu)
     figaro (1.3.0)
       thor (>= 0.14.0, < 2)
     foreman (0.90.0)
       thor (~> 1.4)
-    formatador (1.2.2)
+    formatador (1.2.3)
       reline
     globalid (1.3.0)
       activesupport (>= 6.1)
-    guard (2.19.1)
+    guard (2.20.1)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
       logger (~> 1.6)
       lumberjack (>= 1.0.12, < 2.0)
       nenv (~> 0.1)
       notiffany (~> 0.0)
-      ostruct (~> 0.6)
       pry (>= 0.13.0)
       shellany (~> 0.0)
       thor (>= 0.18.1)
@@ -187,7 +226,8 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
-    hashie (5.0.0)
+    hashie (5.1.0)
+      logger
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.2.3)
@@ -195,8 +235,9 @@ GEM
       activesupport (>= 6.0.0)
       railties (>= 6.0.0)
     io-console (0.8.2)
-    irb (1.16.0)
+    irb (1.17.0)
       pp (>= 0.6.0)
+      prism (>= 1.3.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.18.1)
@@ -206,7 +247,8 @@ GEM
     libnotify (0.9.4)
       ffi (>= 1.0.11)
     lint_roller (1.1.0)
-    listen (3.9.0)
+    listen (3.10.0)
+      logger
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.7.0)
@@ -226,16 +268,16 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2026.0127)
+    mime-types-data (3.2026.0203)
     mini_mime (1.1.5)
     minitest (6.0.1)
       prism (~> 1.5)
-    multi_xml (0.7.2)
-      bigdecimal (~> 3.1)
+    multi_xml (0.8.1)
+      bigdecimal (>= 3.1, < 5)
     nenv (0.3.0)
     net-http (0.9.1)
       uri (>= 0.11.1)
-    net-imap (0.5.12)
+    net-imap (0.6.3)
       date
       net-protocol
     net-pop (0.1.2)
@@ -268,14 +310,13 @@ GEM
       oauth2 (~> 2.0)
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.8)
-    omniauth-oauth2 (1.8.0)
-      oauth2 (>= 1.4, < 3)
+    omniauth-oauth2 (1.9.0)
+      oauth2 (>= 2.0.2, < 3)
       omniauth (~> 2.0)
     omniauth-rails_csrf_protection (2.0.1)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     orm_adapter (0.5.0)
-    ostruct (0.6.3)
     page_title_helper (10.0.0)
       rails (>= 7.2.0, < 8.2)
     parallel (1.27.0)
@@ -295,15 +336,16 @@ GEM
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
       rack
-    pry (0.15.2)
+    pry (0.16.0)
       coderay (~> 1.1)
       method_source (~> 1.0)
+      reline (>= 0.6.0)
     pry-rails (0.3.11)
       pry (>= 0.13.0)
     psych (5.3.1)
       date
       stringio
-    public_suffix (6.0.2)
+    public_suffix (7.0.2)
     puma (7.2.0)
       nio4r (~> 2.0)
     pundit (2.5.2)
@@ -346,6 +388,11 @@ GEM
     rails-html-sanitizer (1.6.2)
       loofah (~> 2.21)
       nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
+    rails-mcp-server (1.1.1)
+      fast-mcp
+      logger
+      puma
+      rack
     railties (7.2.3)
       actionpack (= 7.2.3)
       activesupport (= 7.2.3)
@@ -361,7 +408,10 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.11.1)
       ffi (~> 1.0)
-    rdoc (7.1.0)
+    rbs (3.10.3)
+      logger
+      tsort
+    rdoc (7.2.0)
       erb
       psych (>= 4.0.0)
       tsort
@@ -373,7 +423,7 @@ GEM
     responders (3.2.0)
       actionpack (>= 7.0)
       railties (>= 7.0)
-    rouge (4.6.1)
+    rouge (4.7.0)
     rspec (3.13.2)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -394,10 +444,10 @@ GEM
       rspec-expectations (~> 3.13)
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
-    rspec-support (3.13.6)
+    rspec-support (3.13.7)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.84.1)
+    rubocop (1.84.2)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -424,6 +474,10 @@ GEM
     rubocop-rspec (3.9.0)
       lint_roller (~> 1.1)
       rubocop (~> 1.81)
+    ruby-lsp (0.26.6)
+      language_server-protocol (~> 3.17.0)
+      prism (>= 1.2, < 2.0)
+      rbs (>= 3, < 5)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     sdoc (2.6.5)
@@ -443,7 +497,7 @@ GEM
       railties (>= 6.0.0)
     stringio (3.2.0)
     thor (1.5.0)
-    timeout (0.4.4)
+    timeout (0.6.0)
     tsort (0.2.0)
     turbo-rails (2.0.23)
       actionpack (>= 7.1.0)
@@ -471,6 +525,7 @@ PLATFORMS
   x86_64-linux-gnu
 
 DEPENDENCIES
+  actioncable-enhanced-postgresql-adapter
   annotate
   better_errors
   binding_of_caller
@@ -502,12 +557,14 @@ DEPENDENCIES
   pundit
   rails (~> 7.2.3)
   rails-controller-testing
+  rails-mcp-server
   rspec-rails (>= 4.0.0.beta3)
   rspec_junit_formatter
   rubocop
   rubocop-performance
   rubocop-rails
   rubocop-rspec
+  ruby-lsp
   sdoc (~> 2.6.5)
   simplecov
   sqlite3

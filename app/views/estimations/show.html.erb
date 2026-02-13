@@ -1,5 +1,10 @@
 <% page_title! @estimation.title %>
 
+<%# Subscribe to Turbo Stream updates for viewers only %>
+<% unless @estimation.can_edit?(current_user) %>
+  <%= turbo_stream_from "estimation_#{@estimation.id}" %>
+<% end %>
+
 <div id="estimation_title">
   <h1><%= @estimation.editable :title %></h1>
   <% if policy(@estimation).manage_shares? %>

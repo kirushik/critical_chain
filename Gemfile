@@ -47,6 +47,8 @@ gem 'bullet', group: :development
 # gem 'capistrano-rails', group: :development
 group :production do
   gem 'pg'
+  # Enhanced PostgreSQL adapter for ActionCable with better LISTEN/NOTIFY support
+  gem 'actioncable-enhanced-postgresql-adapter'
 end
 
 group :development, :test do
@@ -67,6 +69,12 @@ end
 
 group :development do
   gem 'foreman'
+  
+  
+  # Speed up development by keeping application running in the background
+  gem 'ruby-lsp', require: false
+  # Give AI agents ability to talk to your local Rails
+  gem 'rails-mcp-server', require: false
 end
 
 group :test do
