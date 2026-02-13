@@ -24,13 +24,13 @@ module RealtimeBroadcastable
         # Remove the deleted item
         Turbo::StreamsChannel.broadcast_remove_to(
           "estimation_#{estimation_id}",
-          target: dom_id(self)
+          target: ActionView::RecordIdentifier.dom_id(self)
         )
       elsif previous_changes.key?('id')
         # Append new item
         Turbo::StreamsChannel.broadcast_append_later_to(
           "estimation_#{estimation_id}",
-          target: dom_id(est),
+          target: ActionView::RecordIdentifier.dom_id(est),
           partial: est_decorated.items_partial_name,
           locals: { estimation_item: self }
         )
@@ -38,7 +38,7 @@ module RealtimeBroadcastable
         # Replace updated item
         Turbo::StreamsChannel.broadcast_replace_later_to(
           "estimation_#{estimation_id}",
-          target: dom_id(self),
+          target: ActionView::RecordIdentifier.dom_id(self),
           partial: est_decorated.items_partial_name,
           locals: { estimation_item: self }
         )
@@ -48,17 +48,17 @@ module RealtimeBroadcastable
       Turbo::StreamsChannel.broadcast_replace_later_to(
         "estimation_#{estimation_id}",
         target: "total",
-        html: est.total.to_s
+        html: est_decorated.total
       )
       Turbo::StreamsChannel.broadcast_replace_later_to(
         "estimation_#{estimation_id}",
         target: "sum",
-        html: est.sum.to_s
+        html: est_decorated.sum
       )
       Turbo::StreamsChannel.broadcast_replace_later_to(
         "estimation_#{estimation_id}",
         target: "buffer",
-        html: est.buffer.to_s
+        html: est_decorated.buffer
       )
       
       # Update tracking mode specific elements if applicable

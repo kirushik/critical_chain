@@ -16,10 +16,10 @@ This feature enables viewers to see edits made by the editor in real-time using 
    - `RealtimeBroadcastable::EstimationItem` - Broadcasts changes to EstimationItem model
    - Both concerns use Turbo::StreamsChannel to render and broadcast HTML partials
 
-3. **EstimationUpdatesChannel**
-   - ActionCable channel that handles WebSocket connections
-   - Authorizes users based on estimation ownership or sharing
-   - Subscribes users to `estimation_{id}` channels
+3. **Turbo Streams Channel (Turbo::StreamsChannel)**
+   - Built-in ActionCable channel used by Turbo Streams
+   - Clients subscribe via `turbo_stream_from` in views
+   - Subscriptions use stream names like `estimation_{id}` for per-estimation updates
 
 4. **Turbo Streams**
    - Uses `turbo_stream_from` helper in views for viewers
@@ -85,12 +85,7 @@ The feature includes comprehensive test coverage:
   - Confirms broadcast methods don't raise errors
   - Tests with proper ActionCable test adapter
 
-- **Channel tests** (`spec/channels/estimation_updates_channel_spec.rb`)
-  - Tests authorization (owner, shared user, unauthorized)
-  - Verifies stream subscriptions
-  - Tests cleanup on unsubscribe
-
-All 216 tests pass, including existing functionality.
+All existing tests pass, including existing functionality.
 
 ## Usage
 

@@ -6,4 +6,4 @@ test:
 
 production:
   adapter: enhanced_postgresql
-  url: <%= ENV.fetch("DATABASE_URL") { "postgresql://localhost/critical_chain_production" } %>
+  url: <%= ENV["DATABASE_URL"] %>
