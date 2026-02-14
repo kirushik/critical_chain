@@ -28,6 +28,56 @@
     </div>
   </div>
 
+  <div class="columns mt-4">
+    <div class="column">
+      <div class="box">
+        <h3 class="title is-4">Public Read-Only Link</h3>
+        <p class="mb-3">Anyone with this link can view this estimation without signing in.</p>
+
+        <% if @estimation.public_sharing_enabled? %>
+          <div class="field has-addons">
+            <div class="control is-expanded">
+              <input class="input" type="text" readonly
+                     value="<%= public_estimation_url(@estimation, @estimation.share_token) %>"
+                     id="public-share-url"
+                     onclick="this.select()">
+            </div>
+            <div class="control">
+              <button class="button is-info" onclick="navigator.clipboard.writeText(document.getElementById('public-share-url').value)">
+                <span class="icon"><i class="fa-solid fa-copy"></i></span>
+                <span>Copy</span>
+              </button>
+            </div>
+          </div>
+          <div class="buttons mt-2">
+            <%= button_to rotate_share_token_estimation_path(@estimation),
+                          method: :post,
+                          class: 'button is-warning is-small',
+                          data: { turbo_confirm: 'This will invalidate the current link. Anyone who has the old link will no longer be able to view. Continue?' } do %>
+              <span class="icon"><i class="fa-solid fa-rotate"></i></span>
+              <span>Regenerate Link</span>
+            <% end %>
+            <%= button_to disable_share_token_estimation_path(@estimation),
+                          method: :post,
+                          class: 'button is-danger is-light is-small',
+                          data: { turbo_confirm: 'This will completely disable public sharing. Anyone with the link will no longer be able to view. Continue?' } do %>
+              <span class="icon"><i class="fa-solid fa-ban"></i></span>
+              <span>Disable Public Sharing</span>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="has-text-grey">No public link has been generated yet. Visit your estimation to automatically generate one, or generate one now:</p>
+          <%= button_to rotate_share_token_estimation_path(@estimation),
+                        method: :post,
+                        class: 'button is-link is-small mt-2' do %>
+            <span class="icon"><i class="fa-solid fa-link"></i></span>
+            <span>Generate Public Link</span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
   <div class="mt-4">
     <%= link_to "Back to #{@estimation.title}", estimation_path(@estimation), class: "button" %>
   </div>

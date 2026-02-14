@@ -1,12 +1,16 @@
 <% page_title! @estimation.title %>
 
-<%# Subscribe to Turbo Stream updates for viewers only %>
-<% unless @estimation.can_edit?(current_user) %>
-  <%= turbo_stream_from "estimation_#{@estimation.id}" %>
-<% end %>
+<%# Subscribe to Turbo Stream updates for all editors (realtime collaboration) %>
+<%= turbo_stream_from "estimation_#{@estimation.id}" %>
 
 <div id="estimation_title">
-  <h1><%= @estimation.editable :title %></h1>
+  <h1>
+    <% if policy(@estimation).update_metadata? %>
+      <%= @estimation.editable :title %>
+    <% else %>
+      <%= @estimation.title %>
+    <% end %>
+  </h1>
   <% if policy(@estimation).manage_shares? %>
     <div class="mt-2">
       <%= link_to estimation_estimation_shares_path(@estimation), class: "button is-small is-link" do %>
@@ -49,7 +53,9 @@
   </div>
 
   <div class="column is-5">
-    <div id="mode_toggle"><%= render 'mode_toggle' %></div>
+    <% if policy(@estimation).update_metadata? %>
+      <div id="mode_toggle"><%= render 'mode_toggle' %></div>
+    <% end %>
     <%= render 'estimation_items/form_for_new' unless @estimation.tracking_mode? %>
     <%= render 'results' %>
     <%= render 'buffer_consumption' if @estimation.tracking_mode? %>

@@ -48,6 +48,16 @@ RSpec.describe EstimationItemsController, :type => :controller do
       expect(estimation.reload.estimation_items.size).to eq(0)
     end
 
+    it "allows shared editors to add items" do
+      shared_user = FactoryBot.create(:user)
+      FactoryBot.create(:estimation_share, :active, estimation: estimation, shared_with_user: shared_user)
+      sign_in shared_user
+
+      post :create, params: { estimation_id: estimation.id, estimation_item: { value: 42 } }
+      expect(response).to redirect_to(estimation_path(estimation))
+      expect(estimation.reload.estimation_items.size).to eq(1)
+    end
+
     it "decorates loaded Estimation" do
       post :create, params: { estimation_id: estimation.id, estimation_item: { value: 117 } }
 

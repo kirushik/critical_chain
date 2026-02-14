@@ -1,0 +1,26 @@
+<tr id="<%= dom_id estimation_item %>">
+  <%# Calculation: Qty × Value = Total %>
+  <td class="col-calculation has-text-right">
+    <span class="calculation-group">
+      <% if estimation_item.quantity > 1 %>
+        <span class="quantity has-text-grey">
+          <%= "#{estimation_item.quantity}×#{estimation_item.value}=" %>
+        </span>
+      <% end %>
+
+      <span class="total"><%= estimation_item.value * estimation_item.quantity %></span>
+    </span>
+  </td>
+
+  <%# Fixed Indicator %>
+  <td class="col-fixed has-text-centered">
+    <% if estimation_item.fixed? %>
+      <span class="has-text-info" title="Fixed estimate (excluded from buffer calculation)">
+        <i class="fa-solid fa-thumbtack"></i>
+      </span>
+    <% end %>
+  </td>
+
+  <%# Title %>
+  <td class="col-title"><%= estimation_item.title %></td>
+</tr>

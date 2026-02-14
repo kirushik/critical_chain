@@ -8,6 +8,10 @@ class EstimationPolicy < ApplicationPolicy
   end
 
   def update?
+    owner? || record.shared_with?(user)
+  end
+
+  def update_metadata?
     owner?
   end
 

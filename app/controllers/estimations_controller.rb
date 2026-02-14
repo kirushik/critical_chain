@@ -15,6 +15,8 @@
 #
 
 class EstimationsController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:public_show]
+
   def create
     estimation = Estimation.new(estimation_params)
     estimation.user = current_user
@@ -44,6 +46,65 @@ class EstimationsController < ApplicationController
       share = @estimation.share_for(current_user)
       share&.touch_last_accessed
     end
+
+    # Redirect to canonical URL with share token for easy copy-paste sharing
+    if @estimation.public_sharing_enabled? && params[:share_token].blank?
+      redirect_to public_estimation_path(@estimation, @estimation.share_token)
+    end
+  end
+
+  def public_show
+    @estimation = Estimation.includes(
+      :user,
+      :estimation_items,
+      estimation_shares: :shared_with_user
+    ).find(params[:id])
+
+    # Authenticated editor: redirect to canonical URL with current token
+    if current_user && @estimation.can_edit?(current_user)
+      authorize @estimation, :show?
+
+      if @estimation.public_sharing_enabled?
+        redirect_to public_estimation_path(@estimation, @estimation.share_token) if params[:share_token] != @estimation.share_token
+        return if performed?
+      end
+
+      @estimation = @estimation.decorate
+
+      # Track last access for shared users
+      if current_user.id != @estimation.user_id
+        share = @estimation.share_for(current_user)
+        share&.touch_last_accessed
+      end
+
+      render :show
+      return
+    end
+
+    # Anonymous/unauthorized: verify token with constant-time comparison
+    if @estimation.share_token.present? &&
+       ActiveSupport::SecurityUtils.secure_compare(params[:share_token].to_s, @estimation.share_token)
+      skip_authorization
+      @estimation = @estimation.decorate
+      render :public_show
+    else
+      skip_authorization
+      redirect_to new_user_session_path
+    end
+  end
+
+  def rotate_share_token
+    @estimation = Estimation.find(params[:id])
+    authorize @estimation, :manage_shares?
+    @estimation.rotate_share_token!
+    redirect_to estimation_estimation_shares_path(@estimation), notice: 'Share link regenerated. Old links no longer work.'
+  end
+
+  def disable_share_token
+    @estimation = Estimation.find(params[:id])
+    authorize @estimation, :manage_shares?
+    @estimation.disable_share_token!
+    redirect_to estimation_estimation_shares_path(@estimation), notice: 'Public sharing disabled.'
   end
 
   def destroy
@@ -56,7 +117,7 @@ class EstimationsController < ApplicationController
 
   def update
     @estimation = Estimation.find(params[:id])
-    authorize @estimation, :update?
+    authorize @estimation, :update_metadata?
     result = @estimation.update(estimation_params)
 
     respond_to do |format|

@@ -6,7 +6,7 @@ RSpec.describe "estimations/show.html.erb", :type => :view do
     assign(:estimation, estimation)
 
     # Stub the Pundit policy helper for view specs
-    policy_double = double('EstimationPolicy', manage_shares?: false)
+    policy_double = double('EstimationPolicy', manage_shares?: false, update_metadata?: true)
     without_partial_double_verification do
       allow(view).to receive(:policy).with(estimation).and_return(policy_double)
       allow(view).to receive(:current_user).and_return(estimation.user)

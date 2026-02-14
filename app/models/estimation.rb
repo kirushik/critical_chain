@@ -64,7 +64,28 @@ class Estimation < ActiveRecord::Base
 
   def can_edit?(user)
     return false if user.nil?
+    self.user == user || shared_with?(user)
+  end
+
+  def owner?(user)
+    return false if user.nil?
     self.user == user
+  end
+
+  def generate_share_token!
+    update!(share_token: SecureRandom.urlsafe_base64(16))
+  end
+
+  def rotate_share_token!
+    generate_share_token!
+  end
+
+  def disable_share_token!
+    update!(share_token: nil)
+  end
+
+  def public_sharing_enabled?
+    share_token.present?
   end
 
   def can_view?(user)
