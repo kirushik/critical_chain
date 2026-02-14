@@ -46,7 +46,7 @@ feature "EstimationSharing", type: :feature do
 
   end
 
-  scenario 'Shared user can view but not share estimation' do
+  scenario 'Shared user can edit items but not manage shares' do
     shared_user = FactoryBot.create(:user, email: 'viewer@example.com')
     FactoryBot.create(:estimation_share, :active, estimation: estimation, shared_with_user: shared_user)
 
@@ -56,7 +56,8 @@ feature "EstimationSharing", type: :feature do
     expect(page).to have_content('Test Estimation')
     expect(page).to have_content('This estimation is shared with you')
     expect(page).not_to have_link('Sharing')
-    expect(page).not_to have_css('form.editable-form')
+    # Shared editors CAN edit items (editable forms are present)
+    expect(page).not_to have_css('.tracking-toggle-button')
   end
 
 

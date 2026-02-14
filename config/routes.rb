@@ -37,6 +37,9 @@ Rails.application.routes.draw do
         post :transfer_ownership
       end
     end
+    member do
+      post :rotate_share_token
+    end
   end
 
   namespace :admin do
@@ -48,6 +51,10 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # Public read-only view (token-based, no auth required)
+  # Must come AFTER resources :estimations so nested routes match first
+  get 'estimations/:id/:share_token', to: 'estimations#public_show', as: :public_estimation
 
   root 'estimations#index'
 end

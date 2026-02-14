@@ -280,13 +280,63 @@ RSpec.describe Estimation, :type => :model do
       expect(subject.can_edit?(owner)).to be true
     end
 
-    it 'returns false for other users' do
+    it 'returns false for other users without shares' do
       expect(subject.can_edit?(other_user)).to be false
     end
 
-    it 'returns false for users with shares (view-only)' do
+    it 'returns true for users with active shares' do
       FactoryBot.create(:estimation_share, :active, estimation: subject, shared_with_user: other_user)
-      expect(subject.can_edit?(other_user)).to be false
+      expect(subject.can_edit?(other_user)).to be true
+    end
+
+    it 'returns true for users with pending shares matching their email' do
+      FactoryBot.create(:estimation_share, :pending, estimation: subject, shared_with_email: other_user.email)
+      expect(subject.can_edit?(other_user)).to be true
+    end
+  end
+
+  describe '#owner?' do
+    let(:owner) { subject.user }
+    let(:other_user) { FactoryBot.create(:user) }
+
+    it 'returns false when user is nil' do
+      expect(subject.owner?(nil)).to be false
+    end
+
+    it 'returns true for the owner' do
+      expect(subject.owner?(owner)).to be true
+    end
+
+    it 'returns false for shared users' do
+      FactoryBot.create(:estimation_share, :active, estimation: subject, shared_with_user: other_user)
+      expect(subject.owner?(other_user)).to be false
+    end
+  end
+
+  describe 'share token' do
+    it '#generate_share_token! creates a token' do
+      expect(subject.share_token).to be_nil
+      subject.generate_share_token!
+      expect(subject.reload.share_token).to be_present
+    end
+
+    it '#rotate_share_token! changes the token' do
+      subject.generate_share_token!
+      old_token = subject.share_token
+      subject.rotate_share_token!
+      expect(subject.reload.share_token).not_to eq(old_token)
+    end
+
+    it '#disable_share_token! removes the token' do
+      subject.generate_share_token!
+      subject.disable_share_token!
+      expect(subject.reload.share_token).to be_nil
+    end
+
+    it '#public_sharing_enabled? reflects token presence' do
+      expect(subject.public_sharing_enabled?).to be false
+      subject.generate_share_token!
+      expect(subject.public_sharing_enabled?).to be true
     end
   end
 

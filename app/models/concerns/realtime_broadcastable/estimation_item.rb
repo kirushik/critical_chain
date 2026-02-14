@@ -27,20 +27,20 @@ module RealtimeBroadcastable
           target: ActionView::RecordIdentifier.dom_id(self)
         )
       elsif previous_changes.key?('id')
-        # Append new item
+        # Append new item (all broadcast subscribers are editors)
         Turbo::StreamsChannel.broadcast_append_later_to(
           "estimation_#{estimation_id}",
           target: ActionView::RecordIdentifier.dom_id(est),
           partial: est_decorated.items_partial_name,
-          locals: { estimation_item: self }
+          locals: { estimation_item: self, can_edit: true }
         )
       else
-        # Replace updated item
+        # Replace updated item (all broadcast subscribers are editors)
         Turbo::StreamsChannel.broadcast_replace_later_to(
           "estimation_#{estimation_id}",
           target: ActionView::RecordIdentifier.dom_id(self),
           partial: est_decorated.items_partial_name,
-          locals: { estimation_item: self }
+          locals: { estimation_item: self, can_edit: true }
         )
       end
 

@@ -18,12 +18,12 @@
     <span class="calculation-group">
       <span class="quantity">
         <i class="fa-regular fa-clone has-text-grey-light"></i>
-        <%= estimation_item.decorate.editable :quantity, type: :number %>
+        <%= estimation_item.decorate.editable :quantity, type: :number, can_edit: local_assigns[:can_edit] %>
         <span class="has-text-grey">×</span>
       </span>
 
       <span class="value">
-        <%= estimation_item.decorate.editable :value, type: :number %>
+        <%= estimation_item.decorate.editable :value, type: :number, can_edit: local_assigns[:can_edit] %>
       </span>
 
       <span class="equals">=</span>
@@ -51,7 +51,7 @@
 
   <%# Title %>
   <td class="col-title">
-    <%= estimation_item.decorate.editable :title, css_class: :item_title %>
+    <%= estimation_item.decorate.editable :title, css_class: :item_title, can_edit: local_assigns[:can_edit] %>
   </td>
 
   <%# Delete Action %>

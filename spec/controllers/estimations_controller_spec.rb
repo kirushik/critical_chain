@@ -111,6 +111,79 @@ RSpec.describe EstimationsController, :type => :controller do
     end
   end
 
+  describe "GET public_show" do
+    let(:user) { FactoryBot.create(:user_with_estimations) }
+    let(:estimation) { user.estimations.first }
+
+    before do
+      estimation.generate_share_token!
+    end
+
+    it "shows read-only view for anonymous user with valid token" do
+      get :public_show, params: { id: estimation.id, share_token: estimation.share_token }
+
+      expect(response).to have_http_status(:success)
+    end
+
+    it "redirects anonymous user with invalid token to sign in" do
+      get :public_show, params: { id: estimation.id, share_token: 'bad_token' }
+
+      expect(response).to redirect_to(new_user_session_path)
+    end
+
+    it "shows editable view for authenticated editor with valid token" do
+      sign_in user
+      get :public_show, params: { id: estimation.id, share_token: estimation.share_token }
+
+      expect(response).to have_http_status(:success)
+    end
+
+    it "redirects authenticated editor to fresh token when token is stale" do
+      sign_in user
+      old_token = estimation.share_token
+      estimation.rotate_share_token!
+
+      get :public_show, params: { id: estimation.id, share_token: old_token }
+
+      expect(response).to redirect_to(public_estimation_path(estimation, estimation.share_token))
+    end
+
+    it "allows shared editors to see the editable view" do
+      shared_user = FactoryBot.create(:user)
+      FactoryBot.create(:estimation_share, :active, estimation: estimation, shared_with_user: shared_user)
+      sign_in shared_user
+
+      get :public_show, params: { id: estimation.id, share_token: estimation.share_token }
+
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "POST rotate_share_token" do
+    let(:user) { FactoryBot.create(:user_with_estimations) }
+    let(:estimation) { user.estimations.first }
+
+    before do
+      sign_in user
+      estimation.generate_share_token!
+    end
+
+    it "rotates the share token for the owner" do
+      old_token = estimation.share_token
+      post :rotate_share_token, params: { id: estimation.id }
+
+      expect(estimation.reload.share_token).not_to eq(old_token)
+      expect(response).to redirect_to(estimation_estimation_shares_path(estimation))
+    end
+
+    it "denies access for non-owners" do
+      sign_in FactoryBot.create(:user)
+      post :rotate_share_token, params: { id: estimation.id }
+
+      expect(response).to have_http_status(403)
+    end
+  end
+
   describe "PATCH update" do
     render_views
     let(:user) { FactoryBot.create(:user_with_estimations) }
@@ -154,6 +227,17 @@ RSpec.describe EstimationsController, :type => :controller do
     it "redirects to the estimation if no XHR happened" do
       patch :update, params: { id: estimation.id, estimation: { tracking_mode: true } }
       expect(response).to redirect_to(estimation_path(estimation))
+    end
+
+    it "denies shared editors from updating estimation metadata" do
+      shared_user = FactoryBot.create(:user)
+      FactoryBot.create(:estimation_share, :active, estimation: estimation, shared_with_user: shared_user)
+      sign_in shared_user
+
+      patch :update, params: { id: estimation.id, estimation: { title: "Hijacked" } }, format: :turbo_stream
+
+      expect(response).to have_http_status(403)
+      expect(estimation.reload.title).not_to eq("Hijacked")
     end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_11_215907) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_14_124411) do
   create_table "estimation_items", force: :cascade do |t|
     t.integer "value"
     t.string "title"
@@ -45,6 +45,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_11_215907) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "tracking_mode", default: false, null: false
+    t.string "share_token"
+    t.index ["share_token"], name: "index_estimations_on_share_token", unique: true
     t.index ["user_id"], name: "index_estimations_on_user_id"
   end
 
