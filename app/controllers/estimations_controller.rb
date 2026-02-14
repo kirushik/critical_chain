@@ -54,11 +54,21 @@ class EstimationsController < ApplicationController
   end
 
   def public_show
-    @estimation = Estimation.includes(:estimation_items).find(params[:id])
+    @estimation = Estimation.includes(
+      :user,
+      :estimation_items,
+      estimation_shares: :shared_with_user
+    ).find(params[:id])
 
-    # Authenticated editor: show full editable view
+    # Authenticated editor: redirect to canonical URL with current token
     if current_user && @estimation.can_edit?(current_user)
       authorize @estimation, :show?
+
+      if @estimation.public_sharing_enabled?
+        redirect_to public_estimation_path(@estimation, @estimation.share_token) if params[:share_token] != @estimation.share_token
+        return if performed?
+      end
+
       @estimation = @estimation.decorate
 
       # Track last access for shared users
@@ -67,18 +77,13 @@ class EstimationsController < ApplicationController
         share&.touch_last_accessed
       end
 
-      # Redirect to fresh token if stale
-      if @estimation.share_token != params[:share_token] && @estimation.public_sharing_enabled?
-        redirect_to public_estimation_path(@estimation, @estimation.share_token)
-        return
-      end
-
       render :show
       return
     end
 
-    # Anonymous/unauthorized: verify token
-    if @estimation.share_token.present? && params[:share_token] == @estimation.share_token
+    # Anonymous/unauthorized: verify token with constant-time comparison
+    if @estimation.share_token.present? &&
+       ActiveSupport::SecurityUtils.secure_compare(params[:share_token].to_s, @estimation.share_token)
       skip_authorization
       @estimation = @estimation.decorate
       render :public_show
@@ -93,6 +98,13 @@ class EstimationsController < ApplicationController
     authorize @estimation, :manage_shares?
     @estimation.rotate_share_token!
     redirect_to estimation_estimation_shares_path(@estimation), notice: 'Share link regenerated. Old links no longer work.'
+  end
+
+  def disable_share_token
+    @estimation = Estimation.find(params[:id])
+    authorize @estimation, :manage_shares?
+    @estimation.disable_share_token!
+    redirect_to estimation_estimation_shares_path(@estimation), notice: 'Public sharing disabled.'
   end
 
   def destroy

@@ -57,6 +57,13 @@
               <span class="icon"><i class="fa-solid fa-rotate"></i></span>
               <span>Regenerate Link</span>
             <% end %>
+            <%= button_to disable_share_token_estimation_path(@estimation),
+                          method: :post,
+                          class: 'button is-danger is-light is-small',
+                          data: { turbo_confirm: 'This will completely disable public sharing. Anyone with the link will no longer be able to view. Continue?' } do %>
+              <span class="icon"><i class="fa-solid fa-ban"></i></span>
+              <span>Disable Public Sharing</span>
+            <% end %>
           </div>
         <% else %>
           <p class="has-text-grey">No public link has been generated yet. Visit your estimation to automatically generate one, or generate one now:</p>

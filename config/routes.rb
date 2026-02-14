@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     end
     member do
       post :rotate_share_token
+      post :disable_share_token
     end
   end
 

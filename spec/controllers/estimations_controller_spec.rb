@@ -131,6 +131,12 @@ RSpec.describe EstimationsController, :type => :controller do
       expect(response).to redirect_to(new_user_session_path)
     end
 
+    it "redirects anonymous user without token to sign in" do
+      get :public_show, params: { id: estimation.id, share_token: '' }
+
+      expect(response).to redirect_to(new_user_session_path)
+    end
+
     it "shows editable view for authenticated editor with valid token" do
       sign_in user
       get :public_show, params: { id: estimation.id, share_token: estimation.share_token }

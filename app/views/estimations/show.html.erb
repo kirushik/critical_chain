@@ -4,7 +4,13 @@
 <%= turbo_stream_from "estimation_#{@estimation.id}" %>
 
 <div id="estimation_title">
-  <h1><%= @estimation.editable :title %></h1>
+  <h1>
+    <% if policy(@estimation).update_metadata? %>
+      <%= @estimation.editable :title %>
+    <% else %>
+      <%= @estimation.title %>
+    <% end %>
+  </h1>
   <% if policy(@estimation).manage_shares? %>
     <div class="mt-2">
       <%= link_to estimation_estimation_shares_path(@estimation), class: "button is-small is-link" do %>
