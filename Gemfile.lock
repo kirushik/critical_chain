@@ -326,7 +326,7 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.6.3-x86_64-linux)
-    playwright-ruby-client (1.59.1)
+    playwright-ruby-client (1.60.0)
       base64
       concurrent-ruby (>= 1.1.6)
       mime-types (>= 3.0)
