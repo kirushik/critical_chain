@@ -69,12 +69,13 @@ RSpec.describe EstimationsController, :type => :controller do
 
     context "estimation in planning mode" do
       render_views
-      let(:estimation) { FactoryBot.create(:estimation, user: user, tracking_mode: false) }
+      let(:estimation) { FactoryBot.create(:estimation_with_items, user: user, tracking_mode: false, items: { count: 2, size: 2 }) }
 
       it "should render planning-related partials" do
         get :show, params: { id: estimation.id }
 
-        expect(response).to render_template(partial: "estimation_items/_estimation_item_editable", count: estimation.estimation_items.count)
+        expect(estimation.estimation_items.count).to eq(2)
+        expect(response).to render_template(partial: "estimation_items/_estimation_item", count: estimation.estimation_items.count)
         expect(response).to render_template(partial: "estimation_items/_form_for_new")
         expect(response).to render_template(partial: "estimations/_results")
         expect(response).to render_template(partial: "estimations/_mode_toggle")
@@ -83,11 +84,12 @@ RSpec.describe EstimationsController, :type => :controller do
 
     context "estimation in tracking mode" do
       render_views
-      let(:estimation) { FactoryBot.create(:estimation, user: user, tracking_mode: true) }
+      let(:estimation) { FactoryBot.create(:estimation_with_items, user: user, tracking_mode: true, items: { count: 2, size: 2 }) }
 
       it "should render tracking-related partials" do
         get :show, params: { id: estimation.id }
 
+        expect(estimation.estimation_items.count).to eq(2)
         expect(response).to render_template(partial: "estimation_items/_estimation_item_trackable", count: estimation.estimation_items.count)
         expect(response).to render_template(partial: "estimations/_graph")
         expect(response).to render_template(partial: "estimations/_results")
