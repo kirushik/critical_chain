@@ -65,7 +65,6 @@ class EstimationItemsController < ApplicationController
           ), status: :unprocessable_entity
         end
       end
-      format.js
       format.html do
         redirect_to estimation_path(@estimation)
       end
