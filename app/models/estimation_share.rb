@@ -24,7 +24,7 @@
 #  shared_with_user_id  (shared_with_user_id => users.id)
 #
 
-class EstimationShare < ActiveRecord::Base
+class EstimationShare < ApplicationRecord
   belongs_to :estimation
   belongs_to :shared_with_user, class_name: 'User', optional: true
 

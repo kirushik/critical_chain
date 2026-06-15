@@ -20,7 +20,7 @@
 #  user_id  (user_id => users.id)
 #
 
-class Estimation < ActiveRecord::Base
+class Estimation < ApplicationRecord
   include RealtimeBroadcastable::Estimation
   
   belongs_to :user

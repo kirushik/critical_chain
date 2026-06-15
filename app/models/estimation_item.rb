@@ -23,7 +23,7 @@
 #  estimation_id  (estimation_id => estimations.id)
 #
 
-class EstimationItem < ActiveRecord::Base
+class EstimationItem < ApplicationRecord
   include RealtimeBroadcastable::EstimationItem
   
   belongs_to :estimation
