@@ -10,27 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_14_124411) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_14_124411) do
   create_table "estimation_items", force: :cascade do |t|
-    t.integer "value"
-    t.string "title"
-    t.integer "estimation_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.boolean "fixed", default: false, null: false
-    t.integer "quantity", default: 1, null: false
     t.float "actual_value"
+    t.datetime "created_at", precision: nil, null: false
+    t.integer "estimation_id"
+    t.boolean "fixed", default: false, null: false
     t.float "order", default: 0.0, null: false
+    t.integer "quantity", default: 1, null: false
+    t.string "title"
+    t.datetime "updated_at", precision: nil, null: false
+    t.integer "value"
     t.index ["estimation_id", "order"], name: "index_estimation_items_on_estimation_id_and_order"
     t.index ["estimation_id"], name: "index_estimation_items_on_estimation_id"
   end
 
   create_table "estimation_shares", force: :cascade do |t|
-    t.integer "estimation_id", null: false
-    t.integer "shared_with_user_id"
-    t.string "shared_with_email"
-    t.datetime "last_accessed_at"
     t.datetime "created_at", null: false
+    t.integer "estimation_id", null: false
+    t.datetime "last_accessed_at"
+    t.string "shared_with_email"
+    t.integer "shared_with_user_id"
     t.datetime "updated_at", null: false
     t.index ["estimation_id", "shared_with_email"], name: "index_estimation_shares_on_estimation_and_email", unique: true
     t.index ["estimation_id", "shared_with_user_id"], name: "index_estimation_shares_on_estimation_and_user", unique: true
@@ -40,30 +40,30 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_14_124411) do
   end
 
   create_table "estimations", force: :cascade do |t|
-    t.string "title"
-    t.integer "user_id"
     t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.boolean "tracking_mode", default: false, null: false
     t.string "share_token"
+    t.string "title"
+    t.boolean "tracking_mode", default: false, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.integer "user_id"
     t.index ["share_token"], name: "index_estimations_on_share_token", unique: true
     t.index ["user_id"], name: "index_estimations_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.datetime "remember_created_at", precision: nil
-    t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at", precision: nil
-    t.datetime "last_sign_in_at", precision: nil
-    t.string "current_sign_in_ip"
-    t.string "last_sign_in_ip"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.string "provider"
-    t.string "uid"
     t.datetime "banned_at"
     t.string "banned_by_email"
+    t.datetime "created_at", precision: nil
+    t.datetime "current_sign_in_at", precision: nil
+    t.string "current_sign_in_ip"
+    t.string "email", default: "", null: false
+    t.datetime "last_sign_in_at", precision: nil
+    t.string "last_sign_in_ip"
+    t.string "provider"
+    t.datetime "remember_created_at", precision: nil
+    t.integer "sign_in_count", default: 0, null: false
+    t.string "uid"
+    t.datetime "updated_at", precision: nil
     t.index ["banned_at"], name: "index_users_on_banned_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["provider"], name: "index_users_on_provider"
