@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_14_124411) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_14_124411) do
   create_table "estimation_items", force: :cascade do |t|
     t.integer "value"
     t.string "title"
