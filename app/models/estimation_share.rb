@@ -3,12 +3,12 @@
 # Table name: estimation_shares
 #
 #  id                  :integer          not null, primary key
-#  estimation_id       :integer          not null
-#  shared_with_user_id :integer
-#  shared_with_email   :string
 #  last_accessed_at    :datetime
+#  shared_with_email   :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  estimation_id       :integer          not null
+#  shared_with_user_id :integer
 #
 # Indexes
 #
@@ -18,8 +18,13 @@
 #  index_estimation_shares_on_shared_with_email     (shared_with_email)
 #  index_estimation_shares_on_shared_with_user_id   (shared_with_user_id)
 #
+# Foreign Keys
+#
+#  estimation_id        (estimation_id => estimations.id)
+#  shared_with_user_id  (shared_with_user_id => users.id)
+#
 
-class EstimationShare < ActiveRecord::Base
+class EstimationShare < ApplicationRecord
   belongs_to :estimation
   belongs_to :shared_with_user, class_name: 'User', optional: true
 

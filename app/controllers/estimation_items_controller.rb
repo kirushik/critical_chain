@@ -30,7 +30,7 @@ class EstimationItemsController < ApplicationController
 
     @estimation_item.save!
 
-    redirect_to estimation_path(@estimation) unless request.xhr?
+    redirect_to estimation_path(@estimation)
   end
 
   def destroy
@@ -40,7 +40,7 @@ class EstimationItemsController < ApplicationController
     authorize @estimation, :update?
     @estimation_item.destroy!
 
-    redirect_to estimation_path(@estimation) unless request.xhr?
+    redirect_to estimation_path(@estimation)
   end
 
   def update
@@ -59,13 +59,13 @@ class EstimationItemsController < ApplicationController
           # Render the turbo stream template
           render :update
         else
+          error_message = @estimation_item.errors.full_messages.first || "Update failed"
           render turbo_stream: turbo_stream.append(
             dom_id(@estimation),
-            ActionController::Base.helpers.content_tag(:script, "alert('#{j(@estimation_item.errors.full_messages.first) || "Update failed"}');")
+            ActionController::Base.helpers.content_tag(:script, "alert('#{j(error_message)}');")
           ), status: :unprocessable_entity
         end
       end
-      format.js
       format.html do
         redirect_to estimation_path(@estimation)
       end

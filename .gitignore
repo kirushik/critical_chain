@@ -31,5 +31,8 @@
 /app/assets/builds/*
 !/app/assets/builds/.keep
 
+# Ignore Propshaft-compiled assets (regenerated at deploy time).
+/public/assets
+
 .serena
 .mcp.json

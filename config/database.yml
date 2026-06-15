@@ -20,6 +20,10 @@ test:
   <<: *default
   database: db/test.sqlite3
 
+# Production runs on PostgreSQL, configured entirely via DATABASE_URL
+# (the pg gem is in the :production bundle group). The sqlite3 `default`
+# anchor above is intentionally not used here.
 production:
-  <<: *default
-  database: db/production.sqlite3
+  adapter: postgresql
+  url: <%= ENV["DATABASE_URL"] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>

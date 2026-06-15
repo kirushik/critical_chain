@@ -3,19 +3,19 @@
 # Table name: users
 #
 #  id                  :integer          not null, primary key
-#  email               :string           default(""), not null
-#  remember_created_at :datetime
-#  sign_in_count       :integer          default(0), not null
-#  current_sign_in_at  :datetime
-#  last_sign_in_at     :datetime
-#  current_sign_in_ip  :string
-#  last_sign_in_ip     :string
-#  created_at          :datetime
-#  updated_at          :datetime
-#  provider            :string
-#  uid                 :string
 #  banned_at           :datetime
 #  banned_by_email     :string
+#  current_sign_in_at  :datetime
+#  current_sign_in_ip  :string
+#  email               :string           default(""), not null
+#  last_sign_in_at     :datetime
+#  last_sign_in_ip     :string
+#  provider            :string
+#  remember_created_at :datetime
+#  sign_in_count       :integer          default(0), not null
+#  uid                 :string
+#  created_at          :datetime
+#  updated_at          :datetime
 #
 # Indexes
 #
@@ -25,7 +25,7 @@
 #  index_users_on_uid        (uid)
 #
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   devise :omniauthable, :rememberable, :trackable, :omniauth_providers => [:google_oauth2]
 
   has_many :estimations

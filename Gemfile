@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '3.3.8'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.2.3'
+gem 'rails', '~> 8.1.3'
 
 # Modern asset pipeline
 gem 'propshaft'
@@ -22,7 +22,7 @@ gem 'stimulus-rails'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 2.6.5', group: :doc
 
-gem 'annotate', group: :development
+gem 'annotaterb', '~> 4.22', group: :development
 
 # Security scanning tools
 gem 'brakeman', group: :development, require: false
@@ -90,8 +90,7 @@ group :test do
 
   gem 'rspec_junit_formatter'
 
-  gem 'simplecov', require: false
-  gem "codeclimate-test-reporter", require: false
+  gem 'simplecov', '~> 0.22', require: false
 end
 
 # To provide authentication
