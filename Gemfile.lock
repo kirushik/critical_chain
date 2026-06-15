@@ -84,9 +84,9 @@ GEM
       tzinfo (~> 2.0, >= 2.0.5)
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
-    annotate (3.2.0)
-      activerecord (>= 3.2, < 8.0)
-      rake (>= 10.4, < 14.0)
+    annotaterb (4.22.0)
+      activerecord (>= 6.0.0)
+      activesupport (>= 6.0.0)
     ast (2.4.3)
     auth-sanitizer (0.1.2)
       version_gem (~> 1.1, >= 1.1.9)
@@ -531,7 +531,7 @@ PLATFORMS
 
 DEPENDENCIES
   actioncable-enhanced-postgresql-adapter
-  annotate
+  annotaterb (~> 4.22)
   better_errors
   binding_of_caller
   brakeman
