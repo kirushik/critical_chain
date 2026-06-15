@@ -17,8 +17,11 @@ Bundler.require(*Rails.groups)
 
 module CriticalChain
   class Application < Rails::Application
-    # Opt into Rails 8.0 behavior for timezone handling
-    config.active_support.to_time_preserves_timezone = true
+    # Preserve the full timezone (not just the UTC offset) when calling #to_time.
+    # Rails 8.0 accepts :zone or :offset here; the legacy `true` mapped to :offset
+    # and now emits a deprecation. This app runs in UTC with no #to_time/#in_time_zone
+    # usage, so :zone is behavior-identical. (Removed entirely once on Rails 8.1.)
+    config.active_support.to_time_preserves_timezone = :zone
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
