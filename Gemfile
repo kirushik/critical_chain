@@ -90,8 +90,7 @@ group :test do
 
   gem 'rspec_junit_formatter'
 
-  gem 'simplecov', require: false
-  gem "codeclimate-test-reporter", require: false
+  gem 'simplecov', '~> 0.22', require: false
 end
 
 # To provide authentication
