@@ -22,7 +22,7 @@ gem 'stimulus-rails'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 2.6.5', group: :doc
 
-gem 'annotaterb', '~> 4.22', group: :development
+gem 'annotaterb', '~> 4.23', group: :development
 
 # Security scanning tools
 gem 'brakeman', group: :development, require: false
