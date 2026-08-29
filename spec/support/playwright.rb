@@ -149,7 +149,7 @@ RSpec.configure do |config|
     # We create a session which will start the server
     @capybara_server = Capybara::Server.new(Rails.application).boot
 
-    Playwright.create(playwright_cli_executable_path: 'npx playwright') do |playwright|
+    Playwright.create(playwright_cli_executable_path: './node_modules/.bin/playwright') do |playwright|
       playwright.chromium.launch(headless: true, args: ['--disable-dev-shm-usage', '--no-sandbox']) do |browser|
         # Prepare directories for artifacts
         FileUtils.mkdir_p('tmp/screenshots')
