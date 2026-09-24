@@ -85,7 +85,7 @@ GEM
       uri (>= 0.13.1)
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
-    annotaterb (4.24.0)
+    annotaterb (4.25.0)
       activerecord (>= 6.0.0)
       activesupport (>= 6.0.0)
     anonymous_loader (0.1.3)
@@ -533,7 +533,7 @@ PLATFORMS
 
 DEPENDENCIES
   actioncable-enhanced-postgresql-adapter
-  annotaterb (~> 4.24)
+  annotaterb (~> 4.25)
   better_errors
   binding_of_caller
   brakeman
