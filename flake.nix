@@ -27,9 +27,9 @@
           inherit (pkgs) lib;
           # The Gemfile pins an exact patch release and Bundler refuses any
           # other, so .ruby-version, the Gemfile, Gemfile.lock and CI's image
-          # follow nixpkgs' 3.3.x: after a nixpkgs bump moves it, bump them
+          # follow nixpkgs' 3.4.x: after a nixpkgs bump moves it, bump them
           # together. The assert says so instead of Bundler, at load time.
-          ruby = pkgs.ruby_3_3;
+          ruby = pkgs.ruby_3_4;
           pinned = lib.fileContents ./.ruby-version;
         in
         assert lib.assertMsg (toString ruby.version == pinned)

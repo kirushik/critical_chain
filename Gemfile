@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.3.13'
+ruby '3.4.9'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 8.1.4'
@@ -90,7 +90,7 @@ group :test do
 
   gem 'rspec_junit_formatter'
 
-  gem 'simplecov', '~> 0.22', require: false
+  gem 'simplecov', require: false
 end
 
 # To provide authentication
@@ -102,14 +102,7 @@ gem 'omniauth-google-oauth2'
 # See also: https://github.com/omniauth/omniauth/wiki/Upgrading-to-2.0#rails
 gem 'omniauth-rails_csrf_protection'
 
-# Temporary fix till Devise Omniauth version detection is fixed upstream
-# https://github.com/heartcombo/devise/issues/5326
-gem 'omniauth', '~>2.1.2'
-
 # To enable privilege separation
 gem 'pundit'
-
-# Environment variable configuration management
-gem 'figaro'
 
 gem 'draper'
