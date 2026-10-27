@@ -17,6 +17,11 @@ Bundler.require(*Rails.groups)
 
 module CriticalChain
   class Application < Rails::Application
+    # Framework defaults: the app was generated on Rails 4 and ran without
+    # load_defaults until 8.1; the settings held back from it are in
+    # config/initializers/new_framework_defaults.rb.
+    config.load_defaults 8.1
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
