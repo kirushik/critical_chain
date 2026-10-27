@@ -20,7 +20,9 @@
 !/log/.keep
 /tmp
 
-# Ignore application configuration
+# Ignore application configuration: local secrets live in .env (see .env.example).
+# application.yml was Figaro's; kept ignored so an old local copy stays out of git.
+/.env
 /config/application.yml
 
 .idea

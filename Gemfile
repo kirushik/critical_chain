@@ -109,7 +109,4 @@ gem 'omniauth', '~>2.1.2'
 # To enable privilege separation
 gem 'pundit'
 
-# Environment variable configuration management
-gem 'figaro'
-
 gem 'draper'
