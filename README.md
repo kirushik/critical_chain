@@ -21,10 +21,12 @@ Please see it in action [here](https://cc.pimenov.cc)
 
 It is a pretty typical Rails project.
 
-Please fork it, clone it, run `bundle install` to fetch all the dependencies. Then copy `application.yml.sample` in application.yml, and populate it with proper Google API keys from [here](https://console.developers.google.com). You'll have to create a new OAuth credentials pair, bound to `localhost` host.
+Please fork it, clone it, run `bundle install` to fetch all the dependencies. Then copy `.env.example` to `.env`, and populate it with Google API keys from [here](https://console.developers.google.com). You'll have to create a new OAuth credentials pair, bound to `localhost:3000` (the redirect URI is `http://localhost:3000/users/auth/google_oauth2/callback`).
 
-The project uses FOREMAN to properly set up processes and env variables. It comes with Google OAuth secrets valid for localhost:3000, in the `.env` file.
-To properly launch Rails server in development mode, please run `env RAILS_ENV=development bundle exec foreman start`.
+The project uses FOREMAN to properly set up processes and env variables: it reads `.env`.
+To properly launch Rails server in development mode, please run `env RAILS_ENV=development bundle exec foreman start`. Anything else that boots the app (`bin/rails`, `rspec`) needs the same variables in the environment; with direnv, add `dotenv_if_exists` to your `.envrc`.
+
+A Nix dev shell is in `flake.nix`: `nix develop`, or `use flake` in `.envrc`.
 
 All tests are written in RSpec, so `bundle exec rspec` should do the trick with testing. `phantomjs` binary should be in `PATH` to run javascript-related feature tests. (See `spec/features` folder.)
 

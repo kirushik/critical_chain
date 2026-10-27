@@ -105,7 +105,4 @@ gem 'omniauth-rails_csrf_protection'
 # To enable privilege separation
 gem 'pundit'
 
-# Environment variable configuration management
-gem 'figaro'
-
 gem 'draper'
