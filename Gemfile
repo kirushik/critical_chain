@@ -90,7 +90,7 @@ group :test do
 
   gem 'rspec_junit_formatter'
 
-  gem 'simplecov', '~> 0.22', require: false
+  gem 'simplecov', require: false
 end
 
 # To provide authentication
@@ -101,10 +101,6 @@ gem 'omniauth-google-oauth2'
 # which triggers CSRF protection failures without this gem
 # See also: https://github.com/omniauth/omniauth/wiki/Upgrading-to-2.0#rails
 gem 'omniauth-rails_csrf_protection'
-
-# Temporary fix till Devise Omniauth version detection is fixed upstream
-# https://github.com/heartcombo/devise/issues/5326
-gem 'omniauth', '~>2.1.2'
 
 # To enable privilege separation
 gem 'pundit'
