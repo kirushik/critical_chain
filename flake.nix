@@ -7,10 +7,12 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    # The Railway CLI only: 26.05 carries 4.x, Railway's docs assume 5.x.
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
   };
 
   outputs =
-    { nixpkgs, ... }:
+    { nixpkgs, nixpkgs-unstable, ... }:
     let
       # Gemfile.lock carries only x86_64-linux gems (as CI and Railway run);
       # another system would re-resolve and rewrite it on `bundle install`.
@@ -18,11 +20,15 @@
       systems = [
         "x86_64-linux"
       ];
-      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
+      forAllSystems =
+        f:
+        nixpkgs.lib.genAttrs systems (
+          system: f nixpkgs.legacyPackages.${system} nixpkgs-unstable.legacyPackages.${system}
+        );
     in
     {
       devShells = forAllSystems (
-        pkgs:
+        pkgs: unstable:
         let
           inherit (pkgs) lib;
           # The Gemfile pins an exact patch release and Bundler refuses any
@@ -62,6 +68,9 @@
               # when PLAYWRIGHT_CHROMIUM_EXECUTABLE is set.
               chromium
               sqlite-interactive
+              # Production runs there (railway.toml); `railway link` once per
+              # checkout.
+              unstable.railway
             ];
 
             # Gems next to the checkout, as on CI, so they are built against
