@@ -8,17 +8,17 @@ updates:
   open-pull-requests-limit: 10
   assignees:
   - kirushik
-  ignore:
-  - dependency-name: font-awesome-sass
-    versions:
-    - "< 6, >= 5.0.a"
-  - dependency-name: poltergeist
-    versions:
-    - "< 1.19, >= 1.18.a"
-  - dependency-name: rails
-    versions:
-    - "< 6, >= 5.0.a"
-  - dependency-name: omniauth
-    versions:
-    - 2.0.0
-    - 2.0.3
+# The Playwright driver the specs launch (spec/support/playwright.rb); keep it
+# in step with playwright-ruby-client in the Gemfile.
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+  assignees:
+  - kirushik
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: weekly
+  assignees:
+  - kirushik
