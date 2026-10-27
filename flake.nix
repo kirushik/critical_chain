@@ -12,9 +12,11 @@
   outputs =
     { nixpkgs, ... }:
     let
+      # Gemfile.lock carries only x86_64-linux gems (as CI and Railway run);
+      # another system would re-resolve and rewrite it on `bundle install`.
+      # Add one together with `bundle lock --add-platform`.
       systems = [
         "x86_64-linux"
-        "aarch64-linux"
       ];
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
     in
