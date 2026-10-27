@@ -150,7 +150,11 @@ RSpec.configure do |config|
     @capybara_server = Capybara::Server.new(Rails.application).boot
 
     Playwright.create(playwright_cli_executable_path: './node_modules/.bin/playwright') do |playwright|
-      playwright.chromium.launch(headless: true, args: ['--disable-dev-shm-usage', '--no-sandbox']) do |browser|
+      # The Nix dev shell (flake.nix) points this at a system Chromium;
+      # elsewhere Playwright uses the browser it downloaded.
+      launch_options = { headless: true, args: ['--disable-dev-shm-usage', '--no-sandbox'] }
+      launch_options[:executablePath] = ENV['PLAYWRIGHT_CHROMIUM_EXECUTABLE'] if ENV['PLAYWRIGHT_CHROMIUM_EXECUTABLE']
+      playwright.chromium.launch(**launch_options) do |browser|
         # Prepare directories for artifacts
         FileUtils.mkdir_p('tmp/screenshots')
         FileUtils.mkdir_p('tmp/traces')
