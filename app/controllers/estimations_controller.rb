@@ -125,9 +125,10 @@ class EstimationsController < ApplicationController
         if result
           render :update
         else
+          error_message = @estimation.errors.full_messages.first || "Update failed"
           render turbo_stream: turbo_stream.append(
             "estimation_title",
-            ActionController::Base.helpers.content_tag(:script, "alert('#{j(@estimation.errors.full_messages.first) || "Update failed"}');")
+            helpers.javascript_tag("alert('#{helpers.j(error_message)}');")
           ), status: :unprocessable_entity
         end
       end

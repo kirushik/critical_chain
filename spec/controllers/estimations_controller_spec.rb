@@ -217,19 +217,45 @@ RSpec.describe EstimationsController, :type => :controller do
       expect(response.body).to include(new_title)
     end
 
-    it "returns error message when title update fails via Turbo Stream" do
-      # Stub validation to fail for testing error handling
-      allow_any_instance_of(Estimation).to receive(:update).and_return(false)
-      allow_any_instance_of(Estimation).to receive(:errors).and_return(
-        double(full_messages: double(first: "Title is invalid"))
-      )
+    context "when the update fails via Turbo Stream" do
+      # Estimation has no validations of its own, so make #update fail
+      # the way a validation would: by adding an error and returning false.
+      def fail_update_with(message)
+        allow_any_instance_of(Estimation).to receive(:update) do |record, _attrs|
+          record.errors.add(:base, message) if message
+          false
+        end
+      end
 
-      patch :update, params: { id: estimation.id, estimation: { title: "Bad Title" } }, format: :turbo_stream
+      it "alerts the validation message with the quote JS-escaped" do
+        fail_update_with("Title can't be blank")
 
-      expect(response.content_type).to match(%r{text/vnd.turbo-stream})
-      expect(response.status).to eq(422)
-      expect(response.body).to include('turbo-stream')
-      expect(response.body).to include('alert')
+        patch :update, params: { id: estimation.id, estimation: { title: "" } }, format: :turbo_stream
+
+        expect(response.content_type).to match(%r{text/vnd.turbo-stream})
+        expect(response.status).to eq(422)
+        expect(response.body).to include('<turbo-stream action="append" target="estimation_title">')
+        expect(response.body).to include(%q{alert('Title can\'t be blank');})
+        expect(response.body).not_to include("Update failed")
+      end
+
+      it "cannot close the script element from inside the message" do
+        fail_update_with(%q{</script><script>alert(1)//'})
+
+        patch :update, params: { id: estimation.id, estimation: { title: "" } }, format: :turbo_stream
+
+        expect(response.body).to include(%q{alert('<\/script><script>alert(1)//\'');})
+        expect(response.body.scan("</script>").size).to eq(1)
+      end
+
+      it "falls back to a generic message when there are no errors" do
+        fail_update_with(nil)
+
+        patch :update, params: { id: estimation.id, estimation: { title: "" } }, format: :turbo_stream
+
+        expect(response.status).to eq(422)
+        expect(response.body).to include(%q{alert('Update failed');})
+      end
     end
 
     it "redirects to the estimation if no XHR happened" do
