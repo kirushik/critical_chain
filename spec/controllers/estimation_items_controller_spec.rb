@@ -100,7 +100,16 @@ RSpec.describe EstimationItemsController, :type => :controller do
       patch :update, params: { id: estimation_item.id, estimation_id: estimation.id, estimation_item: { quantity: -1 }, format: :turbo_stream }
 
       expect(response.status).to eq(422)
-      expect(response.body).to include('alert')
+      expect(response.body).to include(%Q{<turbo-stream action="append" target="estimation_#{estimation.id}">})
+      expect(response.body).to include(%q{alert('Quantity must be greater than 0');})
+    end
+
+    it "alerts the validation message with the quote JS-escaped" do
+      patch :update, params: { id: estimation_item.id, estimation_id: estimation.id, estimation_item: { value: "" }, format: :turbo_stream }
+
+      expect(response.status).to eq(422)
+      expect(response.body).to include(%q{alert('Value can\'t be blank');})
+      expect(estimation_item.reload.value).not_to be_nil
     end
 
     it "returns Turbo Stream with updated values" do
