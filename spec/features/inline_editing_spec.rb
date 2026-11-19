@@ -91,6 +91,18 @@ feature "AdditionOfEstimationsAndItems", :type => :feature do
     expect(page.locator("#total").text_content).to eq(old_estimation_value.to_s)
   end
 
+  scenario "I see the validation error when an edit is rejected", :playwright do
+    page.get_by_title('Click to edit').filter(hasText: old_estimation_value.to_s).click
+    page.locator(".editing input[name*='[value]']").fill("")
+
+    dialog = page.expect_event('dialog') do
+      page.get_by_role('button', name: 'Save').click
+    end
+
+    expect(dialog.message).to eq("Value can't be blank")
+    dialog.dismiss
+  end
+
   scenario "I can set the number for a batch", :playwright do
     # Click on quantity to edit (should be "1" initially)
     page.get_by_title('Click to edit').filter(hasText: /^1$/).first.click
