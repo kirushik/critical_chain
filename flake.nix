@@ -32,10 +32,18 @@
         let
           inherit (pkgs) lib;
           # The Gemfile pins an exact patch release and Bundler refuses any
-          # other, so .ruby-version, the Gemfile, Gemfile.lock and CI's image
-          # follow nixpkgs' 3.4.x: after a nixpkgs bump moves it, bump them
-          # together. The assert says so instead of Bundler, at load time.
-          ruby = pkgs.ruby_3_4;
+          # other, so .ruby-version, the Gemfile, Gemfile.lock, CI's image and
+          # this Ruby move together. nixpkgs lags upstream patch releases, so
+          # the pinned one is built here with nixpkgs' own recipe; the hash is
+          # the release tarball's sha256 from ruby-lang.org. Once nixpkgs'
+          # ruby_3_4 catches up, `ruby = pkgs.ruby_3_4;` is enough again. The
+          # assert says what to bump instead of Bundler, at load time.
+          ruby = pkgs.mkRuby {
+            version = pkgs.mkRubyVersion "3" "4" "13" "";
+            hash = "sha256-0NO/PdjCJKPDt+zYFqDxssvPT4e1r8vb6R0/7xd/NRo=";
+            # YJIT's vendored crates; unchanged across 3.4.x so far.
+            cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
+          };
           pinned = lib.fileContents ./.ruby-version;
         in
         assert lib.assertMsg (toString ruby.version == pinned)
