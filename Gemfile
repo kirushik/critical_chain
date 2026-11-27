@@ -19,8 +19,6 @@ gem 'turbo-rails'
 gem 'stimulus-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem 'jbuilder', '~> 2.0'
-# bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 2.6.5', group: :doc
 
 gem 'annotaterb', '~> 4.26', group: :development
 
@@ -63,18 +61,11 @@ group :development, :test do
 
   gem 'factory_bot_rails'
   gem 'faker'
-
-  gem 'guard-migrate'
 end
 
 group :development do
   gem 'foreman'
-  
-  
-  # Speed up development by keeping application running in the background
   gem 'ruby-lsp', require: false
-  # Give AI agents ability to talk to your local Rails
-  gem 'rails-mcp-server', require: false
 end
 
 group :test do
@@ -84,9 +75,6 @@ group :test do
   gem 'playwright-ruby-client'
 
   gem 'database_cleaner'
-
-  gem 'guard-rspec'
-  gem 'libnotify'
 
   gem 'rspec_junit_formatter'
 
