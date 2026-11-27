@@ -1,11 +1,15 @@
 version: 2
 updates:
+# Version updates wait out a cooldown, so a compromised release that gets
+# yanked within days never reaches a PR. Security updates are not delayed.
 - package-ecosystem: bundler
   directory: "/"
   schedule:
     interval: daily
     time: "04:00"
   open-pull-requests-limit: 10
+  cooldown:
+    default-days: 5
   assignees:
   - kirushik
 # The Playwright driver the specs launch (spec/support/playwright.rb); keep it
@@ -14,11 +18,17 @@ updates:
   directory: "/"
   schedule:
     interval: weekly
+  cooldown:
+    default-days: 5
   assignees:
   - kirushik
+# Actions are pinned by commit SHA; Dependabot bumps the SHA and the tag
+# comment together.
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
     interval: weekly
+  cooldown:
+    default-days: 5
   assignees:
   - kirushik
