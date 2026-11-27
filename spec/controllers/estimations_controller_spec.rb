@@ -42,15 +42,6 @@ RSpec.describe EstimationsController, :type => :controller do
       expect(assigns(:estimations)).to match_array(user.estimations)
     end
 
-    it "decorates collection of Estimations" do
-      user = FactoryBot.create(:user_with_estimations)
-      sign_in user
-
-      get :index
-
-      expect(assigns(:estimations)).to be_decorated
-      expect(assigns(:estimations).first).to be_decorated
-    end
   end
 
   describe "GET show" do
@@ -59,12 +50,6 @@ RSpec.describe EstimationsController, :type => :controller do
 
     before(:each) do
       sign_in user
-    end
-
-    it "decorates loaded Estimation" do
-      get :show, params: { id: estimation.id }
-
-      expect(assigns(:estimation)).to be_decorated
     end
 
     context "estimation in planning mode" do
@@ -105,7 +90,7 @@ RSpec.describe EstimationsController, :type => :controller do
 
       get :show, params: { id: estimation.id }
 
-      # Verify items are ordered by the order field in the decorated collection
+      # Verify items are ordered by the order field
       items = assigns(:estimation).estimation_items.to_a
       expect(items[0].title).to eq('First by order')
       expect(items[1].title).to eq('Second by order')

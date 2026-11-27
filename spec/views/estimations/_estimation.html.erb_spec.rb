@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "estimations/_estimation.html.erb", :type => :view do
-  let(:estimation) { FactoryBot.create(:estimation_with_items, items: {size: 1, count: 4}).decorate }
+  let(:estimation) { FactoryBot.create(:estimation_with_items, items: {size: 1, count: 4}) }
 
   before do
     render partial: "estimations/estimation", locals: { estimation: estimation }
@@ -27,7 +27,7 @@ RSpec.describe "estimations/_estimation.html.erb", :type => :view do
   end
 
   context 'in planning mode' do
-    let(:estimation) { FactoryBot.create(:estimation_with_items, items: {size: 1, count: 4}, tracking_mode: false).decorate }
+    let(:estimation) { FactoryBot.create(:estimation_with_items, items: {size: 1, count: 4}, tracking_mode: false) }
 
     it 'shows planning mode indicator' do
       expect(rendered).to have_selector('.tag', text: 'Planning')
@@ -57,7 +57,7 @@ RSpec.describe "estimations/_estimation.html.erb", :type => :view do
   end
 
   context 'in tracking mode' do
-    let(:estimation) { FactoryBot.create(:estimation_with_items, items: {size: 1, count: 4}, tracking_mode: true).decorate }
+    let(:estimation) { FactoryBot.create(:estimation_with_items, items: {size: 1, count: 4}, tracking_mode: true) }
 
     before do
       # Set actual values on some items

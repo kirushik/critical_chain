@@ -38,6 +38,6 @@
 
   <%# Actual Value (Editable in tracking mode) %>
   <td class="col-actions has-text-right">
-    <%= estimation_item.decorate.editable :actual_value, type: :number, can_edit: local_assigns[:can_edit] %>
+    <%= editable_item_field(estimation_item, :actual_value, type: :number, can_edit: local_assigns[:can_edit]) %>
   </td>
 </tr>

@@ -39,6 +39,10 @@ class Estimation < ApplicationRecord
     sum + buffer
   end
 
+  def actual_sum
+    estimation_items.sum(:actual_value)
+  end
+
   def completed_items
     estimation_items.where.not(actual_value: nil)
   end

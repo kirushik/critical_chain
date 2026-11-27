@@ -11,8 +11,6 @@ gem 'importmap-rails'
 
 gem 'puma'
 
-gem 'page_title_helper'
-
 # Hotwire's SPA-like page accelerator and form submissions
 gem 'turbo-rails'
 # Hotwire's modest JavaScript framework
@@ -92,5 +90,3 @@ gem 'omniauth-rails_csrf_protection'
 
 # To enable privilege separation
 gem 'pundit'
-
-gem 'draper'

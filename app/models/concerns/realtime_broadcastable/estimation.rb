@@ -14,13 +14,13 @@ module RealtimeBroadcastable
       return unless id
       return unless defined?(Turbo)
 
-      # Broadcast Turbo Stream update to viewers
-      # This renders the updated estimation title in place
-      Turbo::StreamsChannel.broadcast_replace_later_to(
+      # Update only the title text: the header around it differs per viewer
+      # (the owner's is editable and has the Sharing button), so one broadcast
+      # rendering of it would be wrong for someone. html: goes out unescaped.
+      Turbo::StreamsChannel.broadcast_update_later_to(
         "estimation_#{id}",
-        target: "estimation_title",
-        partial: "estimations/title",
-        locals: { estimation: decorate }
+        targets: "#estimation_title .editable-display, #estimation_title .estimation-title-text",
+        html: ERB::Util.html_escape(title)
       )
     rescue => e
       Rails.logger.error "Failed to broadcast estimation change: #{e.message}"
