@@ -18,9 +18,9 @@ module EstimationsHelper
   # An estimate figure as the UI shows it: three significant digits and no
   # trailing ".0" (12.3, 1230, 0).
   def rounded_estimate(value)
+    return '0' if value.nil?
+
     value.to_fs(:rounded, significant: true).gsub(/\.0+$/, '')
-  rescue StandardError
-    '0'
   end
 
   # The row partial for an item, by the estimation's mode.

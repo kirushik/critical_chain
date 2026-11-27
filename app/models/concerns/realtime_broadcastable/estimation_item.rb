@@ -45,18 +45,19 @@ module RealtimeBroadcastable
         )
       end
 
-      # Always update the totals
-      Turbo::StreamsChannel.broadcast_replace_later_to(
+      # Always update the totals (update, not replace: the target elements
+      # and their ids must stay for the next broadcast)
+      Turbo::StreamsChannel.broadcast_update_later_to(
         "estimation_#{estimation_id}",
         target: "total",
         html: helpers.rounded_estimate(est.total)
       )
-      Turbo::StreamsChannel.broadcast_replace_later_to(
+      Turbo::StreamsChannel.broadcast_update_later_to(
         "estimation_#{estimation_id}",
         target: "sum",
         html: helpers.rounded_estimate(est.sum)
       )
-      Turbo::StreamsChannel.broadcast_replace_later_to(
+      Turbo::StreamsChannel.broadcast_update_later_to(
         "estimation_#{estimation_id}",
         target: "buffer",
         html: helpers.rounded_estimate(est.buffer)
@@ -64,7 +65,7 @@ module RealtimeBroadcastable
       
       # Update tracking mode specific elements if applicable
       if est.tracking_mode?
-        Turbo::StreamsChannel.broadcast_replace_later_to(
+        Turbo::StreamsChannel.broadcast_update_later_to(
           "estimation_#{estimation_id}",
           target: "actual_sum",
           html: est.actual_sum.to_s

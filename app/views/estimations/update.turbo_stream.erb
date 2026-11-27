@@ -1,6 +1,6 @@
-<%# Replace the title section %>
-<%= turbo_stream.replace "estimation_title" do %>
-  <h1><%= editable_estimation_field(@estimation, :title) %></h1>
+<%# Replace the title field only; the rest of the header (Sharing button) stays %>
+<%= turbo_stream.replace "editable_estimation_#{@estimation.id}_title" do %>
+  <%= editable_estimation_field(@estimation, :title, can_edit: policy(@estimation).update_metadata?) %>
 <% end %>
 
 <%# Replace the mode toggle (handles tracking_mode updates) %>

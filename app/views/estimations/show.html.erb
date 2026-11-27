@@ -8,7 +8,7 @@
     <% if policy(@estimation).update_metadata? %>
       <%= editable_estimation_field(@estimation, :title) %>
     <% else %>
-      <%= @estimation.title %>
+      <span class="estimation-title-text"><%= @estimation.title %></span>
     <% end %>
   </h1>
   <% if policy(@estimation).manage_shares? %>
