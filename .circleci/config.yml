@@ -9,23 +9,27 @@ jobs:
           BUNDLE_JOBS: 3
           BUNDLE_RETRY: 3
           BUNDLE_PATH: vendor/bundle
+          # Install exactly Gemfile.lock (checksums included); fail if it is
+          # out of date instead of re-resolving.
+          BUNDLE_FROZEN: "true"
           RAILS_ENV: test
           CACHE_VERSION: 1
     steps:
       - checkout
 
+      # npm ci wipes node_modules, so cache npm's download cache instead.
       - restore_cache:
           keys:
-            - node-deps-{{ checksum "package.json" }}
+            - npm-cache-v1-{{ checksum "package-lock.json" }}
 
       - run:
           name: Install Node dependencies
-          command: npm install
+          command: npm ci
 
       - save_cache:
-          key: node-deps-{{ checksum "package.json" }}
+          key: npm-cache-v1-{{ checksum "package-lock.json" }}
           paths:
-            - node_modules
+            - ~/.npm
 
       - restore_cache:
           keys:
