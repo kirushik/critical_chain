@@ -58,12 +58,6 @@ RSpec.describe EstimationItemsController, :type => :controller do
       expect(estimation.reload.estimation_items.size).to eq(1)
     end
 
-    it "decorates loaded Estimation" do
-      post :create, params: { estimation_id: estimation.id, estimation_item: { value: 117 } }
-
-      expect(assigns(:estimation)).to be_decorated
-    end
-
     it "assigns order to newly created item" do
       post :create, params: { estimation_id: estimation.id, estimation_item: { value: 117 } }
 
@@ -114,7 +108,6 @@ RSpec.describe EstimationItemsController, :type => :controller do
 
     it "returns Turbo Stream with updated values" do
       patch :update, params: { id: estimation_item.id, estimation_id: estimation.id, estimation_item: { value: 10 }, format: :turbo_stream }
-      decorated_estimation = estimation.decorate
 
       expect(response.content_type).to match(%r{text/vnd.turbo-stream})
       expect(response.body).to include('turbo-stream')

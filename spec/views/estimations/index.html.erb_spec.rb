@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "estimations/index.html.erb", :type => :view do
   context 'with estimations' do
-    let(:estimations) { (1..3).map { FactoryBot.create(:estimation).decorate } }
+    let(:estimations) { (1..3).map { FactoryBot.create(:estimation) } }
 
     before do
       assign(:estimations, estimations)
@@ -60,7 +60,7 @@ RSpec.describe "estimations/index.html.erb", :type => :view do
 
   context 'mode indicator' do
     it 'shows planning mode indicator for estimations in planning mode' do
-      estimation = FactoryBot.create(:estimation_with_items, items: {size: 1, count: 4}, tracking_mode: false).decorate
+      estimation = FactoryBot.create(:estimation_with_items, items: {size: 1, count: 4}, tracking_mode: false)
       assign(:estimations, [estimation])
 
       render
@@ -72,7 +72,7 @@ RSpec.describe "estimations/index.html.erb", :type => :view do
     end
 
     it 'shows sum + buffer = total for planning mode' do
-      estimation = FactoryBot.create(:estimation_with_items, items: {size: 1, count: 4}, tracking_mode: false).decorate
+      estimation = FactoryBot.create(:estimation_with_items, items: {size: 1, count: 4}, tracking_mode: false)
       assign(:estimations, [estimation])
 
       render
@@ -87,7 +87,7 @@ RSpec.describe "estimations/index.html.erb", :type => :view do
     end
 
     it 'shows tracking mode indicator for estimations in tracking mode' do
-      estimation = FactoryBot.create(:estimation_with_items, items: {size: 1, count: 4}, tracking_mode: true).decorate
+      estimation = FactoryBot.create(:estimation_with_items, items: {size: 1, count: 4}, tracking_mode: true)
       assign(:estimations, [estimation])
 
       render
@@ -101,7 +101,7 @@ RSpec.describe "estimations/index.html.erb", :type => :view do
     it 'shows actual / total and buffer health for tracking mode' do
       estimation = FactoryBot.create(:estimation_with_items, items: {size: 1, count: 4}, tracking_mode: true)
       estimation.estimation_items.first.update!(actual_value: 2)
-      assign(:estimations, [estimation.decorate])
+      assign(:estimations, [estimation])
 
       render
 

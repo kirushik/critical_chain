@@ -1,6 +1,6 @@
 <%# Replace the title section %>
 <%= turbo_stream.replace "estimation_title" do %>
-  <h1><%= @estimation.decorate.editable :title %></h1>
+  <h1><%= editable_estimation_field(@estimation, :title) %></h1>
 <% end %>
 
 <%# Replace the mode toggle (handles tracking_mode updates) %>

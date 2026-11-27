@@ -42,7 +42,7 @@ feature "Tracking mode", :type => :feature do
     # Check that actual_sum is updated (text is split across elements, so check the sum directly)
     expect(page.locator('#actual_sum').text_content).to eq('11179.0')
     expect(page.get_by_text('completed out of total estimate')).to be_visible
-    expect(page.locator('#total').text_content).to eq(tracking_mode_estimation.decorate.total.to_s)
+    expect(page.locator('#total').text_content).to eq(ApplicationController.helpers.rounded_estimate(tracking_mode_estimation.total))
   end
 
   scenario 'I can see buffer consumption in tracking mode' do

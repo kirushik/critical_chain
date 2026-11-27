@@ -4,9 +4,9 @@
 <% end %>
 
 <%# Update the totals %>
-<%= turbo_stream.update "total" do %><%= @estimation.total %><% end %>
-<%= turbo_stream.update "sum" do %><%= @estimation.sum %><% end %>
-<%= turbo_stream.update "buffer" do %><%= @estimation.buffer %><% end %>
+<%= turbo_stream.update "total" do %><%= rounded_estimate(@estimation.total) %><% end %>
+<%= turbo_stream.update "sum" do %><%= rounded_estimate(@estimation.sum) %><% end %>
+<%= turbo_stream.update "buffer" do %><%= rounded_estimate(@estimation.buffer) %><% end %>
 
 <%# Clear the form fields and highlight the new item %>
 <turbo-stream action="append" target="<%= dom_id(@estimation) %>">

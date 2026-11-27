@@ -20,7 +20,7 @@ module RealtimeBroadcastable
         "estimation_#{id}",
         target: "estimation_title",
         partial: "estimations/title",
-        locals: { estimation: decorate }
+        locals: { estimation: self }
       )
     rescue => e
       Rails.logger.error "Failed to broadcast estimation change: #{e.message}"

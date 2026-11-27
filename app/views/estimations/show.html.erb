@@ -1,4 +1,4 @@
-<% page_title! @estimation.title %>
+<% content_for :title, @estimation.title %>
 
 <%# Subscribe to Turbo Stream updates for all editors (realtime collaboration) %>
 <%= turbo_stream_from "estimation_#{@estimation.id}" %>
@@ -6,7 +6,7 @@
 <div id="estimation_title">
   <h1>
     <% if policy(@estimation).update_metadata? %>
-      <%= @estimation.editable :title %>
+      <%= editable_estimation_field(@estimation, :title) %>
     <% else %>
       <%= @estimation.title %>
     <% end %>
@@ -46,7 +46,7 @@
         </colgroup>
 
         <tbody>
-          <%= render partial: @estimation.items_partial_name, collection: @estimation.estimation_items, as: :estimation_item %>
+          <%= render partial: estimation_items_partial(@estimation), collection: @estimation.estimation_items, as: :estimation_item %>
         </tbody>
       </table>
     </div>

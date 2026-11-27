@@ -18,8 +18,9 @@ module RealtimeBroadcastable
       # Use find_by to handle cascade deletes gracefully (estimation may already be gone)
       est = ::Estimation.includes(:estimation_items).find_by(id: estimation_id)
       return unless est
-      est_decorated = est.decorate
-      
+      helpers = ApplicationController.helpers
+      items_partial = helpers.estimation_items_partial(est)
+
       if destroyed?
         # Remove the deleted item
         Turbo::StreamsChannel.broadcast_remove_to(
@@ -31,7 +32,7 @@ module RealtimeBroadcastable
         Turbo::StreamsChannel.broadcast_append_later_to(
           "estimation_#{estimation_id}",
           target: ActionView::RecordIdentifier.dom_id(est),
-          partial: est_decorated.items_partial_name,
+          partial: items_partial,
           locals: { estimation_item: self, can_edit: true }
         )
       else
@@ -39,7 +40,7 @@ module RealtimeBroadcastable
         Turbo::StreamsChannel.broadcast_replace_later_to(
           "estimation_#{estimation_id}",
           target: ActionView::RecordIdentifier.dom_id(self),
-          partial: est_decorated.items_partial_name,
+          partial: items_partial,
           locals: { estimation_item: self, can_edit: true }
         )
       end
@@ -48,17 +49,17 @@ module RealtimeBroadcastable
       Turbo::StreamsChannel.broadcast_replace_later_to(
         "estimation_#{estimation_id}",
         target: "total",
-        html: est_decorated.total
+        html: helpers.rounded_estimate(est.total)
       )
       Turbo::StreamsChannel.broadcast_replace_later_to(
         "estimation_#{estimation_id}",
         target: "sum",
-        html: est_decorated.sum
+        html: helpers.rounded_estimate(est.sum)
       )
       Turbo::StreamsChannel.broadcast_replace_later_to(
         "estimation_#{estimation_id}",
         target: "buffer",
-        html: est_decorated.buffer
+        html: helpers.rounded_estimate(est.buffer)
       )
       
       # Update tracking mode specific elements if applicable
@@ -66,13 +67,13 @@ module RealtimeBroadcastable
         Turbo::StreamsChannel.broadcast_replace_later_to(
           "estimation_#{estimation_id}",
           target: "actual_sum",
-          html: est_decorated.actual_sum.to_s
+          html: est.actual_sum.to_s
         )
         Turbo::StreamsChannel.broadcast_replace_later_to(
           "estimation_#{estimation_id}",
           target: "buffer_health",
           partial: "estimations/buffer_health",
-          locals: { estimation: est_decorated }
+          locals: { estimation: est }
         )
       end
     rescue => e

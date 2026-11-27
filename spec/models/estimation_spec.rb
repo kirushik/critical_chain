@@ -29,6 +29,23 @@ RSpec.describe Estimation, :type => :model do
     it "should be an array" do
       expect(subject.estimation_items).to match_array([])
     end
+
+    it 'orders items by order field' do
+      first_item = FactoryBot.create :estimation_item, estimation: subject, created_at: 1.minute.ago
+      second_item = FactoryBot.create :estimation_item, estimation: subject, created_at: 1.hour.ago
+
+      # Each new item gets the next order value, so creation order wins over created_at
+      expect(subject.estimation_items).to eq [first_item, second_item]
+    end
+  end
+
+  describe '#actual_sum' do
+    it 'sums the actual values reported so far' do
+      FactoryBot.create :estimation_item, estimation: subject, actual_value: 1
+      FactoryBot.create :estimation_item, estimation: subject
+
+      expect(subject.actual_sum).to eq(1.0)
+    end
   end
 
   describe 'mathematics' do

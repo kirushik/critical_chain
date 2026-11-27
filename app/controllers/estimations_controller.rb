@@ -30,7 +30,6 @@ class EstimationsController < ApplicationController
     @estimations = policy_scope(Estimation)
                      .includes(:estimation_items)
                      .all
-                     .decorate
   end
 
   def show
@@ -38,7 +37,7 @@ class EstimationsController < ApplicationController
       :user,
       :estimation_items,
       estimation_shares: :shared_with_user
-    ).find(params[:id]).decorate
+    ).find(params[:id])
     authorize @estimation
 
     # Track last access for shared users
@@ -69,8 +68,6 @@ class EstimationsController < ApplicationController
         return if performed?
       end
 
-      @estimation = @estimation.decorate
-
       # Track last access for shared users
       if current_user.id != @estimation.user_id
         share = @estimation.share_for(current_user)
@@ -85,7 +82,6 @@ class EstimationsController < ApplicationController
     if @estimation.share_token.present? &&
        ActiveSupport::SecurityUtils.secure_compare(params[:share_token].to_s, @estimation.share_token)
       skip_authorization
-      @estimation = @estimation.decorate
       render :public_show
     else
       skip_authorization

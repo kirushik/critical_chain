@@ -1,4 +1,30 @@
 module EditableHelper
+  # An editable field of an estimation, saved to the estimation.
+  def editable_estimation_field(estimation, field, type: :text, can_edit: nil)
+    editable(estimation, field,
+             url: estimation_path(estimation),
+             type: type,
+             css_class: field,
+             can_edit: can_edit.nil? ? editor_of?(estimation) : can_edit)
+  end
+
+  # An editable field of an estimation item, saved to the item.
+  def editable_item_field(item, field, type: :text, css_class: nil, can_edit: nil)
+    editable(item, field,
+             url: estimation_estimation_item_path(item.estimation, item),
+             type: type,
+             css_class: css_class || field,
+             can_edit: can_edit.nil? ? editor_of?(item.estimation) : can_edit)
+  end
+
+  # Outside a request (a Turbo broadcast renders without one) there is no
+  # signed-in user, so nobody gets edit controls by default.
+  def editor_of?(estimation)
+    estimation.can_edit?(current_user)
+  rescue Devise::MissingWarden
+    false
+  end
+
   # Helper to create Stimulus-powered editable elements with pre-rendered form
   def editable(object, field, options = {})
     value = object.send(field)

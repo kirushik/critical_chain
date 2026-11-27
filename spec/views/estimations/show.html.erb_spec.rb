@@ -16,7 +16,7 @@ RSpec.describe "estimations/show.html.erb", :type => :view do
   end
 
   context 'in planning mode' do
-    let(:estimation) { FactoryBot.create(:estimation_with_items, items: {count: 2, size: 2}).decorate }
+    let(:estimation) { FactoryBot.create(:estimation_with_items, items: {count: 2, size: 2}) }
 
     it 'lists the values of the estimation items' do
       estimation.estimation_items.each do |item|
@@ -25,7 +25,7 @@ RSpec.describe "estimations/show.html.erb", :type => :view do
     end
 
     it "shows the calculated optimistic value" do
-      expect(rendered).to have_text(estimation.sum)
+      expect(rendered).to have_text(view.rounded_estimate(estimation.sum))
     end
 
     it "shows the rounded buffer value" do
@@ -41,7 +41,7 @@ RSpec.describe "estimations/show.html.erb", :type => :view do
     end
 
     it 'doesn\'t show buffer consumption' do
-      expect(rendered).not_to have_text(estimation.buffer_health)
+      expect(rendered).not_to have_text(view.buffer_health_percentage(estimation))
     end
   end
 
@@ -50,7 +50,7 @@ RSpec.describe "estimations/show.html.erb", :type => :view do
       estimation = FactoryBot.create(:estimation, tracking_mode: true)
       FactoryBot.create :estimation_item, value: 2, actual_value: 3, estimation: estimation
       FactoryBot.create :estimation_item, value: 2, actual_value: 10, estimation: estimation
-      estimation.decorate
+      estimation
     end
 
     it 'shows sum of actual values' do
@@ -58,7 +58,7 @@ RSpec.describe "estimations/show.html.erb", :type => :view do
     end
 
     it 'shows buffer consumption' do
-      expect(rendered).to have_text(estimation.buffer_health)
+      expect(rendered).to have_text(view.buffer_health_percentage(estimation))
     end
   end
 end

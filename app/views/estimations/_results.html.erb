@@ -3,7 +3,7 @@
     <p class="tracking-progress">
       <span class="actual" id="actual_sum"><%= @estimation.actual_sum %></span>
       <span class="has-text-grey-light"> / </span>
-      <span class="total" id="total"><%= @estimation.total %></span>
+      <span class="total" id="total"><%= rounded_estimate(@estimation.total) %></span>
     </p>
 
     <p class="is-size-7 has-text-grey">completed out of total estimate</p>
@@ -13,21 +13,21 @@
     <div class="summary-row">
       <span class="summary-item is-sum">
         <span class="summary-label">Sum</span>
-        <span class="summary-value" id="sum"><%= @estimation.sum %></span>
+        <span class="summary-value" id="sum"><%= rounded_estimate(@estimation.sum) %></span>
       </span>
 
       <span class="summary-operator">+</span>
 
       <span class="summary-item is-buffer">
         <span class="summary-label">Buffer</span>
-        <span class="summary-value" id="buffer"><%= @estimation.buffer %></span>
+        <span class="summary-value" id="buffer"><%= rounded_estimate(@estimation.buffer) %></span>
       </span>
 
       <span class="summary-operator">=</span>
 
       <span class="summary-item is-total">
         <span class="summary-label">Total</span>
-        <span class="summary-value" id="total"><%= @estimation.total %></span>
+        <span class="summary-value" id="total"><%= rounded_estimate(@estimation.total) %></span>
       </span>
     </div>
   </div>

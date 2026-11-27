@@ -21,7 +21,7 @@ class EstimationItemsController < ApplicationController
   include ActionView::RecordIdentifier
 
   def create
-    @estimation = Estimation.includes(:estimation_items).find(params[:estimation_id]).decorate
+    @estimation = Estimation.includes(:estimation_items).find(params[:estimation_id])
 
     @estimation_item = EstimationItem.new(estimation_item_params)
     @estimation_item.estimation = @estimation
@@ -34,7 +34,7 @@ class EstimationItemsController < ApplicationController
   end
 
   def destroy
-    @estimation = Estimation.includes(:estimation_items).find(params[:estimation_id]).decorate
+    @estimation = Estimation.includes(:estimation_items).find(params[:estimation_id])
     @estimation_item = @estimation.estimation_items.find(params[:id])
 
     authorize @estimation, :update?
@@ -44,14 +44,14 @@ class EstimationItemsController < ApplicationController
   end
 
   def update
-    @estimation = Estimation.includes(:estimation_items).find(params[:estimation_id]).decorate
+    @estimation = Estimation.includes(:estimation_items).find(params[:estimation_id])
     @estimation_item = @estimation.estimation_items.find(params[:id])
 
     authorize @estimation, :update?
     result = @estimation_item.update(estimation_item_params)
 
     # Reload with preloaded associations to avoid N+1 queries in turbo stream
-    @estimation = Estimation.includes(:estimation_items).find(@estimation.id).decorate
+    @estimation = Estimation.includes(:estimation_items).find(@estimation.id)
 
     respond_to do |format|
       format.turbo_stream do

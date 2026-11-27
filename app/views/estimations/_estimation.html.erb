@@ -38,34 +38,34 @@
           <span class="calculation-operator">/</span>
 
           <span class="calculation-value is-total" title="Total estimate">
-            <%= estimation.total %>
+            <%= rounded_estimate(estimation.total) %>
           </span>
 
           <span class="calculation-separator"></span>
 
           <span
-            class="calculation-value <%= estimation.buffer_health_class %>"
+            class="calculation-value <%= buffer_health_class(estimation) %>"
             title="Buffer consumption"
           >
-            <%= estimation.buffer_health %>
+            <%= buffer_health_percentage(estimation) %>
           </span>
         </span>
       <% else %>
         <span class="calculation-group">
           <span class="calculation-value is-sum" title="Sum">
-            <%= estimation.sum %>
+            <%= rounded_estimate(estimation.sum) %>
           </span>
 
           <span class="calculation-operator">+</span>
 
           <span class="calculation-value is-buffer" title="Buffer">
-            <%= estimation.buffer %>
+            <%= rounded_estimate(estimation.buffer) %>
           </span>
 
           <span class="calculation-operator">=</span>
 
           <span class="calculation-value is-total" title="Total">
-            <%= estimation.total %>
+            <%= rounded_estimate(estimation.total) %>
           </span>
         </span>
       <% end %>

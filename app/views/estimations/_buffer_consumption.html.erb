@@ -2,9 +2,9 @@
   <p class="buffer-label">Current buffer consumption</p>
 
   <p
-    class="buffer-value <%= @estimation.buffer_health_class %>"
+    class="buffer-value <%= buffer_health_class(@estimation) %>"
     id="buffer_health"
   >
-    <%= @estimation.buffer_health %>
+    <%= buffer_health_percentage(@estimation) %>
   </p>
 </div>

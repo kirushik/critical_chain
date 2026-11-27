@@ -1,4 +1,12 @@
 module ApplicationHelper
+  # The <title>: the page's own (`content_for :title`), else the locale's
+  # `<controller>.<action>.title`, followed by the app name.
+  def page_title
+    title = content_for(:title).presence ||
+            t("#{controller_path.tr('/', '.')}.#{action_name}.title", default: nil)
+    safe_join([title, t('app.name')].compact, ' - ')
+  end
+
   BRAND_ICONS = %w[google facebook twitter github linkedin].freeze
   
   def icon(icon_name, text = nil)

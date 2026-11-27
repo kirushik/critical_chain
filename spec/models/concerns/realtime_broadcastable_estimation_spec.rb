@@ -28,10 +28,9 @@ RSpec.describe RealtimeBroadcastable::Estimation, type: :concern do
   end
 
   describe 'Turbo Stream content' do
-    it 'passes decorated estimation to the partial' do
+    it 'passes the estimation to the partial' do
       expect(Turbo::StreamsChannel).to receive(:broadcast_replace_later_to) do |stream, **opts|
-        expect(opts[:locals][:estimation]).to be_a(EstimationDecorator)
-        expect(opts[:locals][:estimation].object).to eq(estimation)
+        expect(opts[:locals][:estimation]).to eq(estimation)
       end
       
       estimation.update(title: 'New Title')
